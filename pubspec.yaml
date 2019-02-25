@@ -8,10 +8,11 @@ environment:
   sdk: '>=2.1.0-dev <3.0.0'
 
 dev_dependencies:
-  chrome_travis:
+  tekartik_travis_ci_flutter:
     git:
-      url: git://github.com/tekartik/chrome_travis.dart
+      url: git://github.com/tekartik/travis_ci_flutter.dart
       ref: dart2
+    version: '>=0.1.0'
   process_run: '>=0.10.0'
 # include all from git so that it makes a dependency check
   tekartik_app_emit:
