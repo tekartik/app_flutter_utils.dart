@@ -5,7 +5,7 @@ dart:
   - stable
   - dev
 before_script:
-  - dart tool/travis_install_flutter.dart
+  - dart tool/travis_flutter_install.dart
   - source $(dart tool/travis_flutter_env.dart)
 script:
   - dart tool/travis.dart
