@@ -1,0 +1,11 @@
+language: dart
+sudo: required
+dist: trusty
+dart:
+  - stable
+  - dev
+before_script:
+  - dart tool/travis_install_flutter.dart
+  - source $(dart tool/travis_flutter_env.dart)
+script:
+  - dart tool/travis.dart
