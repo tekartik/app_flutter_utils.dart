@@ -42,7 +42,7 @@ Future main() async {
   print('flutterTop: $travisFlutterTop');
 
   //TODO
-  bool install = !runningOnTravis;
+  bool install = true; //!runningOnTravis;
 
   await new Directory(dirname(travisFlutterTop)).create(recursive: true);
 
