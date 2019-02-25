@@ -2,17 +2,20 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
-import 'package:tekartik_common_utils/json_utils.dart';
+import 'package:tekartik_common_utils/bool_utils.dart';
 
 //  "TRAVIS": "true",
 //  "TRAVIS_DART_VERSION": "stable",
+
+bool get runningOnTravis => parseBool(Platform.environment['TRAVIS']) == true;
 
 String get travisDartVersion =>
     Platform.environment['TRAVIS_DART_VERSION'] ?? 'stable';
 
 String get travisFlutterTop =>
-    '~/.tekartik/travis/${travisDartVersion}/flutter';
+    '${userHomePath}/.tekartik/travis/${travisDartVersion}/flutter';
 
+/// Create the envir file
 Future<String> travisCreateEnvFile() async {
   Directory tempDir = await Directory.systemTemp.createTemp();
 
@@ -25,26 +28,46 @@ export PATH=${travisFlutterTop}/bin:${travisFlutterTop}/bin/cache/dart-sdk/bin:\
 ''';
 
   File dst = new File(join(tempDir.path, envRc));
-  await dst.writeAsString(content);
+  await dst.writeAsString(content, flush: true);
   return dst.path;
 }
 
 Future main() async {
   var shell = Shell();
 
-  print(jsonPretty(Platform.environment));
+  //print(jsonPretty(Platform.environment));
   //  "TRAVIS_DART_VERSION": "stable",
 
-  print('version: $travisDartVersion');
+  print('dartVersion: $travisDartVersion');
+  print('flutterTop: $travisFlutterTop');
+
+  //TODO
+  bool install = !runningOnTravis;
 
   await new Directory(dirname(travisFlutterTop)).create(recursive: true);
 
-  await shell.run('''
+  if (install) {
+    // update
+    if (File(join(travisFlutterTop, '.git')).existsSync()) {
+      await shell.run('''
+      
+      git pull
+      
+      ''');
+    } else {
+      // install
+
+      await shell.run('''
     
 # ls $travisFlutterTop
-  
-''');
+git clone https://github.com/flutter/flutter.git --depth 1 ${travisFlutterTop} -b ${travisDartVersion}
 
+''');
+    }
+    await shell.run('''
+$travisFlutterTop/bin/flutter doctor
+''');
+  }
   var path = await travisCreateEnvFile();
   print('env_file: $path');
   print(await File(path).readAsString());
