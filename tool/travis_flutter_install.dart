@@ -27,7 +27,7 @@ export PATH=${travisFlutterTop}/bin:${travisFlutterTop}/bin/cache/dart-sdk/bin:\
 
 ''';
 
-  File dst = new File(join(tempDir.path, envRc));
+  File dst = File(join(tempDir.path, envRc));
   await dst.writeAsString(content, flush: true);
   return dst.path;
 }
@@ -44,7 +44,7 @@ Future main() async {
   //TODO
   bool install = true; //!runningOnTravis;
 
-  await new Directory(dirname(travisFlutterTop)).create(recursive: true);
+  await Directory(dirname(travisFlutterTop)).create(recursive: true);
 
   if (install) {
     // update
