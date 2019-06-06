@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - tekartik_app_flutter_plugin (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios-release`)
+  - tekartik_app_flutter_plugin (from `.symlinks/plugins/tekartik_app_flutter_plugin/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios-release"
+  tekartik_app_flutter_plugin:
+    :path: ".symlinks/plugins/tekartik_app_flutter_plugin/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  tekartik_app_flutter_plugin: 71a4b05f1abfb529a262973b68557212feefc1c8
+
+PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
+
+COCOAPODS: 1.5.3

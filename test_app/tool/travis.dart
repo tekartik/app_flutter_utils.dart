@@ -18,11 +18,19 @@ flutter analyze
   if (whichSync('adb') != null &&
       Platform.environment['ANDROID_HOME'] != null) {
     await shell.run('''
-
-flutter build apk
-
+      flutter build apk
 ''');
   } else {
     print('Android build tools not installed');
+  }
+
+  if (Platform.isMacOS) {
+    if (whichSync('xcode-select') != null) {
+      await shell.run('''
+      flutter build ios
+''');
+    } else {
+      print('iOS build tools not installed');
+    }
   }
 }

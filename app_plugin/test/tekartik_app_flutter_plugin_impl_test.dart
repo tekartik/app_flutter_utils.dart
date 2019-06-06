@@ -10,6 +10,7 @@ void main() {
       if (methodCall.method == 'isMonkeyRunning') {
         return true;
       }
+      return null;
     });
   });
 
