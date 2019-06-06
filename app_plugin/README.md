@@ -2,6 +2,19 @@
 
 Flutter plugin with platform features 
 
+## Setup
+
+`pubspec.yaml` dependencies:
+
+```yaml
+tekartik_app_flutter_plugin:
+  git:
+    url: git://github.com/tekartik/app_flutter_utils.dart
+    ref: dart2
+    path: app_plugin
+  version: '>=0.1.0'
+```
+
 ## Test if monkey is running
 
 Assuming you run the following shell script

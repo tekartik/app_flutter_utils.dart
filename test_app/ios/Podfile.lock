@@ -4,12 +4,12 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - tekartik_app_flutter_plugin (from `.symlinks/plugins/tekartik_app_flutter_plugin/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   tekartik_app_flutter_plugin:
     :path: ".symlinks/plugins/tekartik_app_flutter_plugin/ios"
 
