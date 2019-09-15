@@ -13,6 +13,7 @@ flutter doctor
     'app_emit_builder',
     'app_plugin',
     'test_app',
+    'app_idb',
   ]) {
     shell = shell.pushd(dir);
     await shell.run('''

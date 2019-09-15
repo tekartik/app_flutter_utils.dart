@@ -8,11 +8,12 @@ IDB factory for flutter app (mobile & web)
 
 ```yaml
 dependencies:
-  tekartik_app_emit_builder:
+  tekartik_app_flutter_idb:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
       path: app_idb
+    version: '>=0.1.0'
 ```
 
 ### Usage
