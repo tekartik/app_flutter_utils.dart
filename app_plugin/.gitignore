@@ -6,3 +6,6 @@
 
 build/
 .flutter-plugins
+
+/ios/
+/android/

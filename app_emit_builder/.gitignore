@@ -8,5 +8,5 @@ build/
 
 # remove generated
 .metadata
-/ios
-/android
+/ios/
+/android/
