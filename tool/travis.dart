@@ -11,6 +11,7 @@ flutter doctor
 
   for (var dir in [
     'app_emit_builder',
+    'app_firebase',
     'app_plugin',
     'test_app',
     'app_idb',
