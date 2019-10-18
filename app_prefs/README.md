@@ -8,7 +8,7 @@ Rx builder
 
 ```yaml
 dependencies:
-  tekartik_app_rx_utils:
+  tekartik_app_prefs:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
