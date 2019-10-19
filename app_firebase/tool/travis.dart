@@ -6,6 +6,6 @@ Future main() async {
   await shell.run('''
 
 flutter analyze
-
+dartfmt -n --set-exit-if-changed .
 ''');
 }
