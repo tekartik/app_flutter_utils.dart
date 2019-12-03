@@ -7,10 +7,11 @@ Future main() async {
   var shell = Shell();
 
   await shell.run('''
-
+flutter config --enable-web
 flutter packages get
 flutter analyze
 # flutter test
+flutter build web
 
 ''');
 

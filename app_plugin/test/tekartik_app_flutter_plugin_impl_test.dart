@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_plugin/src/tekartik_app_flutter_plugin.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   const MethodChannel channel = MethodChannel('tekartik_app_flutter_plugin');
 
   setUp(() {

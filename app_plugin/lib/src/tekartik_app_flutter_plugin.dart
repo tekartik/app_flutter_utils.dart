@@ -29,6 +29,6 @@ class TekartikAppFlutterPlugin {
     return false;
   }
 
-  static get callIsMonkeyRunning async =>
+  static Future<bool> get callIsMonkeyRunning async =>
       await _channel.invokeMethod('isMonkeyRunning') as bool;
 }

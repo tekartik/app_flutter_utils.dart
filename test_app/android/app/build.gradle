@@ -53,6 +53,11 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    // Temporary fix until alpha10
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
 }
 
 flutter {
