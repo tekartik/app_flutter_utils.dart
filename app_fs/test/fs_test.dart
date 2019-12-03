@@ -1,12 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tekartik_app_flutter_idb/idb.dart';
+import 'package:tekartik_app_flutter_fs/fs.dart';
+import 'package:path/path.dart';
 
 void main() {
   group('idb', () {
     test('factory', () {
-      expect(idbFactory, isNotNull);
+      expect(fs, isNotNull);
     });
-    group('memory', () {
+    test('getApplicationDocumentsDirectory()', () async {
+      expect((await fsMemory.getApplicationDocumentsDirectory()).path,
+          '${context.separator}data');
+    });
+    /*
+    group('simple', () {
       test('open', () async {
         Future<Database> open() async {
           var db = await idbFactoryMemory.open('test.db', version: 1,
@@ -21,7 +27,7 @@ void main() {
         var db = await open();
         var txn = db.transaction('simple', idbModeReadWrite);
         var store = txn.objectStore('simple');
-        await store.put('test', 1);
+        store.put('test', 1);
         db.close();
         db = await open();
         txn = db.transaction('simple', idbModeReadOnly);
@@ -30,5 +36,7 @@ void main() {
         db.close();
       });
     });
+
+     */
   });
 }

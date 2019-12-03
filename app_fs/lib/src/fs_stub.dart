@@ -1,0 +1,13 @@
+import 'package:tekartik_app_flutter_fs/fs.dart';
+
+/// Get the application file system
+FileSystem get fs => _stub('fs');
+
+/// Get the application file system
+FileSystem get testFs => _stub('testFs');
+
+Future<Directory> getApplicationDocumentsDirectory() =>
+    _stub('getApplicationDocumentsDirectory');
+T _stub<T>(String message) {
+  throw UnimplementedError(message);
+}

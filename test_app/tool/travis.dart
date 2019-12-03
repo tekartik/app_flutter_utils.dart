@@ -11,6 +11,7 @@ Future main() async {
 flutter packages get
 flutter analyze
 # flutter test
+flutter build web
 
 ''');
 

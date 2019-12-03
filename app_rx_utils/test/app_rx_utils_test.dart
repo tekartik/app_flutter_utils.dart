@@ -11,6 +11,6 @@ void main() {
       subject: subject,
     );
 
-    subject.close();
+    await subject.close();
   });
 }

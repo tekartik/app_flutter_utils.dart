@@ -7,7 +7,7 @@ void main() {
     Timer timer;
     item('start checking isMonkeyRunning every 500ms', () async {
       timer?.cancel();
-      timer = Timer.periodic(Duration(milliseconds: 500), (_) async {
+      timer = Timer.periodic(const Duration(milliseconds: 500), (_) async {
         write('monkey running ${await isMonkeyRunning}');
       });
     });

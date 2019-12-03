@@ -1,8 +1,9 @@
-export 'package:idb_shim/idb_shim.dart';
-import 'src/idb.dart' as src;
-
 import 'package:idb_shim/idb_client.dart';
 import 'package:idb_shim/idb_client_memory.dart' as idb_shim_memory;
+
+import 'src/idb.dart' as src;
+
+export 'package:idb_shim/idb_shim.dart';
 
 /// The Idb factory for your flutter application.
 ///

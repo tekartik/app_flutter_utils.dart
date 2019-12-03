@@ -14,7 +14,7 @@ description: Flutter test application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -88,5 +88,7 @@ dependency_overrides:
     path: ../app_plugin
   tekartik_app_flutter_idb:
     path: ../app_idb
+  tekartik_app_flutter_fs:
+    path: ../app_fs
   tekartik_app_flutter_firebase:
     path: ../app_firebase
