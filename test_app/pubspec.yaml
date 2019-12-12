@@ -36,6 +36,7 @@ dependencies:
       path: test_menu_flutter
     version: '>=0.2.4'
   process_run: '>=0.10.1'
+  pub_semver:
 dev_dependencies:
   flutter_test:
     sdk: flutter
