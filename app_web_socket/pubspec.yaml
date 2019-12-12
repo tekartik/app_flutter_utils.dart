@@ -1,0 +1,26 @@
+name: tekartik_app_web_socket
+description: Web socket for flutter app
+version: 0.1.0
+author:
+homepage:
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  tekartik_web_socket_io:
+    git:
+      url: git://github.com/tekartik/web_socket.dart
+      path: web_socket_io
+      ref: dart2
+    version: '>=0.1.0'
+  tekartik_web_socket_browser:
+    git:
+      url: git://github.com/tekartik/web_socket.dart
+      path: web_socket_browser
+      ref: dart2
+    version: '>=0.1.0'
+
+dev_dependencies:
+  process_run:
+  test:
