@@ -17,6 +17,8 @@ flutter doctor
         Version(2, 6, 0)) ...['app_fs', 'test_app'],
     'app_emit_builder',
     'app_firebase',
+    'app_firebase_auth',
+    'app_firebase_firestore',
     'app_plugin',
     'app_idb',
     'app_rx_utils',
