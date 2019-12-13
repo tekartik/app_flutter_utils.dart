@@ -25,3 +25,4 @@ doc/api/
 /test_app/.flutter-plugins-dependencies
 /app_prefs/.flutter-plugins-dependencies
 /app_firebase/.flutter-plugins-dependencies
+/app_web_socket/.flutter-plugins-dependencies

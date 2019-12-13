@@ -1,6 +1,6 @@
-# tekartik_app_flutter_utils/app_prefs
+# tekartik_app_flutter_firebase
 
-Prefs helper for flutter application
+Firebaase for flutter app (mobile & web)
 
 ## Getting Started
 
@@ -8,10 +8,10 @@ Prefs helper for flutter application
 
 ```yaml
 dependencies:
-  tekartik_app_prefs:
+  tekartik_app_flutter_firebase_firestore:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
-      path: app_prefs
+      path: app_firebase_firestore
     version: '>=0.1.0'
 ```
