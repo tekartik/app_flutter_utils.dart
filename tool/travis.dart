@@ -31,18 +31,4 @@ flutter doctor
 ''');
     shell = shell.popd();
   }
-
-  for (var dir in [
-    'app_web_socket',
-  ]) {
-    shell = shell.pushd(dir);
-    await shell.run('''
-  
-  pub get
-  dart tool/travis.dart
-  
-''');
-
-    shell = shell.popd();
-  }
 }
