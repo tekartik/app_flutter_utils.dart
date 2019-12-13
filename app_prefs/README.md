@@ -1,6 +1,6 @@
-# tekartik_app_flutter_utils/rx
+# tekartik_app_flutter_utils/app_prefs
 
-Rx builder
+Prefs helper for flutter application
 
 ## Getting Started
 
