@@ -1,33 +1,54 @@
-name: tekartik_app_flutter_idb
-description: A new Flutter package project.
-version: 0.1.0
+name: tekartik_idb_test_app_lib
+description: Idb test app lib
+version: 0.0.1
 author:
 homepage:
 
 environment:
-  sdk: ">=2.4.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  idb_shim: '>=1.9.0-dev.1'
-  idb_sqflite:
-  process_run:
-
+  tekartik_test_menu_flutter:
+    git:
+      url: git://github.com/tekartik/test_menu_flutter
+      ref: dart2
+      path: test_menu_flutter
+    version: '>=0.2.3'
+  tekartik_common_utils:
+    git:
+      url: git://github.com/tekartik/common_utils.dart
+      ref: dart2
+    version: '>=0.2.3'
+  tekartik_app_flutter_idb:
+    git:
+      url: git://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2
+      path: app_idb
+    version: '>=0.1.0'
+  tekartik_app_platform:
+    git:
+      url: git://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2
+      path: app_platform
+    version: '>=0.1.0'
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
+dependency_overrides:
+  tekartik_app_flutter_idb:
+    path: ../../app_idb
+  tekartik_app_platform:
+    path: ../../app_platform
+  pedantic: '>=1.9.0'
 flutter:
 
   # To add assets to your package, add an assets section, like this:
   # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

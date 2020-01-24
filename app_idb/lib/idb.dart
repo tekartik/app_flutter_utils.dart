@@ -15,3 +15,8 @@ IdbFactory get idbFactory => src.idbFactory;
 
 /// In memory factory.
 IdbFactory get idbFactoryMemory => idb_shim_memory.idbFactoryMemory;
+
+/// For all flutter app (including linux and windows)
+///
+/// Links with sembast though. Package name is only used for sembast
+IdbFactory getIdbFactory(String packageName) => src.getIdbFactory(packageName);

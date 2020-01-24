@@ -38,8 +38,8 @@ dev_dependencies:
     sdk: flutter
 
 dependency_overrides:
-  tekartik_app_prefs:
-    path: ../../app_prefs
+  tekartik_app_flutter_idb:
+    path: ../../app_idb
   tekartik_app_platform:
     path: ../../app_platform
   pedantic: '>=1.9.0'

@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
+import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
+import 'package:tekartik_app_platform/app_platform.dart';
+import 'package:tekartik_app_platform/app_platform.dart';
+import 'package:tekartik_app_flutter_idb/idb.dart';
+import 'package:tekartik_test_menu_flutter/test.dart';
+import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
-void main() => prefs.main(); // runApp(MyApp());
+void main() {
+  platformInit();
+  mainMenu(() {
+    prefs.defineMenu();
+    idb.defineMenu();
+  }, showConsole: true);
+}
+
+// void main() => prefs.main(); // runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
