@@ -23,5 +23,5 @@ void main() {
         expect(newToggle, toggle);
       });
     });
-  });
+  }, showConsole: true);
 }
