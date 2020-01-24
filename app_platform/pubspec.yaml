@@ -1,40 +1,24 @@
-name: tekartik_app_prefs
-description: Prefs helper
-version: 0.3.0
+name: tekartik_app_platform
+description: Platform helper
+version: 0.1.0
 author:
 homepage:
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.7.0-dev <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  tekartik_prefs_flutter:
-    git:
-      url: git://github.com/tekartik/prefs.dart
-      path: prefs_flutter
-      ref: dart2
-    version: '>=0.1.0'
-  tekartik_prefs_sembast:
-    git:
-      url: git://github.com/tekartik/prefs.dart
-      path: prefs_sembast
-      ref: dart2
-    version: '>=0.1.0'
-  tekartik_prefs_browser:
-    git:
-      url: git://github.com/tekartik/prefs.dart
-      path: prefs_browser
-      ref: dart2
-    version: '>=0.1.0'
-  process_run:
   path:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  process_run:
 
+dependency_overrides:
+  pedantic: '>=1.9.0'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

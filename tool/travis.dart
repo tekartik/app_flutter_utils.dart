@@ -8,8 +8,12 @@ Future main() async {
 
   await shell.run('''
     
-flutter doctor
-  
+  flutter doctor
+    
+  dartanalyzer --fatal-warnings --fatal-infos test tool
+  dartfmt -n --set-exit-if-changed test tool
+  pub run test
+
 ''');
 
   for (var dir in [
@@ -23,6 +27,7 @@ flutter doctor
     'app_idb',
     'app_rx_utils',
     'app_prefs',
+    'app_platform',
   ]) {
     shell = shell.pushd(dir);
     await shell.run('''

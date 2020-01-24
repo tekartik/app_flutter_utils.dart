@@ -12,11 +12,11 @@ dependencies:
     sdk: flutter
   idb_shim: '>=1.9.0-dev.1'
   idb_sqflite:
+  process_run:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  process_run:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
