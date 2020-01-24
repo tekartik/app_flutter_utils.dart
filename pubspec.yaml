@@ -5,7 +5,7 @@ homepage: https://www.example.com
 author: alex <alex@tekartik.com>
 
 environment:
-  sdk: '>=2.4.0 <3.0.0'
+  sdk: '>=2.7.0-dev <3.0.0'
 
 dev_dependencies:
   tekartik_travis_ci_flutter:
@@ -18,7 +18,7 @@ dev_dependencies:
     git:
       url: git://github.com/tekartik/build_utils.dart
       ref: dart2
-    version: '>=0.7.5'
+    version: '>=0.7.8'
 
   # include all from git so that it makes a dependency check
   tekartik_app_emit:
@@ -26,6 +26,7 @@ dev_dependencies:
       url: git://github.com/tekartik/app_common_utils.dart
       ref: dart2
       path: app_emit
+  test:
 
 dependency_overrides:
 # tmp
