@@ -8,7 +8,9 @@ void main() {
       expect(fs, isNotNull);
     });
     test('getApplicationDocumentsDirectory()', () async {
-      expect((await fsMemory.getApplicationDocumentsDirectory()).path,
+      expect(
+          (await fsMemory.getApplicationDocumentsDirectory('test.tekartik.com'))
+              .path,
           '${context.separator}data');
     });
     /*

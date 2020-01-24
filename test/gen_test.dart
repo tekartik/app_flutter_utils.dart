@@ -12,10 +12,14 @@ void main() {
     'min_app',
     () {
       test('fs_generate', () async {
-        await copyDirectory(Directory('example/prefs_test_app_lib'),
-            Directory('.dart_tool/prefs_test_app_lib'));
-        await copyDirectory(Directory('example/idb_test_app_lib'),
-            Directory('.dart_tool/idb_test_app_lib'));
+        for (var dir in [
+          'fs_test_app_lib',
+          'idb_test_app_lib',
+          'prefs_test_app_lib'
+        ]) {
+          await copyDirectory(
+              Directory('example/$dir'), Directory('.dart_tool/$dir'));
+        }
         var dirName = '.dart_tool/test_app';
         var src = 'example/test_app';
         await fsGenerate(dir: dirName, src: src);

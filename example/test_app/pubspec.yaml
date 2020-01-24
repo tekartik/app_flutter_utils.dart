@@ -27,6 +27,8 @@ dependencies:
     path: ../prefs_test_app_lib
   tekartik_idb_test_app_lib:
     path: ../idb_test_app_lib
+  tekartik_fs_test_app_lib:
+    path: ../fs_test_app_lib
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +41,8 @@ dependency_overrides:
     path: ../../app_platform
   tekartik_app_flutter_idb:
     path: ../../app_idb
+  tekartik_app_flutter_fs:
+    path: ../../app_fs
   pedantic: '>=1.9.0'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
