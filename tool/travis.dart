@@ -23,6 +23,7 @@ flutter doctor
     'app_idb',
     'app_rx_utils',
     'app_prefs',
+    'app_platform',
   ]) {
     shell = shell.pushd(dir);
     await shell.run('''

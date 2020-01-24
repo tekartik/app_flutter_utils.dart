@@ -33,7 +33,9 @@ dev_dependencies:
 dependency_overrides:
   tekartik_app_prefs:
     path: ../../app_prefs
-
+  tekartik_app_platform:
+    path: ../../app_platform
+  pedantic: '>=1.9.0'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -75,3 +77,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Medium.ttf
+          weight: 500
