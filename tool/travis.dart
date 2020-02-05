@@ -28,6 +28,7 @@ Future main() async {
     'app_rx_utils',
     'app_prefs',
     'app_platform',
+    'app_roboto',
   ]) {
     shell = shell.pushd(dir);
     await shell.run('''
