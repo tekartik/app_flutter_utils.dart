@@ -1,6 +1,6 @@
 name: tekartik_app_platform
 description: Platform helper
-version: 0.1.0
+version: 0.2.0
 author:
 homepage:
 
@@ -11,6 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
   path:
+  tekartik_platform_io:
+    git:
+      url: git://github.com/tekartik/platform.dart
+      ref: dart2
+      path: platform_io
+  tekartik_platform_browser:
+    git:
+      url: git://github.com/tekartik/platform.dart
+      ref: dart2
+      path: platform_browser
 
 dev_dependencies:
   flutter_test:
