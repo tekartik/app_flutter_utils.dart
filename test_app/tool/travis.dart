@@ -17,7 +17,7 @@ Future main() async {
   var shell = Shell();
 
   var flutterVersion = await getFlutterVersion();
-  var webMinFlutterVersion = Version(1, 12, 13, build: 'hotfix.6');
+  var webMinFlutterVersion = Version(1, 14, 6);
 
   if (flutterVersion >= webMinFlutterVersion) {
     await shell.run('flutter config --enable-web');

@@ -12,11 +12,12 @@ dependencies:
     sdk: flutter
   fs_shim:
   path_provider:
+  process_run:
+  path:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  process_run:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

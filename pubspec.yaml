@@ -26,6 +26,7 @@ dev_dependencies:
       url: git://github.com/tekartik/app_common_utils.dart
       ref: dart2
       path: app_emit
+
   test:
 
 dependency_overrides:
