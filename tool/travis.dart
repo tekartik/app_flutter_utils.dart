@@ -29,6 +29,7 @@ Future main() async {
     'app_prefs',
     'app_platform',
     'app_roboto',
+    'app_sembast',
   ]) {
     shell = shell.pushd(dir);
     await shell.run('''
