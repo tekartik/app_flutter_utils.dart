@@ -24,7 +24,9 @@ DatabaseFactory _newDatabaseFactorySembast(String dataPath) {
   return createDatabaseFactoryIo(rootPath: dataPath);
 }
 
-/// Use sembast on linux and windows
+/// Use app data on linux and windows if rootPath is null
+///
+/// Throw if no path defined
 DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) {
   if (rootPath != null) {
     var factory = _databaseFactoryMap[rootPath] ??=
@@ -37,5 +39,5 @@ DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) {
       return factory;
     }
   }
-  return databaseFactory;
+  throw ArgumentError('Missing packageName or rootPath in getDatabaseFactory');
 }

@@ -29,7 +29,8 @@ dependencies:
     path: ../idb_test_app_lib
   tekartik_fs_test_app_lib:
     path: ../fs_test_app_lib
-
+  tekartik_sembast_test_app_lib:
+    path: ../sembast_test_app_lib
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,6 +42,8 @@ dependency_overrides:
     path: ../../app_platform
   tekartik_app_flutter_idb:
     path: ../../app_idb
+  tekartik_app_flutter_sembast:
+    path: ../../app_sembast
   tekartik_app_flutter_fs:
     path: ../../app_fs
   pedantic: '>=1.9.0'

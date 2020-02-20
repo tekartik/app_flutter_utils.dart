@@ -31,3 +31,4 @@ build/
 
 /ios/
 /android/
+/.flutter-plugins-dependencies
