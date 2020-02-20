@@ -15,7 +15,8 @@ void main() {
         for (var dir in [
           'fs_test_app_lib',
           'idb_test_app_lib',
-          'prefs_test_app_lib'
+          'prefs_test_app_lib',
+          'sembast_test_app_lib'
         ]) {
           await copyDirectory(
               Directory('example/$dir'), Directory('.dart_tool/$dir'));
