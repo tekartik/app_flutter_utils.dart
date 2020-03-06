@@ -109,6 +109,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 dependency_overrides:
+  pedantic: '>=1.9.0'
   tekartik_app_flutter_plugin:
     path: ../app_plugin
   tekartik_app_flutter_idb:

@@ -12,8 +12,7 @@ final _databaseFactoryMap = <String, DatabaseFactory>{};
 
 DatabaseFactory newDatabaseFactorySembast(
     {String packageName, String rootPath}) {
-  var dataPath =
-      rootPath != null ? rootPath : join(userAppDataPath, packageName, 'db');
+  var dataPath = rootPath ?? join(userAppDataPath, packageName, 'db');
   return _newDatabaseFactorySembast(dataPath);
 }
 

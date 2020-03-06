@@ -9,7 +9,7 @@ class TekartikAppFlutterPlugin {
       MethodChannel('tekartik_app_flutter_plugin');
 
   static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+    final version = await _channel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
@@ -17,7 +17,7 @@ class TekartikAppFlutterPlugin {
   static Future<bool> get isMonkeyRunning async {
     if (Platform.isAndroid) {
       try {
-        final bool running = await _channel.invokeMethod('isMonkeyRunning');
+        final running = await _channel.invokeMethod<bool>('isMonkeyRunning');
         return running;
       } catch (e) {
         if (isDebug) {

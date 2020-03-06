@@ -20,6 +20,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   process_run:
+
+dependency_overrides:
+  pedantic: '>=1.9.0'
+
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
