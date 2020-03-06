@@ -5,7 +5,7 @@ import 'package:tekartik_app_flutter_plugin/src/tekartik_app_flutter_plugin.dart
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const MethodChannel channel = MethodChannel('tekartik_app_flutter_plugin');
+  const channel = MethodChannel('tekartik_app_flutter_plugin');
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {

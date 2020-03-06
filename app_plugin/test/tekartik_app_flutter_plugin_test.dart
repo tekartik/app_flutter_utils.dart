@@ -5,7 +5,7 @@ import 'package:tekartik_app_flutter_plugin/monkey.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const MethodChannel channel = MethodChannel('tekartik_app_flutter_plugin');
+  const channel = MethodChannel('tekartik_app_flutter_plugin');
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
