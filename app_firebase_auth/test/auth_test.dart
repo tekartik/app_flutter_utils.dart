@@ -7,6 +7,7 @@ void main() {
       // ignore: unnecessary_statements
       AuthService;
       authService;
+      googleAuthProvider;
     });
   });
 }
