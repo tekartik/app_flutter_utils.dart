@@ -13,11 +13,19 @@ IdbFactory get idbFactory => idbFactorySqflite;
 
 final _prefsFactoryMap = <String, IdbFactory>{};
 
-IdbFactory newIdbFactorySembast(String packageName) {
-  var dataPath = join(userAppDataPath, packageName, 'prefs');
+String buildDatabasesPath(String packageName) {
+  var dataPath = join(userAppDataPath, packageName, 'databases');
   try {
-    Directory(dirname(dataPath)).createSync(recursive: true);
+    var dir = Directory(dataPath);
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
   } catch (_) {}
+  return dataPath;
+}
+
+IdbFactory newIdbFactorySembast(String packageName) {
+  var dataPath = buildDatabasesPath(packageName);
   return IdbFactorySembast(databaseFactoryIo, dataPath);
 }
 

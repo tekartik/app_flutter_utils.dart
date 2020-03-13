@@ -27,6 +27,8 @@ dependencies:
     path: ../prefs_test_app_lib
   tekartik_idb_test_app_lib:
     path: ../idb_test_app_lib
+  tekartik_sqflite_test_app_lib:
+    path: ../sqflite_test_app_lib
   tekartik_fs_test_app_lib:
     path: ../fs_test_app_lib
   tekartik_sembast_test_app_lib:
@@ -42,6 +44,8 @@ dependency_overrides:
     path: ../../app_platform
   tekartik_app_flutter_idb:
     path: ../../app_idb
+  tekartik_app_flutter_sqflite:
+    path: ../../app_sqflite
   tekartik_app_flutter_sembast:
     path: ../../app_sembast
   tekartik_app_flutter_fs:
