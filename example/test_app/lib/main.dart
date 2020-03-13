@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
+import 'package:tekartik_sqflite_test_app_lib/main.dart' as sqflite;
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
 import 'package:tekartik_fs_test_app_lib/main.dart' as fs;
 import 'package:tekartik_sembast_test_app_lib/main.dart' as sembast;
@@ -14,6 +15,7 @@ void main() {
     idb.defineMenu();
     fs.defineMenu();
     sembast.defineMenu();
+    sqflite.defineMenu();
   }, showConsole: true);
 }
 
