@@ -1,11 +1,11 @@
 name: tekartik_app_flutter_idb
-description: A new Flutter package project.
-version: 0.1.0
+description: Setup idb for all platforms
+version: 0.2.0
 author:
 homepage:
 
 environment:
-  sdk: ">=2.4.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
