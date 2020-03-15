@@ -7,9 +7,10 @@ import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:tekartik_app_flutter_idb/idb.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// All but Linux/Windows
-IdbFactory get idbFactory => idbFactorySqflite;
+IdbFactory get idbFactory => getIdbFactorySqflite(databaseFactory);
 
 final _prefsFactoryMap = <String, IdbFactory>{};
 
