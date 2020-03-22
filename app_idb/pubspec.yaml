@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_idb
 description: Setup idb for all platforms
-version: 0.2.0
+version: 0.3.0
 author:
 homepage:
 
@@ -11,7 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   idb_shim: '>=1.9.0-dev.1'
-  idb_sqflite:
+  idb_sqflite: '>=0.3.0-dev.1'
+  sqflite:
   process_run:
 
 dev_dependencies:
