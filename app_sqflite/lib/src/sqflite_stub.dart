@@ -7,6 +7,9 @@ DatabaseFactory get databaseFactory => _stub('databaseFactory');
 Future<DatabaseFactory> initDatabaseFactory(String packageName) =>
     _stub('initDatabaseFactory($packageName)');
 
+DatabaseFactory getDatabaseFactory(String packageName) =>
+    _stub('getDatabaseFactory($packageName)');
+
 T _stub<T>(String message) {
   throw UnimplementedError(message);
 }
