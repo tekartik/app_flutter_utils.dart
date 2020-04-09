@@ -9,7 +9,7 @@ void defineMenu() {
     //devPrint('MAIN_');
     item('open and toggle value', () async {
       var prefsFactory =
-          getDatabaseFactory('app_sqflite_test_app.tekartik.com');
+          getDatabaseFactory(packageName: 'app_sqflite_test_app.tekartik.com');
       // ignore: deprecated_member_use
       await prefsFactory.setLogLevel(sqfliteLogLevelVerbose);
       var prefs = await prefsFactory.openDatabase('open_toggle_sqflitedb',

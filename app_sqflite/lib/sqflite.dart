@@ -16,6 +16,6 @@ Future<DatabaseFactory> initDatabaseFactory(String packageName) =>
 
 /// For all flutter app (including linux and windows)
 ///
-/// [packageName] only used on linux and windows for now
-DatabaseFactory getDatabaseFactory(String packageName) =>
-    src.getDatabaseFactory(packageName);
+/// [packageName] or [rootPath] only used on linux and windows for now
+DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>
+    src.getDatabaseFactory(packageName: packageName, rootPath: rootPath);
