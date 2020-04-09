@@ -1,42 +1,30 @@
-import 'dart:io';
-
-import 'package:path/path.dart';
-import 'package:process_run/shell_run.dart';
-import 'package:sembast/sembast_io.dart';
+import 'package:sembast_sqflite/sembast_sqflite.dart';
 import 'package:tekartik_app_flutter_sembast/sembast.dart';
+import 'package:tekartik_app_flutter_sqflite/sqflite.dart' as sqflite;
 
+/*
 /// All but Linux/Windows
 DatabaseFactory get databaseFactory => databaseFactoryIo;
 
 final _databaseFactoryMap = <String, DatabaseFactory>{};
 
-DatabaseFactory newDatabaseFactorySembast(
+DatabaseFactory newDatabaseFactorySembastIo(
     {String packageName, String rootPath}) {
   var dataPath = rootPath ?? join(userAppDataPath, packageName, 'db');
-  return _newDatabaseFactorySembast(dataPath);
+  return _newDatabaseFactorySembastIo(dataPath);
 }
 
-DatabaseFactory _newDatabaseFactorySembast(String dataPath) {
+DatabaseFactory _newDatabaseFactorySembastIo(String dataPath) {
   try {
     Directory(dirname(dataPath)).createSync(recursive: true);
   } catch (_) {}
   return createDatabaseFactoryIo(rootPath: dataPath);
 }
+*/
 
 /// Use app data on linux and windows if rootPath is null
 ///
 /// Throw if no path defined
-DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) {
-  if (rootPath != null) {
-    var factory = _databaseFactoryMap[rootPath] ??=
-        newDatabaseFactorySembast(rootPath: rootPath);
-    return factory;
-  } else if (packageName != null) {
-    if (Platform.isLinux || Platform.isWindows) {
-      var factory = _databaseFactoryMap[packageName] ??=
-          newDatabaseFactorySembast(packageName: packageName);
-      return factory;
-    }
-  }
-  throw ArgumentError('Missing packageName or rootPath in getDatabaseFactory');
-}
+DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>
+    getDatabaseFactorySqflite(sqflite.getDatabaseFactory(
+        packageName: packageName, rootPath: rootPath));

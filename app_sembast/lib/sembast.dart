@@ -11,9 +11,9 @@ DatabaseFactory get databaseFactoryMemory =>
 
 /// For all flutter app (including linux and windows).
 ///
-/// For mobile/MacOS, use the rootPath, for example from path_provider,
+/// For mobile/MacOS, sqflite is used, no parameter are needed,
 ///
-/// On linux and windows, specify a package name.
+/// On linux and windows, specify a package name or root path
 ///
 /// On the web the parameters are ignored.
 DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>

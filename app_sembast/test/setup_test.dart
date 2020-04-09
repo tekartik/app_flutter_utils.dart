@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_sembast/sembast.dart';
 
 void main() {
-  var factory = getDatabaseFactory(
-      rootPath: '.dart_tool/tekartik_app_flutter_sembast/db');
+  var rootPath = '.dart_tool/tekartik_app_flutter_sembast/db';
+  var factory = getDatabaseFactory(rootPath: rootPath);
   group('sembast', () {
     test('factory', () {
       expect(getDatabaseFactory, isNotNull);
@@ -12,6 +12,7 @@ void main() {
     group('memory', () {
       test('open', () async {
         var store = StoreRef<String, String>.main();
+        await factory.deleteDatabase('test.db');
         Future<Database> open() async {
           var db = await factory.openDatabase('test.db');
           return db;

@@ -26,12 +26,12 @@ void main() {
   });
 
   test('get', () async {
-    factory = getDatabaseFactory('com.tekartik.dummy.app');
+    factory = getDatabaseFactory(packageName: 'com.tekartik.dummy.app');
     var dummyDatabasesPath = await factory.getDatabasesPath();
     expect(dummyDatabasesPath, isNotNull);
     expect(dummyDatabasesPath, contains('dummy.app'));
     print(dummyDatabasesPath);
-    factory = getDatabaseFactory(null);
+    factory = getDatabaseFactory();
     expect(await factory.getDatabasesPath(), isNotNull);
     expect(await factory.getDatabasesPath(), isNot(dummyDatabasesPath));
   });

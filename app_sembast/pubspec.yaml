@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_sembast
 description: Sembast for flutter (Web, Mobile & Desktop)
-version: 0.2.0
+version: 0.3.0
 author:
 homepage:
 
@@ -12,9 +12,16 @@ dependencies:
     sdk: flutter
   sembast: '>=1.2.1'
   sembast_web: '>=0.1.0+4'
+  sembast_sqflite:
   process_run:
   path_provider:
   path:
+  tekartik_app_flutter_sqflite:
+    git:
+      url: git://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2
+      path: app_sqflite
+    version: '>=0.3.0'
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +29,8 @@ dev_dependencies:
 
 dependency_overrides:
   pedantic: '>=1.9.0'
+  tekartik_app_flutter_sqflite:
+    path: ../app_sqflite
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

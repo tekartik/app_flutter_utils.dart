@@ -42,11 +42,12 @@ Future<DatabaseFactory> initDatabaseFactory(String packageName) async {
 }
 
 /// Use sqflite on any platform
-DatabaseFactory getDatabaseFactory(String packageName) {
+DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) {
   if (Platform.isLinux || Platform.isWindows) {
     var databaseFactory = databaseFactoryFfi;
     // Should not return a future...or ignore
-    databaseFactory.setDatabasesPath(buildDatabasesPath(packageName));
+    databaseFactory
+        .setDatabasesPath(rootPath ?? buildDatabasesPath(packageName));
     return databaseFactory;
   } else {
     return databaseFactory;
