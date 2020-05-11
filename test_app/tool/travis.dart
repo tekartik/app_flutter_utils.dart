@@ -1,25 +1,25 @@
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:process_run/cmd_run.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:process_run/which.dart';
-import 'package:pub_semver/pub_semver.dart';
 
-Future<Version> getFlutterVersion() async {
-  var flutterVersion = Version.parse(LineSplitter.split(
-          (await run('flutter --version')).first.stdout.toString())
-      .first
-      .split(' ')[1]);
-  return flutterVersion;
-}
+/*Future<String> _flutterVersion = () async {
+  return await getFlutterBinVersion();
+}();*/
+Future<String> _flutterChannel = () async {
+  return await getFlutterBinChannel();
+}();
+
+Future<bool> supportsFlutterWeb = () async {
+  var channel = await _flutterChannel;
+  return [dartChannelBeta, dartChannelDev, dartChannelMaster].contains(channel);
+}();
 
 Future main() async {
   var shell = Shell();
 
-  var flutterVersion = await getFlutterVersion();
-  var webMinFlutterVersion = Version(1, 14, 6);
-
-  if (flutterVersion >= webMinFlutterVersion) {
+  if (await supportsFlutterWeb) {
     await shell.run('flutter config --enable-web');
   }
   await shell.run('''
@@ -27,7 +27,7 @@ flutter packages get
 flutter analyze
 ''');
 
-  if (flutterVersion >= webMinFlutterVersion) {
+  if (await supportsFlutterWeb) {
     await shell.run('flutter build web');
   }
 

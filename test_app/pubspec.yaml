@@ -59,12 +59,11 @@ dependencies:
       ref: dart2
       path: app_roboto
       version: '>=0.1.0'
-  process_run: '>=0.10.1'
+  process_run: '>=0.10.9+1'
   pub_semver:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
