@@ -1,8 +1,7 @@
 name: tekartik_app_flutter_idb
 description: Setup idb for all platforms
 version: 0.3.0
-author:
-homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

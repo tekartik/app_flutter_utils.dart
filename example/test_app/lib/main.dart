@@ -13,7 +13,7 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 void main() {
   platformInit();
   if (!kIsWeb) {
-    sqfliteFfiWindowsInit();
+    sqfliteWindowsFfiInit();
   }
   mainMenu(() {
     prefs.defineMenu();

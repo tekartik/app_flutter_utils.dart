@@ -21,4 +21,4 @@ DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>
     src.getDatabaseFactory(packageName: packageName, rootPath: rootPath);
 
 /// Only needed on Windows during development to find the proper dll location
-void sqfliteFfiWindowsInit() => src.sqfliteWindowsFfiInit();
+void sqfliteWindowsFfiInit() => src.sqfliteWindowsFfiInit();

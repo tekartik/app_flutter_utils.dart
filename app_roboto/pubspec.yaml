@@ -1,8 +1,7 @@
 name: tekartik_app_roboto
 description: Roboto fonts
 version: 0.1.0
-author:
-homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
