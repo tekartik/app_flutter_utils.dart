@@ -1,11 +1,11 @@
 name: tekartik_app_flutter_sembast
 description: Sembast for flutter (Web, Mobile & Desktop)
-version: 0.3.1
+version: 0.4.0
 author:
 homepage:
 
 environment:
-  sdk: ">=2.4.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -21,7 +21,7 @@ dependencies:
       url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
       path: app_sqflite
-    version: '>=0.3.0'
+    version: '>=0.4.0'
 
 dev_dependencies:
   flutter_test:

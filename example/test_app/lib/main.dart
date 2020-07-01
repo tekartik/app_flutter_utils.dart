@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
+import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
 import 'package:tekartik_sqflite_test_app_lib/main.dart' as sqflite;
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
@@ -10,6 +12,9 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
 void main() {
   platformInit();
+  if (!kIsWeb) {
+    sqfliteFfiWindowsInit();
+  }
   mainMenu(() {
     prefs.defineMenu();
     idb.defineMenu();
