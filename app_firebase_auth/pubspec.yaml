@@ -1,8 +1,7 @@
 name: tekartik_app_flutter_firebase_auth
 description: Firebase auth for flutter application
 version: 0.1.1
-author:
-homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.7.0-dev <3.0.0"

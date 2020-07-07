@@ -10,6 +10,9 @@ Future<DatabaseFactory> initDatabaseFactory(String packageName) =>
 DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>
     _stub('getDatabaseFactory($packageName)');
 
+/// Only needed/implemented on windows
+void sqfliteWindowsFfiInit() => _stub('sqfliteWindowsFfiInit');
+
 T _stub<T>(String message) {
   throw UnimplementedError(message);
 }

@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:sqflite_common/sqflite_dev.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
-import 'package:sqflite/sqlite_api.dart';
-
 import 'package:sqflite/sqflite.dart' as sqflite show databaseFactory;
+import 'package:sqflite/sqlite_api.dart';
+import 'package:sqflite_common/sqflite_dev.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 String buildDatabasesPath(String packageName) {
@@ -53,3 +52,5 @@ DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) {
     return databaseFactory;
   }
 }
+
+void sqfliteWindowsFfiInit() => sqfliteFfiInit();

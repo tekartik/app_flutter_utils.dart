@@ -1,7 +1,5 @@
-import 'dart:io';
-
 import 'package:process_run/shell.dart';
-import 'package:pub_semver/pub_semver.dart';
+import 'package:tekartik_build_utils/common_import.dart';
 
 Future main() async {
   var shell = Shell();
@@ -17,8 +15,8 @@ Future main() async {
 ''');
 
   for (var dir in [
-    if (Version.parse(Platform.version.split(' ').first) >=
-        Version(2, 6, 0)) ...['app_fs', 'test_app'],
+    'app_fs',
+    'test_app',
     'app_emit_builder',
     'app_firebase',
     'app_firebase_auth',
@@ -30,6 +28,7 @@ Future main() async {
     'app_platform',
     'app_roboto',
     'app_sembast',
+    join('example', 'test_app')
   ]) {
     shell = shell.pushd(dir);
     await shell.run('''

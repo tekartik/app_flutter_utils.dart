@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_sembast/sembast.dart';
+import 'package:tekartik_app_flutter_sqflite/sqflite.dart'
+    show sqfliteWindowsFfiInit;
 
 void main() {
   group('sembast', () {
     test('open', () async {
-      ///
+      sqfliteWindowsFfiInit();
       var factory = getDatabaseFactory();
 
       var store = StoreRef<String, String>.main();

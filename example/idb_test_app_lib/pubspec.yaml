@@ -1,8 +1,7 @@
 name: tekartik_idb_test_app_lib
 description: Idb test app lib
 version: 0.0.1
-author:
-homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
