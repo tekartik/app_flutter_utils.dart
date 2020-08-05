@@ -7,6 +7,10 @@ void main() {
   group('sembast', () {
     test('open', () async {
       sqfliteWindowsFfiInit();
+      // Get the sembast database factory according to the current platform
+      // * sembast_web for FlutterWeb and Web
+      // * sembast_sqflite and sqflite on Flutter iOS/Android/MacOS
+      // * sembast_sqflite and sqflite3 ffi on Flutter Windows/Linux and dart VM (might require extra initialization steps)
       var factory = getDatabaseFactory();
 
       var store = StoreRef<String, String>.main();
