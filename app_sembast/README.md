@@ -1,10 +1,13 @@
 # tekartik_app_flutter_sembast
 
+This package allow a simplified sembast initialization to support multiple platforms (flutter mobile/desktop and web).
+The abstraction is done at the database factory used within an application.
+
 Sembast database factory for flutter app (mobile & web).
 
 * On Flutter iOS/Android/MacOS, [sembast_sqflite](https://pub.dev/packages/sembast_sqflite) will be used based on 
   [sqflite](https://pub.dev/packages/sqflite)
-* On Flutter Desktop Windows/Linux/MacOS, [sembast_sqflite](https://pub.dev/packages/sembast_sqflite) will be used 
+* On Flutter Desktop Windows/Linux/(optional MacOS), [sembast_sqflite](https://pub.dev/packages/sembast_sqflite) will be used 
   based on [sqflite_commmon_ffi](https://pub.dev/packages/sqflite_common_ffi)
 * On Flutter Web, [sembast_web](https://pub.dev/packages/sembast_web) will be used based on
   IndexedDB
@@ -26,13 +29,26 @@ dependencies:
 
 ### Usage
 
+Simplified usage: 
+* Open your database only once in your application 
+* Keep it open
+
 ```dart
 import 'package:tekartik_app_flutter_idb/app_sembast.dart';
-
-var store = StoreRef<String, String>.main();
-var db = await factory.openDatabase('test.db');
-await store.record('kkey').put(db, 'value');
-await db.close();
+Future main() {
+  // Get the sembast database factory according to the current platform
+  // * sembast_web for FlutterWeb and Web
+  // * sembast_sqflite and sqflite on Flutter iOS/Android/MacOS
+  // * sembast_sqflite and sqflite3 ffi on Flutter Windows/Linux and dart VM (might require extra initialization steps)
+  var factory = getDatabaseFactory();
+  var store = StoreRef<String, String>.main();
+  // Open the database
+  var db = await factory.openDatabase('test.db');
+  await store.record('key').put(db, 'value');
+  
+  // Not needed in a flutter application
+  await db.close();
+}
 ```
 
 ### Usage in unit test
@@ -51,3 +67,8 @@ void main() {
   });
 }
 ```
+
+# Sample usage
+
+* [Flutter counter template with added persistency](https://github.com/alextekartik/flutter_app_example/tree/master/demosembast) available, [online demo](https://alextekartik.github.io/flutter_app_example/demosembast)
+* Basic [notepad using sembast](https://github.com/alextekartik/flutter_app_example/tree/master/notepad_sembast) available, [online demo](https://alextekartik.github.io/flutter_app_example/notepad_sembast/)
