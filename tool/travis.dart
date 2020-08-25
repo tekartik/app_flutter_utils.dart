@@ -15,6 +15,7 @@ Future main() async {
 ''');
 
   for (var dir in [
+    'app_bloc',
     'app_fs',
     'test_app',
     'app_emit_builder',
