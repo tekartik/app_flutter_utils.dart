@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:tekartik_app_bloc/base_bloc.dart';
+export 'package:tekartik_app_bloc/base_bloc.dart';
 
 class BlocProvider<T extends BaseBloc> extends StatefulWidget {
   final Widget child;

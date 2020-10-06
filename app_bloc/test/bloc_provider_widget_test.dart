@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tekartik_app_bloc/base_bloc.dart';
 import 'package:tekartik_app_flutter_bloc/bloc_provider.dart';
 
 class TestBloc extends BaseBloc {

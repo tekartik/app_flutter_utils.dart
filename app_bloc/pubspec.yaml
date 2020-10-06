@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_bloc
 description: Basic bloc provider
-version: 0.2.1
+version: 0.2.2
 publish_to: none
 
 environment:
@@ -20,6 +20,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   process_run:
+  dev_test: '>=0.13.3+11'
 
 dependency_overrides:
   pedantic: '>=1.9.0'

@@ -13,5 +13,32 @@ dependencies:
       url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
       path: app_bloc
-    version: '>=0.1.0'
+    version: '>=0.2.2'
+```
+
+### Usage
+
+```dart
+class TestBloc extends BaseBloc {
+  final String value = 'test_result';
+}
+
+class TestApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: BlocProvider(
+      blocBuilder: () => TestBloc(),
+      child: Scaffold(
+        body: ListView(
+          children: [
+            Builder(builder: (context) {
+              return Text(BlocProvider.of<TestBloc>(context).value);
+            })
+          ],
+        ),
+      ),
+    ));
+  }
+}
 ```
