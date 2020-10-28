@@ -1,10 +1,10 @@
 name: tekartik_app_flutter_idb
 description: Setup idb for all platforms
-version: 0.3.0
+version: 0.3.1
 publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0-0 <3.0.0"
 
 dependencies:
   flutter:
@@ -17,6 +17,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  dev_test:
 
 dependency_overrides:
   pedantic: '>=1.9.0'
