@@ -1,5 +1,5 @@
-import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_flutter_fs/fs.dart';
+import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
@@ -10,9 +10,11 @@ Future<Directory> get dirAsync async => _dir ??= await () async {
     }();
 
 File _file;
+
 Future<File> get fileAsync async => _file ??= await () async {
       return fs.file(fs.path.join((await dirAsync).path, 'file.txt'));
     }();
+
 void defineMenu() {
   menu('fs', () {
     //devPrint('MAIN_');

@@ -7,7 +7,8 @@ void defineMenu() {
   menu('idb', () {
     //devPrint('MAIN_');
     item('open and toggle value', () async {
-      var prefsFactory = getIdbFactory('app_idb_test_app.tekartik.com');
+      var prefsFactory =
+          getIdbFactory(packageName: 'app_idb_test_app.tekartik.com');
       var prefs = await prefsFactory.open('open_toggle_idb.db', version: 1,
           onUpgradeNeeded: (event) {
         var db = event.database;
