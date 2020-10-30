@@ -1,23 +1,26 @@
-name: tekartik_app_flutter_idb
-description: Setup idb for all platforms
-version: 0.3.1
+name: tekartik_app_flutter_bloc
+description: Basic bloc provider
+version: 0.2.2
 publish_to: none
 
 environment:
-  sdk: ">=2.10.0-0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  idb_shim: '>=1.9.0-dev.1'
-  idb_sqflite: '>=0.3.0-dev.1'
-  sqflite:
-  process_run:
+  tekartik_app_bloc:
+    git:
+      url: git://github.com/tekartik/app_common_utils.dart
+      ref: dart2
+      path: app_bloc
+    version: '>=0.1.0'
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dev_test:
+  process_run:
+  dev_test: '>=0.13.3+11'
 
 dependency_overrides:
   pedantic: '>=1.9.0'

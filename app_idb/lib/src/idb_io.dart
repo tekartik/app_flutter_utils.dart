@@ -31,7 +31,7 @@ IdbFactory newIdbFactorySembast(String packageName) {
 }
 
 /// Use sembast on linux and windows
-IdbFactory getIdbFactory(String packageName) {
+IdbFactory getIdbFactory({String packageName}) {
   if (Platform.isLinux || Platform.isWindows) {
     var idbFactory = _prefsFactoryMap[packageName];
     if (idbFactory == null) {
