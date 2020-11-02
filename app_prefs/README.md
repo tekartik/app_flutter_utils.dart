@@ -20,7 +20,7 @@ dependencies:
 ### Usage
 
 ```dart
-// Get the default prefs factory. In unit test, it is a new in memory one
+// Get the default persistent prefs factory.
 var prefsFactory = getPrefsFactory();
 var prefs = await prefsFactory.openPreferences('my_shared_prefs');
 
@@ -35,4 +35,11 @@ Linux/Windows
 // For Windows/Linux support you can add package name to find a shared
 // location on the file system
 var prefsFactory = getPrefsFactory(packageName: 'my.package.name');
+```
+
+In unit test:
+
+```dart
+// In memory prefs factory.
+var prefsFactory = prefsFactoryMemory;
 ```
