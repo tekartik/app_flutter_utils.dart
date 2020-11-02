@@ -7,10 +7,9 @@ import 'package:process_run/shell_run.dart';
 
 FileSystem get fs => fileSystemIo;
 
-Future<Directory> getApplicationDocumentsDirectory(
-    {String appPackageName}) async {
+Future<Directory> getApplicationDocumentsDirectory({String packageName}) async {
   if (Platform.isLinux || Platform.isWindows) {
-    var dataPath = fs.path.join(userAppDataPath, appPackageName, 'data');
+    var dataPath = fs.path.join(userAppDataPath, packageName, 'data');
     return fs.directory(dataPath);
   } else {
     var directory = await plugin.getApplicationDocumentsDirectory();
