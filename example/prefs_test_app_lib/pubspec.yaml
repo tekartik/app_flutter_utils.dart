@@ -41,6 +41,8 @@ dependency_overrides:
     path: ../../app_idb
   tekartik_app_platform:
     path: ../../app_platform
+  tekartik_app_prefs:
+    path: ../../app_prefs
   pedantic: '>=1.9.0'
 flutter:
 

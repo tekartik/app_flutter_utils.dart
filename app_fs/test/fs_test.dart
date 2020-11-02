@@ -9,7 +9,8 @@ void main() {
     });
     test('getApplicationDocumentsDirectory()', () async {
       expect(
-          (await fsMemory.getApplicationDocumentsDirectory('test.tekartik.com'))
+          (await fsMemory.getApplicationDocumentsDirectory(
+                  packageName: 'test.tekartik.com'))
               .path,
           '${context.separator}data');
     });

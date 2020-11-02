@@ -18,7 +18,7 @@ PrefsFactory newPrefsFactorySembast(String packageName) {
 }
 
 /// Use sembast on linux and windows
-PrefsFactory getPrefsFactory(String packageName) {
+PrefsFactory getPrefsFactory({String packageName}) {
   if (Platform.isLinux || Platform.isWindows) {
     var prefsFactory = _prefsFactoryMap[packageName];
     if (prefsFactory == null) {

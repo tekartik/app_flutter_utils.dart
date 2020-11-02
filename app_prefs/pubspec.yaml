@@ -1,6 +1,6 @@
 name: tekartik_app_prefs
 description: Prefs helper
-version: 0.3.0
+version: 0.3.1
 publish_to: none
 
 environment:
