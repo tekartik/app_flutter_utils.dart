@@ -77,6 +77,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
           return false;
         }
 
+        // ignore: invalid_use_of_protected_member
         cnBloc.onPopPage(route, result);
         // Update the list of pages by setting _selectedBook to null
 

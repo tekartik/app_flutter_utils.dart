@@ -11,7 +11,7 @@ abstract class ContentPageDef {
       {
       // should a build a default MaterialPage
       @deprecated ContentPageBuilder builder,
-      ContentPath path,
+      @required ContentPath path,
       @required ContentScreenBuilder screenBuilder}) {
     return _ContentPageDef(
         builder: builder, path: path, screenBuilder: screenBuilder);

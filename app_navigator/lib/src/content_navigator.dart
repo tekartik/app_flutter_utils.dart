@@ -140,6 +140,11 @@ class ContentNavigatorBloc extends BaseBloc {
     return MaterialPageRoute(builder: (context) => pageDef.screenBuilder(crp));
   }
 
+  void _notifyNavigatorChanges() {
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    changeNotifier.notifyListeners();
+  }
+
   // TODO @alex remove call to notify listener
   Future<T> _push<T>(ContentRoutePath routePath) async {
     // devPrint('Changed $routePath');
@@ -150,12 +155,14 @@ class ContentNavigatorBloc extends BaseBloc {
     }
     // Find in stack, if found remove
     _stack.removeWhere((item) {
-      return item.routePath.path == routePath.path;
+      if (item.routePath.path == routePath.path) {
+        return true;
+      }
+      return false;
     });
     var item = _ContentPageInStack(def: pageDef, routePath: routePath);
     _stack.add(item);
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-    changeNotifier.notifyListeners();
+    _notifyNavigatorChanges();
     // TODO handled future completion
 
     // TODO wait for pop...
@@ -163,14 +170,15 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   // User ContentNavigator.push instead
-  @protected
-  Future<T> push<T>(BuildContext context, ContentRoutePath routePath) async {
+  // @protected
+  Future<T> push<T>(ContentRoutePath routePath) async {
     if (contentNavigatorDebug) {
       _log('Push $routePath');
     }
     if (contentNavigatorUseDeclarative) {
       return await _push(routePath);
     } else {
+      /*
       // Compat imperative way
       var crpItem = _crpAdd(routePath);
       try {
@@ -178,6 +186,33 @@ class ContentNavigatorBloc extends BaseBloc {
             .pushNamed(routePath.path.toPath(), arguments: routePath.arguments);
       } finally {
         _crpRemoveItem(crpItem);
+      }
+
+       */
+      return null;
+    }
+  }
+
+  /// index of the page verifying the predicate, -1 if none
+  int lastIndexWhere(bool Function(ContentRoutePath routePath) predicate) {
+    var index = -1;
+    for (var i = _stack.length - 1; i >= 0; i--) {
+      var item = _stack[i];
+      if (predicate(item.routePath)) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
+  /// Remove all route until index is reached from the top
+  ///
+  /// -1 does nothing
+  void popUntil(int index) {
+    if (index != -1) {
+      for (var i = _stack.length - 1; i > index; i--) {
+        popItem(i, null);
       }
     }
   }
@@ -188,10 +223,11 @@ class ContentNavigatorBloc extends BaseBloc {
     return crpItem;
   }
 
+  /*
   void _crpRemoveItem(_ContentRoutePathInStack item) {
     _crpStack.removeWhere((element) => element.id == item.id);
     // devPrint(_crpStack);
-  }
+  }*/
 
   void _log(String message) {
     print('/cn $message');
@@ -202,19 +238,21 @@ class ContentNavigatorBloc extends BaseBloc {
       ? 'ContentNavigator(empty)'
       : 'CN(${_stack.last.routePath.path})';
 
-  bool onPopPage(Route route, result) {
+  @protected
+  bool onPopPage(Route route, Object result) {
     if (_stack.isNotEmpty) {
-      // Complete with result
-      var item = _stack.last;
-      if (!item.completer.isCompleted) {
-        item.completer.complete(result);
-      }
-      _removeItem(_stack.length - 1);
+      popItem(_stack.length - 1, result);
     }
-    // no need to call notify listeners here, done in router
-
-    // devPrint('pop');
     return true;
+  }
+
+  @protected
+  void popItem(int index, Object result) {
+    var item = _stack.last;
+    if (!item.completer.isCompleted) {
+      item.completer.complete(result);
+    }
+    _removeItem(index);
   }
 
   /// Return the same route if match found
@@ -244,19 +282,28 @@ class ContentNavigatorBloc extends BaseBloc {
     var crp = ContentRoutePath(path);
     // devPrint('setNewRoutePath($crp)');
     var absPath = path.toPath();
-    if (absPath == currentPath?.toPath()) {
+
+    // devPrint('looking for $absPath in $_stack');
+    var index =
+        lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
+    if (index != -1) {
+      // print('found and reuse $index');
+      popUntil(index);
+      // devPrint(_stack);
+      _notifyNavigatorChanges();
+      return;
+
+      //
+    }
+    /*
+        if (absPath == currentPath?.toPath()) {
       if (contentNavigatorDebug) {
         print('Already current');
       }
+      return;
     } else {
-      // Find in stack and removed then, not the last one we checked already
-      for (var i = 0; i < _stack.length - 1; i++) {
-        var _stackPath = _stack[i].routePath.path;
-        if (absPath == _stackPath?.toPath()) {
-          print('found');
-        }
-      }
-    }
+         */
+
     if (contentNavigatorUseDeclarative) {
       return await _push(crp);
     } else {
@@ -309,8 +356,7 @@ class ContentNavigator extends StatefulWidget {
 
   static Future<T> push<T>(
       BuildContext context, ContentRoutePath contentRoutePath) async {
-    return await ContentNavigator.of(context)
-        .push<T>(context, contentRoutePath);
+    return await ContentNavigator.of(context).push<T>(contentRoutePath);
   }
 }
 
