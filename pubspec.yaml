@@ -27,6 +27,7 @@ dev_dependencies:
       path: app_emit
 
   test:
+  dev_test:
 
 dependency_overrides:
   pedantic: '>=1.9.0'

@@ -3,8 +3,8 @@
 
 import 'import.dart';
 
-typedef ContentPageBuilder = Page Function(ContentRoutePath crp);
-typedef ContentScreenBuilder = Widget Function(ContentRoutePath crp);
+typedef ContentPageBuilder = Page Function(ContentPathRouteSettings crp);
+typedef ContentScreenBuilder = Widget Function(ContentPathRouteSettings rs);
 
 abstract class ContentPageDef {
   factory ContentPageDef(
@@ -33,13 +33,13 @@ abstract class ContentPageDef {
 
 class _ContentPageDef implements ContentPageDef {
   @override
-  Page Function(ContentRoutePath crp) builder;
+  Page Function(ContentPathRouteSettings crp) builder;
 
   @override
   ContentPath path;
 
   @override
-  final Widget Function(ContentRoutePath crp) screenBuilder;
+  final Widget Function(ContentPathRouteSettings crp) screenBuilder;
 
   _ContentPageDef({this.builder, this.path, this.screenBuilder}) {
     // var name = path?.toPath();

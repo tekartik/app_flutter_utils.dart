@@ -11,11 +11,11 @@ bool contentNavigatorUseDeclarative =
 var contentNavigatorDebug = false; // devWarning(true);
 
 class _ContentPageInStack {
-  final ContentRoutePath routePath;
+  final ContentPathRouteSettings rs;
   final ContentPageDef def;
   final completer = Completer.sync();
 
-  _ContentPageInStack({@required this.def, @required this.routePath});
+  _ContentPageInStack({@required this.def, @required this.rs});
 
   void dispose() {
     if (!completer.isCompleted) {
@@ -26,29 +26,28 @@ class _ContentPageInStack {
   /// Build for navigator
   Page build() {
     // ignore: deprecated_member_use_from_same_package
-    var page = def.builder(routePath);
+    var page = def.builder(rs);
     // Name and arguments must match
-    assert(page.name == routePath.path.toPath(),
+    assert(page.name == rs.path.toPath(),
         'name of page must match the content path');
-    assert(
-        page.arguments == routePath.arguments, 'arguments of page must match');
+    assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
     return page;
   }
 
   @override
-  String toString() => routePath?.toString() ?? def.toString() ?? '?';
+  String toString() => rs?.toString() ?? def.toString() ?? '?';
 }
 
 class _ContentRoutePathInStack {
   static int _id = 0;
   final int id;
-  final ContentRoutePath routePath;
+  final ContentPathRouteSettings rs;
 
-  _ContentRoutePathInStack(this.routePath) : id = ++_id;
+  _ContentRoutePathInStack(this.rs) : id = ++_id;
 
   @override
-  String toString() => '<$id> $routePath';
+  String toString() => '<$id> $rs';
 }
 
 class ContentNavigatorBloc extends BaseBloc {
@@ -74,9 +73,10 @@ class ContentNavigatorBloc extends BaseBloc {
       // Create a root if needed
       var pageDef = contentNavigator.def.defs.first;
       var item = _ContentPageInStack(
-          def: pageDef, routePath: ContentRoutePath(pageDef.path));
+          def: pageDef, rs: ContentPathRouteSettings(pageDef.path));
       _stack.add(item);
     }
+    // devPrint(_stack);
     return _stack.map((e) => e.build());
   }
 
@@ -87,16 +87,17 @@ class ContentNavigatorBloc extends BaseBloc {
   _ContentPageInStack get _currentPageInStack =>
       _stack.isEmpty ? null : _stack.last;
 
-  ContentRoutePath get currentRoutePath => contentNavigatorUseDeclarative
-      ? _currentPageInStack?.routePath
-      : _currentContentRoutePathInStack?.routePath;
+  ContentPathRouteSettings get currentRoutePath =>
+      contentNavigatorUseDeclarative
+          ? _currentPageInStack?.rs
+          : _currentContentRoutePathInStack?.rs;
 
   _ContentRoutePathInStack get _currentContentRoutePathInStack =>
       _crpStack.isEmpty ? null : _crpStack.last;
 
   // If last matches
   bool _crpCurrentPathEquals(ContentPath path) {
-    return (_currentContentRoutePathInStack?.routePath?.path == path);
+    return (_currentContentRoutePathInStack?.rs?.path == path);
   }
 
   /// Current path.
@@ -121,7 +122,7 @@ class ContentNavigatorBloc extends BaseBloc {
     }
     var pageDef = contentNavigator.def.findPageDef(contentPath);
 
-    var crp = ContentRoutePath(contentPath, arguments);
+    var rs = ContentPathRouteSettings(contentPath, arguments);
     if (!contentNavigatorUseDeclarative) {
       // var current = _currentContentRoutePathInStack;
       // devPrint('current: $current');
@@ -132,12 +133,12 @@ class ContentNavigatorBloc extends BaseBloc {
         // devPrint('onGenerateRoute: $crp not matching current: $current, push?');
         if (!contentNavigatorUseDeclarative) {
           // Compat imperative way, a route was pushed by name?
-          _crpAdd(crp);
+          _crpAdd(rs);
         }
       }
     }
 
-    return MaterialPageRoute(builder: (context) => pageDef.screenBuilder(crp));
+    return MaterialPageRoute(builder: (context) => pageDef.screenBuilder(rs));
   }
 
   void _notifyNavigatorChanges() {
@@ -146,21 +147,25 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   // TODO @alex remove call to notify listener
-  Future<T> _push<T>(ContentRoutePath routePath) async {
+  Future<T> _push<T>(ContentPathRouteSettings rs) async {
     // devPrint('Changed $routePath');
 
-    var pageDef = contentNavigator.def.findPageDef(routePath.path);
+    var pageDef = contentNavigator.def.findPageDef(rs.path);
     if (contentNavigatorDebug) {
       _log('found: $pageDef');
     }
+    if (pageDef == null) {
+      print('No page found for route settings ${rs.path}');
+    }
+
     // Find in stack, if found remove
     _stack.removeWhere((item) {
-      if (item.routePath.path == routePath.path) {
+      if (item.rs.path == rs.path) {
         return true;
       }
       return false;
     });
-    var item = _ContentPageInStack(def: pageDef, routePath: routePath);
+    var item = _ContentPageInStack(def: pageDef, rs: rs);
     _stack.add(item);
     _notifyNavigatorChanges();
     // TODO handled future completion
@@ -171,12 +176,12 @@ class ContentNavigatorBloc extends BaseBloc {
 
   // User ContentNavigator.push instead
   // @protected
-  Future<T> push<T>(ContentRoutePath routePath) async {
+  Future<T> push<T>(ContentPathRouteSettings rs) async {
     if (contentNavigatorDebug) {
-      _log('Push $routePath');
+      _log('Push $rs');
     }
     if (contentNavigatorUseDeclarative) {
-      return await _push(routePath);
+      return await _push(rs);
     } else {
       /*
       // Compat imperative way
@@ -194,11 +199,11 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   /// index of the page verifying the predicate, -1 if none
-  int lastIndexWhere(bool Function(ContentRoutePath routePath) predicate) {
+  int lastIndexWhere(bool Function(ContentPathRouteSettings rs) predicate) {
     var index = -1;
     for (var i = _stack.length - 1; i >= 0; i--) {
       var item = _stack[i];
-      if (predicate(item.routePath)) {
+      if (predicate(item.rs)) {
         index = i;
         break;
       }
@@ -217,8 +222,8 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
-  _ContentRoutePathInStack _crpAdd(ContentRoutePath crp) {
-    var crpItem = _ContentRoutePathInStack(crp);
+  _ContentRoutePathInStack _crpAdd(ContentPathRouteSettings rs) {
+    var crpItem = _ContentRoutePathInStack(rs);
     _crpStack.add(crpItem);
     return crpItem;
   }
@@ -234,9 +239,8 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   @override
-  String toString() => _stack.isEmpty
-      ? 'ContentNavigator(empty)'
-      : 'CN(${_stack.last.routePath.path})';
+  String toString() =>
+      _stack.isEmpty ? 'ContentNavigator(empty)' : 'CN(${_stack.last.rs.path})';
 
   @protected
   bool onPopPage(Route route, Object result) {
@@ -279,7 +283,7 @@ class ContentNavigatorBloc extends BaseBloc {
         break;
       }
     }*/
-    var crp = ContentRoutePath(path);
+    var rs = ContentPathRouteSettings(path);
     // devPrint('setNewRoutePath($crp)');
     var absPath = path.toPath();
 
@@ -305,7 +309,7 @@ class ContentNavigatorBloc extends BaseBloc {
          */
 
     if (contentNavigatorUseDeclarative) {
-      return await _push(crp);
+      return await _push(rs);
     } else {
       // var current = _currentContentRoutePathInStack;
       // devPrint('current: $current');
@@ -323,7 +327,21 @@ class ContentNavigatorBloc extends BaseBloc {
 class ContentNavigatorDef {
   final List<ContentPageDef> defs;
 
-  ContentNavigatorDef({@required this.defs});
+  ContentNavigatorDef({@required this.defs}) {
+    // devPrint('defs: ${defs.map((def) => def.path)}');
+    // Check defs
+    if (isDebug) {
+      var defSet = <ContentPath>{};
+      for (var def in defs) {
+        var path = def.path;
+        for (var existing in defSet) {
+          assert(!path.matchesPath(existing),
+              '$def already exists in ${defs.map((def) => def.path)}');
+        }
+        defSet.add(path);
+      }
+    }
+  }
   ContentPageDef findPageDef(ContentPath path) {
     if (path != null) {
       // TODO optimize in a map by parts
@@ -355,8 +373,8 @@ class ContentNavigator extends StatefulWidget {
   _ContentNavigatorState createState() => _ContentNavigatorState();
 
   static Future<T> push<T>(
-      BuildContext context, ContentRoutePath contentRoutePath) async {
-    return await ContentNavigator.of(context).push<T>(contentRoutePath);
+      BuildContext context, ContentPathRouteSettings rs) async {
+    return await ContentNavigator.of(context).push<T>(rs);
   }
 }
 

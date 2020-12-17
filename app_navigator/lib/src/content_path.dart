@@ -30,6 +30,10 @@ abstract class ContentPath {
   /// If both path matches /one/1/two/2 matching /one/34/two/27
   bool matchesPath(ContentPath path);
 
+  /// if it starts with a content path (i.e. is a child of another content path)
+  bool startsWith(ContentPath path);
+
+  /// Get a field.
   ContentPathField /*?*/ field(String name);
 }
 
@@ -62,6 +66,22 @@ mixin PathMixin implements ContentPath {
   bool matchesPath(ContentPath path) {
     if (fields.length == path.fields.length) {
       for (var i = 0; i < fields.length; i++) {
+        var f1 = fields[i];
+        var f2 = path.fields[i];
+        if (!f1.matchesField(f2)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /// True for: (* stands for null) /one/*/two/* matching /one/34/two/27
+  @override
+  bool startsWith(ContentPath path) {
+    if (fields.length >= path.fields.length) {
+      for (var i = 0; i < path.fields.length; i++) {
         var f1 = fields[i];
         var f2 = path.fields[i];
         if (!f1.matchesField(f2)) {

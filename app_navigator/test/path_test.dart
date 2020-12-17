@@ -16,6 +16,20 @@ class SimplePath extends ContentPathBase {
   List<ContentPathField> get fields => [section];
 }
 
+class BasePath extends ContentPathBase {
+  final base = ContentPathField('base');
+
+  @override
+  List<ContentPathField> get fields => [base];
+}
+
+class SubPath extends BasePath {
+  final sub = ContentPathPart('sub');
+
+  @override
+  List<ContentPathField> get fields => [base, sub];
+}
+
 void main() {
   group('Path', () {
     test('fromString', () {
@@ -126,6 +140,13 @@ void main() {
           ContentPath.fromString('test/1')
               .matchesPath(ContentPath.fromString('test')),
           isFalse);
+    });
+
+    test('startsWith', () {
+      expect(SubPath().startsWith(BasePath()), isTrue);
+      expect(BasePath().startsWith(SubPath()), isFalse);
+      expect(SubPath().startsWith(SubPath()), isTrue);
+      expect(BasePath().startsWith(BasePath()), isTrue);
     });
     test('fromPath', () {
       var object = SchoolStudentPath()

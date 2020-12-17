@@ -33,6 +33,8 @@ dependencies:
     path: ../fs_test_app_lib
   tekartik_sembast_test_app_lib:
     path: ../sembast_test_app_lib
+  tekartik_widget_test_app_lib:
+    path: ../widget_test_app_lib
   tekartik_test_menu_flutter:
     git:
       url: git://github.com/tekartik/test_menu_flutter
@@ -54,6 +56,8 @@ dependency_overrides:
     path: ../../app_sqflite
   tekartik_app_flutter_sembast:
     path: ../../app_sembast
+  tekartik_app_flutter_widget:
+    path: ../../app_widget
   tekartik_app_flutter_fs:
     path: ../../app_fs
   tekartik_app_roboto:
