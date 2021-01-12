@@ -10,7 +10,7 @@ Common widgets
 dependencies:
   tekartik_app_flutter_widget:
     git:
-      url: git@github.com/tekartik/app_flutter_utils.dart
+      url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
       path: app_widget
     version: '>=0.1.0'

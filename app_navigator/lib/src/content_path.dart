@@ -116,7 +116,13 @@ mixin PathMixin implements ContentPath {
 
 final homeContentPath = HomeContentPath();
 
+// To deprecate, use RootContentPath instead
 class HomeContentPath extends ContentPathBase {
+  @override
+  List<ContentPathField> get fields => const <ContentPathField>[];
+}
+
+class RootContentPath extends ContentPathBase {
   @override
   List<ContentPathField> get fields => const <ContentPathField>[];
 }

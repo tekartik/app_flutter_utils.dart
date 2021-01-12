@@ -1,11 +1,12 @@
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
+
 import 'import.dart';
 
 /// Should be true
 // false to use the old way
 /// The new Navigator 2.0 way
 bool contentNavigatorUseDeclarative =
-    true; // devWarning(false); // true; // devWarning(false);
+true; // devWarning(false); // true; // devWarning(false);
 
 // To set to true for internal debugging and heavy logs
 var contentNavigatorDebug = false; // devWarning(true);
@@ -29,7 +30,7 @@ class _ContentPageInStack {
     var page = def.builder(rs);
     // Name and arguments must match
     assert(page.name == rs.path.toPath(),
-        'name of page must match the content path');
+    'name of page must match the content path');
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
     return page;
@@ -54,8 +55,10 @@ class ContentNavigatorBloc extends BaseBloc {
   final ContentNavigator contentNavigator;
   ContentRouteInformationParser _routeInformationParser;
   ContentRouterDelegate _routerDelegate;
+  TransitionDelegate transitionDelegate;
 
-  ContentNavigatorBloc({this.contentNavigator});
+  ContentNavigatorBloc({this.contentNavigator,
+    this.transitionDelegate = const DefaultTransitionDelegate()});
 
   ContentRouterDelegate get routerDelegate =>
       _routerDelegate ??= ContentRouterDelegate(this);
@@ -214,11 +217,22 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Remove all route until index is reached from the top
   ///
   /// -1 does nothing
+  ///
+  /// You must push another route.
   void popUntil(int index) {
     if (index != -1) {
       for (var i = _stack.length - 1; i > index; i--) {
         popItem(i, null);
       }
+    }
+  }
+
+  /// Remove all route until index is reached from the top
+  ///
+  /// You must push another route.
+  void popAll() {
+    for (var i = _stack.length - 1; i >= 0; i--) {
+      popItem(i, null);
     }
   }
 
@@ -289,7 +303,7 @@ class ContentNavigatorBloc extends BaseBloc {
 
     // devPrint('looking for $absPath in $_stack');
     var index =
-        lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
+    lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
     if (index != -1) {
       // print('found and reuse $index');
       popUntil(index);
@@ -336,12 +350,13 @@ class ContentNavigatorDef {
         var path = def.path;
         for (var existing in defSet) {
           assert(!path.matchesPath(existing),
-              '$def already exists in ${defs.map((def) => def.path)}');
+          '$def already exists in ${defs.map((def) => def.path)}');
         }
         defSet.add(path);
       }
     }
   }
+
   ContentPageDef findPageDef(ContentPath path) {
     if (path != null) {
       // TODO optimize in a map by parts
@@ -372,8 +387,8 @@ class ContentNavigator extends StatefulWidget {
   @override
   _ContentNavigatorState createState() => _ContentNavigatorState();
 
-  static Future<T> push<T>(
-      BuildContext context, ContentPathRouteSettings rs) async {
+  static Future<T> push<T>(BuildContext context,
+      ContentPathRouteSettings rs) async {
     return await ContentNavigator.of(context).push<T>(rs);
   }
 }

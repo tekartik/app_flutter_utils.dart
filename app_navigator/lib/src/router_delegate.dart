@@ -45,7 +45,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
 
     return Navigator(
       key: navigatorKey,
-      //transitionDelegate: NoAnimationTransitionDelegate(),
+      transitionDelegate: cnBloc.transitionDelegate,
 
       pages: [
         /*
