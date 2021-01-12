@@ -6,7 +6,7 @@ import 'import.dart';
 // false to use the old way
 /// The new Navigator 2.0 way
 bool contentNavigatorUseDeclarative =
-true; // devWarning(false); // true; // devWarning(false);
+    true; // devWarning(false); // true; // devWarning(false);
 
 // To set to true for internal debugging and heavy logs
 var contentNavigatorDebug = false; // devWarning(true);
@@ -30,7 +30,7 @@ class _ContentPageInStack {
     var page = def.builder(rs);
     // Name and arguments must match
     assert(page.name == rs.path.toPath(),
-    'name of page must match the content path');
+        'name of page must match the content path');
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
     return page;
@@ -57,8 +57,9 @@ class ContentNavigatorBloc extends BaseBloc {
   ContentRouterDelegate _routerDelegate;
   TransitionDelegate transitionDelegate;
 
-  ContentNavigatorBloc({this.contentNavigator,
-    this.transitionDelegate = const DefaultTransitionDelegate()});
+  ContentNavigatorBloc(
+      {this.contentNavigator,
+      this.transitionDelegate = const DefaultTransitionDelegate()});
 
   ContentRouterDelegate get routerDelegate =>
       _routerDelegate ??= ContentRouterDelegate(this);
@@ -162,12 +163,12 @@ class ContentNavigatorBloc extends BaseBloc {
     }
 
     // Find in stack, if found remove
-    _stack.removeWhere((item) {
+    for (var i = _stack.length - 1; i >= 0; i--) {
+      var item = _stack[i];
       if (item.rs.path == rs.path) {
-        return true;
+        transientPopItem(i, null);
       }
-      return false;
-    });
+    }
     var item = _ContentPageInStack(def: pageDef, rs: rs);
     _stack.add(item);
     _notifyNavigatorChanges();
@@ -184,7 +185,7 @@ class ContentNavigatorBloc extends BaseBloc {
       _log('Push $rs');
     }
     if (contentNavigatorUseDeclarative) {
-      return await _push(rs);
+      return _push(rs);
     } else {
       /*
       // Compat imperative way
@@ -214,25 +215,31 @@ class ContentNavigatorBloc extends BaseBloc {
     return index;
   }
 
+  @deprecated
+  void popUntil(int index) => transientPopUntil(index);
+
   /// Remove all route until index is reached from the top
   ///
   /// -1 does nothing
   ///
   /// You must push another route.
-  void popUntil(int index) {
+  void transientPopUntil(int index) {
     if (index != -1) {
       for (var i = _stack.length - 1; i > index; i--) {
-        popItem(i, null);
+        transientPopItem(i, null);
       }
     }
   }
 
+  @deprecated
+  void popAll() => transientPopAll();
+
   /// Remove all route until index is reached from the top
   ///
   /// You must push another route.
-  void popAll() {
+  void transientPopAll() {
     for (var i = _stack.length - 1; i >= 0; i--) {
-      popItem(i, null);
+      transientPopItem(i, null);
     }
   }
 
@@ -259,14 +266,14 @@ class ContentNavigatorBloc extends BaseBloc {
   @protected
   bool onPopPage(Route route, Object result) {
     if (_stack.isNotEmpty) {
-      popItem(_stack.length - 1, result);
+      transientPopItem(_stack.length - 1, result);
     }
     return true;
   }
 
   @protected
-  void popItem(int index, Object result) {
-    var item = _stack.last;
+  void transientPopItem(int index, Object result) {
+    var item = _stack[index];
     if (!item.completer.isCompleted) {
       item.completer.complete(result);
     }
@@ -303,10 +310,10 @@ class ContentNavigatorBloc extends BaseBloc {
 
     // devPrint('looking for $absPath in $_stack');
     var index =
-    lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
+        lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
     if (index != -1) {
       // print('found and reuse $index');
-      popUntil(index);
+      transientPopUntil(index);
       // devPrint(_stack);
       _notifyNavigatorChanges();
       return;
@@ -350,7 +357,7 @@ class ContentNavigatorDef {
         var path = def.path;
         for (var existing in defSet) {
           assert(!path.matchesPath(existing),
-          '$def already exists in ${defs.map((def) => def.path)}');
+              '$def already exists in ${defs.map((def) => def.path)}');
         }
         defSet.add(path);
       }
@@ -387,8 +394,8 @@ class ContentNavigator extends StatefulWidget {
   @override
   _ContentNavigatorState createState() => _ContentNavigatorState();
 
-  static Future<T> push<T>(BuildContext context,
-      ContentPathRouteSettings rs) async {
+  static Future<T> push<T>(
+      BuildContext context, ContentPathRouteSettings rs) async {
     return await ContentNavigator.of(context).push<T>(rs);
   }
 }

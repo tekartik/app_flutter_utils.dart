@@ -20,7 +20,7 @@ void main() {
       expect(
           crip.parseAnyRouteInformationSync(
               const RouteInformation(location: '/')),
-          homeContentPath);
+          rootContentPath);
       expect(
           crip.parseAnyRouteInformationSync(
               const RouteInformation(location: '/test')),
