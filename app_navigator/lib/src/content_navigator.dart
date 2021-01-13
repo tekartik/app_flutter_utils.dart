@@ -265,10 +265,17 @@ class ContentNavigatorBloc extends BaseBloc {
 
   @protected
   bool onPopPage(Route route, Object result) {
-    if (_stack.isNotEmpty) {
-      transientPopItem(_stack.length - 1, result);
+    // pop if found
+    var contentPath = ContentPath.fromString(route.settings.name);
+    // Find in stack, if found remove
+    for (var i = _stack.length - 1; i >= 0; i--) {
+      var item = _stack[i];
+      if (item.rs.path == contentPath) {
+        transientPopItem(i, null);
+        return true;
+      }
     }
-    return true;
+    return false;
   }
 
   @protected
