@@ -164,6 +164,28 @@ void main() {
       object = SchoolStudentPath()
         ..fromPath(ContentPath.fromString('school/the_school/student'));
       expect(object.toPath(), '/school/the_school/student');
+
+      var boxCp = BoxAddObservationContentPath()
+        ..fromPath(ContentPath.fromString('/category/my_cat/action'));
+      expect(boxCp.categoryId.value, 'my_cat');
+      expect(boxCp.action.value, '');
+      expect(boxCp.toPath(), '/category/my_cat/action');
     });
   });
+}
+
+// /category/1234
+class CategoryContentPath extends ContentPathBase {
+  final categoryId = ContentPathField('category');
+
+  @override
+  List<ContentPathField> get fields => [categoryId];
+}
+
+// /category/1234/action
+class BoxAddObservationContentPath extends CategoryContentPath {
+  final action = ContentPathPart('action');
+
+  @override
+  List<ContentPathField> get fields => [...super.fields, action];
 }

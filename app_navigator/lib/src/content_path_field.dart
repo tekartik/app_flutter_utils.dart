@@ -13,7 +13,7 @@ class ContentPathField {
   set value(String value) {
     if (value == _wildcard) {
       value = null;
-    } else if (value != null) {
+    } else if (value != null && _value != value) {
       assert(_value == null,
           '$name field value ${_value} cannot be changed to $value. It can only be set once');
     }
