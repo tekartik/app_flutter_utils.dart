@@ -17,7 +17,8 @@ void main() {
           'idb_test_app_lib',
           'prefs_test_app_lib',
           'sembast_test_app_lib',
-          'sqflite_test_app_lib'
+          'sqflite_test_app_lib',
+          'widget_test_app_lib'
         ]) {
           await copyDirectory(
               Directory('example/$dir'), Directory('.dart_tool/$dir'));

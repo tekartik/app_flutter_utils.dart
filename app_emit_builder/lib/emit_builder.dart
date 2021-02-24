@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:tekartik_app_emit/emit.dart';
 
+/// Very bad idea....
+@deprecated
 class EmitFutureOrBuilder<T> extends StatefulWidget {
   final EmitFutureOr<T> futureOr;
   final AsyncWidgetBuilder<T> builder;
@@ -15,6 +17,7 @@ class EmitFutureOrBuilder<T> extends StatefulWidget {
   _EmitFutureOrBuilderState<T> createState() => _EmitFutureOrBuilderState<T>();
 }
 
+// ignore: deprecated_member_use_from_same_package
 class _EmitFutureOrBuilderState<T> extends State<EmitFutureOrBuilder<T>> {
   EmitFutureOrSubscription<T> subscription;
 

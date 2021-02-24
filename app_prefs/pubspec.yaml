@@ -1,10 +1,10 @@
 name: tekartik_app_prefs
 description: Prefs helper
-version: 0.3.0
+version: 0.3.1
 publish_to: none
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:

@@ -6,8 +6,9 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 void defineMenu() {
   menu('prefs', () {
     //devPrint('MAIN_');
-    item('open and toggle prefs', () async {
-      var prefsFactory = getPrefsFactory('app_prefs_test_app.tekartik.com');
+    item('centered_wait', () async {
+      var prefsFactory =
+          getPrefsFactory(packageName: 'app_prefs_test_app.tekartik.com');
       var prefs = await prefsFactory.openPreferences('open_toggle_prefs');
       var toggle = prefs.getBool('toggle');
       toggle = !(toggle ?? false);

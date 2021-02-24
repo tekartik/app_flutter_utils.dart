@@ -28,9 +28,10 @@ extension AppFileSystem on FileSystem {
   /// to the user.
   ///
   /// On the web, it is the data root directory
-  Future<Directory> getApplicationDocumentsDirectory(String packageName) async {
+  Future<Directory> getApplicationDocumentsDirectory(
+      {String packageName}) async {
     if (this == fs) {
-      return src.getApplicationDocumentsDirectory(packageName);
+      return src.getApplicationDocumentsDirectory(packageName: packageName);
     }
     return getFsApplicationDocumentsDirectory(this);
   }

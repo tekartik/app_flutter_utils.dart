@@ -32,6 +32,7 @@ Future main() async {
     join('example', 'test_app')
   ]) {
     shell = shell.pushd(dir);
+    print('project: $dir');
     await shell.run('''
   
   flutter packages get

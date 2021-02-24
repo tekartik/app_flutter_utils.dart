@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_fs
 description: Filesystem for Flutter app.
-version: 0.1.0
+version: 0.1.1
 publish_to: none
 
 environment:

@@ -10,7 +10,8 @@ PrefsFactory get prefsFactory => prefsFactoryFlutter;
 
 final _prefsFactoryMap = <String, PrefsFactory>{};
 PrefsFactory newPrefsFactorySembast(String packageName) {
-  var dataPath = join(userAppDataPath, packageName, 'prefs');
+  var dataPath =
+      join(userAppDataPath, packageName ?? 'com.tekartik.app_prefs', 'prefs');
   try {
     Directory(dirname(dataPath)).createSync(recursive: true);
   } catch (_) {}
@@ -18,7 +19,7 @@ PrefsFactory newPrefsFactorySembast(String packageName) {
 }
 
 /// Use sembast on linux and windows
-PrefsFactory getPrefsFactory(String packageName) {
+PrefsFactory getPrefsFactory({String packageName}) {
   if (Platform.isLinux || Platform.isWindows) {
     var prefsFactory = _prefsFactoryMap[packageName];
     if (prefsFactory == null) {
