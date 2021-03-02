@@ -11,5 +11,5 @@ dependencies:
       url: git://github.com/tekartik/app_flutter_utils.dart
       ref: dart2
       path: app_navigator
-    version: '>=0.2.2'
+    version: '>=0.2.4+1'
 ```

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BehaviorSubjectBuilder<T> extends StatelessWidget {
   final BehaviorSubject<T> subject;
@@ -10,7 +10,7 @@ class BehaviorSubjectBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<T>(
       builder: builder,
       stream: subject,
       initialData: subject.value,
