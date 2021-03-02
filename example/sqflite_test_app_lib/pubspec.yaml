@@ -41,7 +41,7 @@ dependency_overrides:
     path: ../../app_sqflite
   tekartik_app_platform:
     path: ../../app_platform
-  pedantic: '>=1.9.0'
+
 flutter:
 
   # To add assets to your package, add an assets section, like this:

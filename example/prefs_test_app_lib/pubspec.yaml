@@ -43,7 +43,7 @@ dependency_overrides:
     path: ../../app_platform
   tekartik_app_prefs:
     path: ../../app_prefs
-  pedantic: '>=1.9.0'
+
 flutter:
 
   # To add assets to your package, add an assets section, like this:

@@ -30,7 +30,7 @@ dev_dependencies:
   dev_test:
 
 dependency_overrides:
-  pedantic: '>=1.9.0'
+
 # tmp
 #  process_run:
 #    path: ../process_run.dart

@@ -23,7 +23,7 @@ dev_dependencies:
   dev_test: '>=0.13.3+11'
 
 dependency_overrides:
-  pedantic: '>=1.9.0'
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
