@@ -1,5 +1,6 @@
 @TestOn('vm')
 import 'dart:io';
+import 'package:path/path.dart';
 import 'package:tekartik_build_utils/cmd_run.dart';
 import 'package:test/test.dart';
 import 'package:process_run/shell_run.dart';
@@ -7,6 +8,7 @@ import 'package:tekartik_build_utils/flutter/app/generate.dart';
 import 'package:tekartik_build_utils/flutter/flutter.dart';
 import 'package:fs_shim/utils/io/copy.dart';
 
+var topDir = '..';
 void main() {
   group(
     'min_app',
@@ -20,11 +22,11 @@ void main() {
           'sqflite_test_app_lib',
           'widget_test_app_lib'
         ]) {
-          await copyDirectory(
-              Directory('example/$dir'), Directory('.dart_tool/$dir'));
+          await copyDirectory(Directory(join(topDir, 'example', '$dir')),
+              Directory(join(topDir, '.dart_tool', dir)));
         }
-        var dirName = '.dart_tool/test_app';
-        var src = 'example/test_app';
+        var dirName = join(topDir, '.dart_tool', 'test_app');
+        var src = join(topDir, 'example', 'test_app');
         await fsGenerate(dir: dirName, src: src);
         var context = await flutterContext;
         if (context.supportsWeb) {

@@ -1,12 +1,14 @@
-name: tekartik_app_flutter_utils_repo
-description: Repo
-version: 0.1.0
+name: mustache_repo_support
+description: Mustache repo (tools)
+version: 0.2.0
 publish_to: none
 
 environment:
-  sdk: '>=2.7.0-dev <3.0.0'
+  sdk: '>=2.10.0-0 <3.0.0'
 
 dev_dependencies:
+  path:
+  pub_semver:
   tekartik_travis_ci_flutter:
     git:
       url: git://github.com/tekartik/travis_ci_flutter.dart
@@ -19,18 +21,8 @@ dev_dependencies:
       ref: dart2
     version: '>=0.7.8'
 
-  # include all from git so that it makes a dependency check
-  tekartik_app_emit:
-    git:
-      url: git://github.com/tekartik/app_common_utils.dart
-      ref: dart2
-      path: app_emit
-
   test:
   dev_test:
+  pedantic:
 
-dependency_overrides:
 
-# tmp
-#  process_run:
-#    path: ../process_run.dart

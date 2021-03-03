@@ -40,7 +40,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
   Widget build(BuildContext context) {
     var cnPages = cnBloc.currentPages;
     if (contentNavigatorDebug) {
-      _log('build navigator ${cnPages}');
+      _log('build navigator $cnPages');
     }
 
     return Navigator(

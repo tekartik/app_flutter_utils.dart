@@ -15,7 +15,7 @@ class ContentPathField {
       value = null;
     } else if (value != null && _value != value) {
       assert(_value == null,
-          '$name field value ${_value} cannot be changed to $value. It can only be set once');
+          '$name field value $_value cannot be changed to $value. It can only be set once');
     }
     _value = value;
   }

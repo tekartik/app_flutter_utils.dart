@@ -1,18 +1,8 @@
+import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
-import 'package:tekartik_build_utils/common_import.dart';
 
 Future main() async {
   var shell = Shell();
-
-  await shell.run('''
-    
-  flutter doctor
-    
-  dartanalyzer --fatal-warnings --fatal-infos test tool
-  dartfmt -n --set-exit-if-changed test tool
-  pub run test
-
-''');
 
   for (var dir in [
     'app_bloc',
@@ -31,8 +21,7 @@ Future main() async {
     'app_sembast',
     join('example', 'test_app')
   ]) {
-    shell = shell.pushd(dir);
-    print('project: $dir');
+    shell = shell.pushd(join('..', dir));
     await shell.run('''
   
   flutter packages get

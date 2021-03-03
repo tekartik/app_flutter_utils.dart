@@ -1,8 +1,9 @@
+import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 import 'package:tekartik_build_utils/flutter/app/generate.dart';
 
 // dir name
-String dirName = 'example/test_app';
+String dirName = join('..', 'example', 'test_app');
 
 /// pub package name
 String appName = 'tekartik_app_utils_test_app';

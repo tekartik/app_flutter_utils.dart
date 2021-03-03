@@ -12,17 +12,12 @@ pubspec.lock
 # If you don't generate documentation locally you can remove this line.
 doc/api/
 
-# flutter root folder wrongly created
-/ios
-/android
-
-# IDE
-.idea/
+# Intellij
+*.idea/
 *.iml
-.vscode/
 
-# local
+# VS code
+.vscode
+
+# Local
 .local/
-
-# Flutter common
-.flutter-plugins-dependencies

@@ -15,6 +15,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   process_run:
+  pedantic:
 
 dependency_overrides:
 

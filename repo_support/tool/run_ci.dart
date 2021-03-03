@@ -20,6 +20,7 @@ Future main() async {
     'app_sembast',
     join('example', 'test_app')
   ]) {
-    await packageRunCi(dir);
+    await packageRunCi(join('..', dir));
   }
+  await packageRunCi('.');
 }
