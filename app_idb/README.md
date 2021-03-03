@@ -1,6 +1,8 @@
 # tekartik_app_flutter_idb
 
-IDB factory for flutter app (mobile & web)
+IDB factory for flutter app (mobile & web).
+
+Uses sqflite on Mobile/Desktop and indexed db on the web.
 
 ## Getting Started
 
