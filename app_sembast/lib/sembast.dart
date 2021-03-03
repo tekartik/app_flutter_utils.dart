@@ -16,5 +16,5 @@ DatabaseFactory get databaseFactoryMemory =>
 /// On linux and windows, specify a package name or root path
 ///
 /// On the web the parameters are ignored.
-DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>
+DatabaseFactory getDatabaseFactory({String? packageName, String? rootPath}) =>
     src.getDatabaseFactory(packageName: packageName, rootPath: rootPath);

@@ -13,6 +13,6 @@ export 'package:sembast/sembast.dart';
 ///
 /// [packageName] only needed for desktop.
 @Deprecated('User getDatabaseFactory instead')
-Future<DatabaseFactory> initDatabaseFactory({String packageName}) async {
+Future<DatabaseFactory> initDatabaseFactory({String? packageName}) async {
   return getDatabaseFactory(packageName: packageName);
 }
