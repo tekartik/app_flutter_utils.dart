@@ -6,7 +6,9 @@ void main() {
     test('api', () {
       // ignore: unnecessary_statements
       Firebase;
-      firebase;
+      try {
+        firebase;
+      } catch (_) {}
     });
   });
 }

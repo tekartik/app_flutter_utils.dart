@@ -6,8 +6,12 @@ void main() {
     test('api', () {
       // ignore: unnecessary_statements
       AuthService;
-      authService;
-      googleAuthProvider;
+      try {
+        authService;
+      } catch (_) {}
+      try {
+        googleAuthProvider;
+      } catch (_) {}
     });
   });
 }

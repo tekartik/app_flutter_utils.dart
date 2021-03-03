@@ -6,7 +6,9 @@ void main() {
     test('api', () {
       // ignore: unnecessary_statements
       FirestoreService;
-      firestoreService;
+      try {
+        firestoreService;
+      } catch (_) {}
     });
   });
 }
