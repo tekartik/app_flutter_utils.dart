@@ -12,9 +12,9 @@ import 'package:sqflite/sqflite.dart';
 /// All but Linux/Windows
 IdbFactory get idbFactory => getIdbFactorySqflite(databaseFactory);
 
-final _prefsFactoryMap = <String, IdbFactory>{};
+final _prefsFactoryMap = <String?, IdbFactory>{};
 
-String buildDatabasesPath(String packageName) {
+String buildDatabasesPath(String? packageName) {
   var dataPath = join(userAppDataPath, packageName, 'databases');
   try {
     var dir = Directory(dataPath);
@@ -25,13 +25,13 @@ String buildDatabasesPath(String packageName) {
   return dataPath;
 }
 
-IdbFactory newIdbFactorySembast(String packageName) {
+IdbFactory newIdbFactorySembast(String? packageName) {
   var dataPath = buildDatabasesPath(packageName);
   return IdbFactorySembast(databaseFactoryIo, dataPath);
 }
 
 /// Use sembast on linux and windows
-IdbFactory getIdbFactory({String packageName}) {
+IdbFactory getIdbFactory({String? packageName}) {
   if (Platform.isLinux || Platform.isWindows) {
     var idbFactory = _prefsFactoryMap[packageName];
     if (idbFactory == null) {
