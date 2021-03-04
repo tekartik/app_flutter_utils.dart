@@ -17,7 +17,7 @@ class TestApp extends StatelessWidget {
         body: ListView(
           children: [
             Builder(builder: (context) {
-              return Text(BlocProvider.of<TestBloc>(context).value);
+              return Text(BlocProvider.of<TestBloc>(context)!.value);
             })
           ],
         ),

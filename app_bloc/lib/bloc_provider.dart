@@ -5,23 +5,22 @@ export 'package:tekartik_app_bloc/base_bloc.dart';
 class BlocProvider<T extends BaseBloc> extends StatefulWidget {
   final Widget child;
   final T Function() blocBuilder;
-  const BlocProvider(
-      {Key key, @required this.blocBuilder, @required this.child})
+  const BlocProvider({Key? key, required this.blocBuilder, required this.child})
       : super(key: key);
   @override
   _BlocProviderState createState() => _BlocProviderState<T>();
 
-  static T of<T extends BaseBloc>(BuildContext context) {
+  static T? of<T extends BaseBloc>(BuildContext context) {
     var provider = context
         .getElementForInheritedWidgetOfExactType<_BlocProviderInherited<T>>()
-        ?.widget as _BlocProviderInherited<T>;
+        ?.widget as _BlocProviderInherited<T>?;
 
     return provider?.bloc;
   }
 }
 
 class _BlocProviderState<T extends BaseBloc> extends State<BlocProvider> {
-  T _bloc;
+  late T _bloc;
   @override
   void initState() {
     super.initState();
@@ -45,9 +44,9 @@ class _BlocProviderState<T extends BaseBloc> extends State<BlocProvider> {
 
 class _BlocProviderInherited<T> extends InheritedWidget {
   _BlocProviderInherited({
-    Key key,
-    @required Widget child,
-    @required this.bloc,
+    Key? key,
+    required Widget child,
+    required this.bloc,
   }) : super(key: key, child: child);
 
   final T bloc;
