@@ -11,7 +11,7 @@ dependencies:
   tekartik_app_flutter_bloc:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_bloc
     version: '>=0.2.2'
 ```

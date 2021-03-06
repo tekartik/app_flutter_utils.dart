@@ -10,7 +10,7 @@ class EmitFutureOrBuilder<T> extends StatefulWidget {
   final AsyncWidgetBuilder<T> builder;
 
   const EmitFutureOrBuilder(
-      {Key key, @required this.futureOr, @required this.builder})
+      {Key? key, required this.futureOr, required this.builder})
       : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class EmitFutureOrBuilder<T> extends StatefulWidget {
 
 // ignore: deprecated_member_use_from_same_package
 class _EmitFutureOrBuilderState<T> extends State<EmitFutureOrBuilder<T>> {
-  EmitFutureOrSubscription<T> subscription;
+  EmitFutureOrSubscription<T>? subscription;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +29,14 @@ class _EmitFutureOrBuilderState<T> extends State<EmitFutureOrBuilder<T>> {
       var completer = Completer<T>.sync();
       subscription = widget.futureOr.listen((value) {
         completer.complete(value);
-      }, onError: (error) {
+      }, onError: (Object error) {
         completer.completeError(error);
       });
       return FutureBuilder<T>(
           future: completer.future, builder: widget.builder);
     } else {
       return widget.builder(
-          context, AsyncSnapshot<T>.withData(ConnectionState.done, value as T));
+          context, AsyncSnapshot<T>.withData(ConnectionState.done, value));
     }
   }
 

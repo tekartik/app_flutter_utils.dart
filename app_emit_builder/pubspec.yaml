@@ -4,7 +4,7 @@ version: 0.1.0
 publish_to: none
 
 environment:
-  sdk: ">=2.1.0-dev <3.0.0"
+  sdk: '>=2.12.0-0 <3.0.0'
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
   tekartik_app_emit:
     git:
       url: git://github.com/tekartik/app_common_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_emit
     version: '>=0.1.2'
 
