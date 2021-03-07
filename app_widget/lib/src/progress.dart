@@ -12,7 +12,7 @@ class CenteredProgress extends StatelessWidget {
 class SmallProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var size = IconTheme.of(context).size;
+    var size = IconTheme.of(context).size!;
     return SizedBox(
         width: size,
         height: size,

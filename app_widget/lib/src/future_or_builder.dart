@@ -12,7 +12,7 @@ class FutureOrBuilder<T> extends StatelessWidget {
 
   /// FutureOr Builder.
   const FutureOrBuilder(
-      {Key key, @required this.futureOr, @required this.builder})
+      {Key? key, required this.futureOr, required this.builder})
       : super(key: key);
 
   @override

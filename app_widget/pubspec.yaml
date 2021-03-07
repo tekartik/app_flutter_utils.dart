@@ -1,10 +1,10 @@
 name: tekartik_app_flutter_widget
 description: Common flutter widget
-version: 0.1.0
+version: 0.2.0
 publish_to: none
 
 environment:
-  sdk: ">=2.10.0-0 <3.0.0"
+  sdk: '>=2.12.0-0 <3.0.0'
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
   tekartik_app_common_utils:
     git:
       url: git://github.com/tekartik/app_common_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app
     version: '>=0.1.0'
 

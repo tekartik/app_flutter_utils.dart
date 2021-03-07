@@ -1,5 +1,5 @@
-name: mustache_repo_support
-description: Mustache repo (tools)
+name: app_flutter_utils_repo_support
+description: App flutter utils repo (tools)
 version: 0.2.0
 publish_to: none
 
