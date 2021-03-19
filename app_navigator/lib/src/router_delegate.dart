@@ -23,7 +23,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
   }
 
   @override
-  ContentPath get currentConfiguration {
+  ContentPath? get currentConfiguration {
     var path = cnBloc.currentPath;
     return path;
   }

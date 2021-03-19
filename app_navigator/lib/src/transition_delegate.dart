@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class NoAnimationTransitionDelegate extends TransitionDelegate<void> {
   @override
   Iterable<RouteTransitionRecord> resolve({
-    List<RouteTransitionRecord> newPageRouteHistory,
-    Map<RouteTransitionRecord, RouteTransitionRecord>
+    required List<RouteTransitionRecord> newPageRouteHistory,
+    required Map<RouteTransitionRecord?, RouteTransitionRecord>
         locationToExitingPageRoute,
-    Map<RouteTransitionRecord, List<RouteTransitionRecord>>
+    Map<RouteTransitionRecord?, List<RouteTransitionRecord>>?
         pageRouteToPagelessRoutes,
   }) {
     final results = <RouteTransitionRecord>[];
@@ -20,7 +20,7 @@ class NoAnimationTransitionDelegate extends TransitionDelegate<void> {
     for (final exitingPageRoute in locationToExitingPageRoute.values) {
       if (exitingPageRoute.isWaitingForExitingDecision) {
         exitingPageRoute.markForRemove();
-        final pagelessRoutes = pageRouteToPagelessRoutes[exitingPageRoute];
+        final pagelessRoutes = pageRouteToPagelessRoutes![exitingPageRoute];
         if (pagelessRoutes != null) {
           for (final pagelessRoute in pagelessRoutes) {
             pagelessRoute.markForRemove();

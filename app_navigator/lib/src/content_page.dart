@@ -10,50 +10,50 @@ abstract class ContentPageDef {
   factory ContentPageDef(
       {
       // should a build a default MaterialPage
-      @deprecated ContentPageBuilder builder,
-      @required ContentPath path,
-      @required ContentScreenBuilder screenBuilder}) {
+      @deprecated ContentPageBuilder? builder,
+      required ContentPath path,
+      required ContentScreenBuilder? screenBuilder}) {
     return _ContentPageDef(
         builder: builder, path: path, screenBuilder: screenBuilder);
   }
 
   /// The path definition
-  ContentPath path;
+  ContentPath? path;
 
   /// The builder, if used, name and arguments must match
   @deprecated
-  ContentPageBuilder builder;
+  ContentPageBuilder? builder;
 
   @override
   String toString() => 'def: $path';
 
   /// The screen builder
-  ContentScreenBuilder get screenBuilder;
+  ContentScreenBuilder? get screenBuilder;
 }
 
 class _ContentPageDef implements ContentPageDef {
   @override
-  Page Function(ContentPathRouteSettings crp) builder;
+  Page Function(ContentPathRouteSettings crp)? builder;
 
   @override
-  ContentPath path;
+  ContentPath? path;
 
   @override
-  final Widget Function(ContentPathRouteSettings crp) screenBuilder;
+  final Widget Function(ContentPathRouteSettings crp)? screenBuilder;
 
   _ContentPageDef({this.builder, this.path, this.screenBuilder}) {
     // var name = path?.toPath();
     // devPrint('Building material page from $name');
 
     builder ??= (routePath) {
-      var name = routePath.path.toPath();
+      var name = routePath.path!.toPath();
       return MaterialPage(
           name: name,
           arguments: routePath.arguments,
           key: ValueKey(name),
           child: Builder(
             builder: (_) {
-              return screenBuilder(routePath);
+              return screenBuilder!(routePath);
             },
           ));
     };

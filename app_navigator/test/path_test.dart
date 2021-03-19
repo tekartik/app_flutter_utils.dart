@@ -102,7 +102,7 @@ void main() {
     });
 
     test('toMap', () {
-      Map<String, String> rt(String path) {
+      Map<String?, String?> rt(String path) {
         return ContentPath.fromString(path).toStringMap();
       }
 

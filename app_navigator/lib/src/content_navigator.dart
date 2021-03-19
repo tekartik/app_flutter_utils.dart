@@ -13,10 +13,10 @@ var contentNavigatorDebug = false; // devWarning(true);
 
 class _ContentPageInStack {
   final ContentPathRouteSettings rs;
-  final ContentPageDef def;
+  final ContentPageDef? def;
   final completer = Completer.sync();
 
-  _ContentPageInStack({@required this.def, @required this.rs});
+  _ContentPageInStack({required this.def, required this.rs});
 
   void dispose() {
     if (!completer.isCompleted) {
@@ -27,9 +27,9 @@ class _ContentPageInStack {
   /// Build for navigator
   Page build() {
     // ignore: deprecated_member_use_from_same_package
-    var page = def.builder(rs);
+    var page = def!.builder!(rs);
     // Name and arguments must match
-    assert(page.name == rs.path.toPath(),
+    assert(page.name == rs.path!.toPath(),
         'name of page must match the content path');
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
@@ -37,7 +37,7 @@ class _ContentPageInStack {
   }
 
   @override
-  String toString() => rs?.toString() ?? def.toString() ?? '?';
+  String toString() => rs.toString();
 }
 
 class _ContentRoutePathInStack {
@@ -52,9 +52,9 @@ class _ContentRoutePathInStack {
 }
 
 class ContentNavigatorBloc extends BaseBloc {
-  final ContentNavigator contentNavigator;
-  ContentRouteInformationParser _routeInformationParser;
-  ContentRouterDelegate _routerDelegate;
+  final ContentNavigator? contentNavigator;
+  ContentRouteInformationParser? _routeInformationParser;
+  ContentRouterDelegate? _routerDelegate;
   TransitionDelegate transitionDelegate;
 
   ContentNavigatorBloc(
@@ -75,7 +75,7 @@ class ContentNavigatorBloc extends BaseBloc {
   Iterable<Page> get currentPages {
     if (_stack.isEmpty) {
       // Create a root if needed
-      var pageDef = contentNavigator.def.defs.first;
+      var pageDef = contentNavigator!.def.defs.first;
       var item = _ContentPageInStack(
           def: pageDef, rs: ContentPathRouteSettings(pageDef.path));
       _stack.add(item);
@@ -86,26 +86,26 @@ class ContentNavigatorBloc extends BaseBloc {
 
   /// Temp
   @visibleForTesting
-  ChangeNotifier changeNotifier;
+  late ChangeNotifier changeNotifier;
 
-  _ContentPageInStack get _currentPageInStack =>
+  _ContentPageInStack? get _currentPageInStack =>
       _stack.isEmpty ? null : _stack.last;
 
-  ContentPathRouteSettings get currentRoutePath =>
+  ContentPathRouteSettings? get currentRoutePath =>
       contentNavigatorUseDeclarative
           ? _currentPageInStack?.rs
           : _currentContentRoutePathInStack?.rs;
 
-  _ContentRoutePathInStack get _currentContentRoutePathInStack =>
+  _ContentRoutePathInStack? get _currentContentRoutePathInStack =>
       _crpStack.isEmpty ? null : _crpStack.last;
 
   // If last matches
   bool _crpCurrentPathEquals(ContentPath path) {
-    return (_currentContentRoutePathInStack?.rs?.path == path);
+    return (_currentContentRoutePathInStack?.rs.path == path);
   }
 
   /// Current path.
-  ContentPath get currentPath => currentRoutePath?.path;
+  ContentPath? get currentPath => currentRoutePath?.path;
 
   void _removeItem(int index) {
     var item = _stack[index];
@@ -118,13 +118,13 @@ class ContentNavigatorBloc extends BaseBloc {
     // devPrint('using old onGenerateRoute for $settings');
     //var info = routeInformationParser.parseRouteInformationSync(
     //    RouteInformation(location: settings.name, state: settings.arguments));
-    var path = settings.name;
+    var path = settings.name!;
     var arguments = settings.arguments;
     var contentPath = ContentPath.fromString(path);
     if (contentNavigatorDebug) {
       _log('onGenerateRoute($settings) => $contentPath');
     }
-    var pageDef = contentNavigator.def.findPageDef(contentPath);
+    var pageDef = contentNavigator!.def.findPageDef(contentPath);
 
     var rs = ContentPathRouteSettings(contentPath, arguments);
     if (!contentNavigatorUseDeclarative) {
@@ -142,7 +142,7 @@ class ContentNavigatorBloc extends BaseBloc {
       }
     }
 
-    return MaterialPageRoute(builder: (context) => pageDef.screenBuilder(rs));
+    return MaterialPageRoute(builder: (context) => pageDef!.screenBuilder!(rs));
   }
 
   void _notifyNavigatorChanges() {
@@ -154,7 +154,7 @@ class ContentNavigatorBloc extends BaseBloc {
   Future<T> _push<T>(ContentPathRouteSettings rs) async {
     // devPrint('Changed $routePath');
 
-    var pageDef = contentNavigator.def.findPageDef(rs.path);
+    var pageDef = contentNavigator!.def.findPageDef(rs.path);
     if (contentNavigatorDebug) {
       _log('found: $pageDef');
     }
@@ -180,7 +180,7 @@ class ContentNavigatorBloc extends BaseBloc {
 
   // User ContentNavigator.push instead
   // @protected
-  Future<T> push<T>(ContentPathRouteSettings rs) async {
+  Future<T?> push<T>(ContentPathRouteSettings rs) async {
     if (contentNavigatorDebug) {
       _log('Push $rs');
     }
@@ -264,9 +264,9 @@ class ContentNavigatorBloc extends BaseBloc {
       _stack.isEmpty ? 'ContentNavigator(empty)' : 'CN(${_stack.last.rs.path})';
 
   @protected
-  bool onPopPage(Route route, Object result) {
+  bool onPopPage(Route route, Object? result) {
     // pop if found
-    var contentPath = ContentPath.fromString(route.settings.name);
+    var contentPath = ContentPath.fromString(route.settings.name!);
     // Find in stack, if found remove
     for (var i = _stack.length - 1; i >= 0; i--) {
       var item = _stack[i];
@@ -279,7 +279,7 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   @protected
-  void transientPopItem(int index, Object result) {
+  void transientPopItem(int index, Object? result) {
     var item = _stack[index];
     if (!item.completer.isCompleted) {
       item.completer.complete(result);
@@ -288,10 +288,10 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   /// Return the same route if match found
-  ContentPath findPath(ContentPath path) {
-    var pageDef = contentNavigator.def.findPageDef(path);
+  ContentPath? findPath(ContentPath path) {
+    var pageDef = contentNavigator!.def.findPageDef(path);
     if (contentNavigatorDebug) {
-      _log('findPath: found $path: $pageDef in ${contentNavigator.def}');
+      _log('findPath: found $path: $pageDef in ${contentNavigator!.def}');
     }
     // Return the wanted root
     return pageDef?.path != null ? path : null;
@@ -317,7 +317,7 @@ class ContentNavigatorBloc extends BaseBloc {
 
     // devPrint('looking for $absPath in $_stack');
     var index =
-        lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
+        lastIndexWhere((routePath) => routePath.path!.toPath() == absPath);
     if (index != -1) {
       // print('found and reuse $index');
       transientPopUntil(index);
@@ -355,15 +355,15 @@ class ContentNavigatorBloc extends BaseBloc {
 class ContentNavigatorDef {
   final List<ContentPageDef> defs;
 
-  ContentNavigatorDef({@required this.defs}) {
+  ContentNavigatorDef({required this.defs}) {
     // devPrint('defs: ${defs.map((def) => def.path)}');
     // Check defs
     if (isDebug) {
-      var defSet = <ContentPath>{};
+      var defSet = <ContentPath?>{};
       for (var def in defs) {
         var path = def.path;
         for (var existing in defSet) {
-          assert(!path.matchesPath(existing),
+          assert(!path!.matchesPath(existing),
               '$def already exists in ${defs.map((def) => def.path)}');
         }
         defSet.add(path);
@@ -371,11 +371,11 @@ class ContentNavigatorDef {
     }
   }
 
-  ContentPageDef findPageDef(ContentPath path) {
+  ContentPageDef? findPageDef(ContentPath? path) {
     if (path != null) {
       // TODO optimize in a map by parts
       for (var def in defs) {
-        if (def.path.matchesPath(path)) {
+        if (def.path!.matchesPath(path)) {
           return def;
         }
       }
@@ -389,21 +389,21 @@ class ContentNavigatorDef {
 
 class ContentNavigator extends StatefulWidget {
   final ContentNavigatorDef def;
-  final Widget child;
+  final Widget? child;
 
   /// The global navigator object
-  static ContentNavigatorBloc of(BuildContext context) =>
+  static ContentNavigatorBloc? of(BuildContext context) =>
       BlocProvider.of<ContentNavigatorBloc>(context);
 
-  const ContentNavigator({Key key, @required this.def, this.child})
+  const ContentNavigator({Key? key, required this.def, this.child})
       : super(key: key);
 
   @override
   _ContentNavigatorState createState() => _ContentNavigatorState();
 
-  static Future<T> push<T>(
+  static Future<T?> push<T>(
       BuildContext context, ContentPathRouteSettings rs) async {
-    return await ContentNavigator.of(context).push<T>(rs);
+    return await ContentNavigator.of(context)!.push<T>(rs);
   }
 }
 
@@ -412,6 +412,6 @@ class _ContentNavigatorState extends State<ContentNavigator> {
   Widget build(BuildContext context) {
     return BlocProvider(
         blocBuilder: () => ContentNavigatorBloc(contentNavigator: widget),
-        child: widget.child);
+        child: widget.child!);
   }
 }
