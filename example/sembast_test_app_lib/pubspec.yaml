@@ -4,7 +4,7 @@ version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -12,24 +12,24 @@ dependencies:
   tekartik_test_menu_flutter:
     git:
       url: git://github.com/tekartik/test_menu_flutter
-      ref: dart2
+      ref: null_safety
       path: test_menu_flutter
     version: '>=0.2.3'
   tekartik_common_utils:
     git:
       url: git://github.com/tekartik/common_utils.dart
-      ref: dart2
+      ref: null_safety
     version: '>=0.2.3'
   tekartik_app_flutter_sembast:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_sembast
     version: '>=0.1.0'
   tekartik_app_platform:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_platform
     version: '>=0.1.0'
 dev_dependencies:

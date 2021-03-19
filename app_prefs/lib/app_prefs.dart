@@ -8,5 +8,5 @@ export 'package:tekartik_prefs/prefs.dart';
 PrefsFactory get prefsFactory => src.prefsFactory;
 
 /// Support Windows and Linux desktop
-PrefsFactory getPrefsFactory({String packageName}) =>
+PrefsFactory getPrefsFactory({String? packageName}) =>
     src.getPrefsFactory(packageName: packageName);

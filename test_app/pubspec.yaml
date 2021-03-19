@@ -15,7 +15,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -27,37 +27,37 @@ dependencies:
   tekartik_app_flutter_plugin:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_plugin
     version: '>=0.1.0'
   tekartik_test_menu_flutter:
     git:
       url: git://github.com/tekartik/test_menu_flutter
-      ref: dart2
+      ref: null_safety
       path: test_menu_flutter
     version: '>=0.2.4'
   tekartik_app_flutter_firebase:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_firebase
     version: '>=0.1.0'
   tekartik_app_flutter_firebase_auth:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_firebase_auth
     version: '>=0.1.0'
   tekartik_app_flutter_firebase_firestore:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_firebase_firestore
     version: '>=0.1.0'
   tekartik_app_roboto:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_roboto
       version: '>=0.1.0'
   process_run: '>=0.10.9+1'
@@ -118,5 +118,9 @@ dependency_overrides:
     path: ../app_fs
   tekartik_app_flutter_firebase:
     path: ../app_firebase
+  tekartik_app_flutter_firebase_firestore:
+    path: ../app_firebase_firestore
+  tekartik_app_flutter_firebase_auth:
+    path: ../app_firebase_auth
   tekartik_app_roboto:
     path: ../app_roboto

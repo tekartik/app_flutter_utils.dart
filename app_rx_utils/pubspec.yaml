@@ -1,10 +1,10 @@
 name: tekartik_app_rx_utils
 description: Rx subject builder
-version: 0.3.0
+version: 0.4.0
 publish_to: none
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: '>=2.12.0-0 <3.0.0'
 
 dependencies:
   flutter:

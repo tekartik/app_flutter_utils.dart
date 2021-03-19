@@ -10,7 +10,7 @@ Flutter plugin with platform features
 tekartik_app_flutter_plugin:
   git:
     url: git://github.com/tekartik/app_flutter_utils.dart
-    ref: dart2
+    ref: null_safety
     path: app_plugin
   version: '>=0.1.0'
 ```

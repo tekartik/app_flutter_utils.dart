@@ -7,7 +7,7 @@ DatabaseFactory get databaseFactory => _stub('databaseFactory');
 Future<DatabaseFactory> initDatabaseFactory(String packageName) =>
     _stub('initDatabaseFactory($packageName)');
 
-DatabaseFactory getDatabaseFactory({String packageName, String rootPath}) =>
+DatabaseFactory getDatabaseFactory({String? packageName, String? rootPath}) =>
     _stub('getDatabaseFactory($packageName)');
 
 /// Only needed/implemented on windows

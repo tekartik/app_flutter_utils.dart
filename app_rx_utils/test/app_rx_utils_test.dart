@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -8,6 +9,7 @@ void main() {
     var subject = BehaviorSubject<bool>();
     BehaviorSubjectBuilder(
       subject: subject,
+      builder: (_, __) => Container(),
     );
 
     await subject.close();
@@ -18,6 +20,7 @@ void main() {
     ValueStream<bool> valueStream = subject;
     ValueStreamBuilder(
       stream: valueStream,
+      builder: (_, __) => Container(),
     );
 
     await subject.close();

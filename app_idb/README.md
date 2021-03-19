@@ -1,6 +1,8 @@
 # tekartik_app_flutter_idb
 
-IDB factory for flutter app (mobile & web)
+IDB factory for flutter app (mobile & web).
+
+Uses sqflite on Mobile/Desktop and indexed db on the web.
 
 ## Getting Started
 
@@ -11,7 +13,7 @@ dependencies:
   tekartik_app_flutter_idb:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_idb
     version: '>=0.1.0'
 ```

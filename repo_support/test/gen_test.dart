@@ -29,7 +29,7 @@ void main() {
         var src = join(topDir, 'example', 'test_app');
         await fsGenerate(dir: dirName, src: src);
         var context = await flutterContext;
-        if (context.supportsWeb) {
+        if (context.supportsWeb!) {
           await Shell(workingDirectory: dirName).run('''
               flutter build web
               ''');

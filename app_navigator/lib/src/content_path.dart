@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:path/path.dart' as p;
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 
@@ -25,16 +26,16 @@ abstract class ContentPath {
   String toPath();
 
   /// A map representing the data, but likely unorderd.
-  Map<String, String> toStringMap();
+  Map<String?, String?> toStringMap();
 
   /// If both path matches /one/1/two/2 matching /one/34/two/27
-  bool matchesPath(ContentPath path);
+  bool matchesPath(ContentPath? path);
 
   /// if it starts with a content path (i.e. is a child of another content path)
   bool startsWith(ContentPath path);
 
   /// Get a field.
-  ContentPathField /*?*/ field(String name);
+  ContentPathField? field(String? name);
 }
 
 mixin PathMixin implements ContentPath {
@@ -59,12 +60,12 @@ mixin PathMixin implements ContentPath {
   }
 
   @override
-  Map<String, String> toStringMap() => fields.toStringMap();
+  Map<String?, String?> toStringMap() => fields.toStringMap();
 
   /// True for: (* stands for null) /one/*/two/* matching /one/34/two/27
   @override
-  bool matchesPath(ContentPath path) {
-    if (fields.length == path.fields.length) {
+  bool matchesPath(ContentPath? path) {
+    if (fields.length == path!.fields.length) {
       for (var i = 0; i < fields.length; i++) {
         var f1 = fields[i];
         var f2 = path.fields[i];
@@ -108,8 +109,8 @@ mixin PathMixin implements ContentPath {
   }
 
   @override
-  ContentPathField /*?*/ field(String name) =>
-      fields.firstWhere((field) => field.name == name, orElse: () => null);
+  ContentPathField? field(String? name) =>
+      fields.firstWhereOrNull((field) => field.name == name);
   @override
   String toString() => '$runtimeType(${toPath()})';
 }
@@ -162,7 +163,7 @@ class _PathFromPath with PathMixin implements ContentPath {
     }
     for (var i = start; i < end; i++) {
       var name = parts[i++];
-      String /*?*/ value;
+      String? value;
       ContentPathField field;
       if (i < end) {
         value = parts[i];

@@ -7,7 +7,7 @@ import 'package:process_run/which.dart';
 /*Future<String> _flutterVersion = () async {
   return await getFlutterBinVersion();
 }();*/
-Future<String> _flutterChannel = () async {
+Future<String?> _flutterChannel = () async {
   return await getFlutterBinChannel();
 }();
 

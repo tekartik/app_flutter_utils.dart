@@ -4,7 +4,7 @@ import 'package:tekartik_test_menu/test.dart';
 
 void main() {
   menu('monkey', () {
-    Timer timer;
+    Timer? timer;
     item('start checking isMonkeyRunning every 500ms', () async {
       timer?.cancel();
       timer = Timer.periodic(const Duration(milliseconds: 500), (_) async {

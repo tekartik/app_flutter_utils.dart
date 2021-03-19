@@ -1,5 +1,5 @@
 import 'package:dev_test/package.dart';
-import 'package:tekartik_build_utils/common_import.dart';
+import 'package:path/path.dart';
 
 Future main() async {
   for (var dir in [

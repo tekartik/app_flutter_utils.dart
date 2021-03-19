@@ -22,7 +22,7 @@ dependencies:
   tekartik_app_flutter_sembast:
     git:
       url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2
+      ref: null_safety
       path: app_sembast
     version: '>=0.1.0'
 ```
