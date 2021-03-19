@@ -8,7 +8,7 @@ import 'package:tekartik_app_flutter_widget/app_widget.dart';
 void defineMenu() {
   menu('widget', () {
     //devPrint('MAIN_');
-    Widget centeredProgressScreen({ThemeData themeData}) {
+    Widget centeredProgressScreen({ThemeData? themeData}) {
       return Theme(
           data: themeData ?? ThemeData.light(),
           child: Scaffold(
@@ -29,7 +29,7 @@ void defineMenu() {
         return centeredProgressScreen(themeData: ThemeData.dark());
       }));
     });
-    Widget smallIconsScreen({ThemeData themeData}) {
+    Widget smallIconsScreen({ThemeData? themeData}) {
       return Theme(
           data: themeData ?? ThemeData.light(),
           child: Scaffold(

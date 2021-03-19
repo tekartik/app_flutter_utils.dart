@@ -3,14 +3,14 @@ import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
-Directory _dir;
+Directory? _dir;
 
 Future<Directory> get dirAsync async => _dir ??= await () async {
       return await fs.getApplicationDocumentsDirectory(
           packageName: 'test1.tekartik.com');
     }();
 
-File _file;
+File? _file;
 
 Future<File> get fileAsync async => _file ??= await () async {
       return fs.file(fs.path.join((await dirAsync).path, 'file.txt'));

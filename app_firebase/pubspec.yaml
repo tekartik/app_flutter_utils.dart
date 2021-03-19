@@ -4,7 +4,7 @@ version: 0.1.0
 publish_to: none
 
 environment:
-  sdk: ">=2.7.0-dev <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -13,13 +13,13 @@ dependencies:
     git:
       url: git://github.com/tekartik/firebase.dart
       path: firebase_browser
-      ref: dart2
+      ref: null_safety
     version: '>=0.4.0'
   tekartik_firebase_flutter:
     git:
-      url: git://github.com/tekartik/firebase.dart
+      url: git://github.com/tekartik/firebase_flutter
       path: firebase_flutter
-      ref: dart2
+      ref: null_safety
     version: '>=0.4.0'
 dev_dependencies:
   flutter_test:

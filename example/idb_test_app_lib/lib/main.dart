@@ -20,7 +20,7 @@ void defineMenu() {
       var toggle = await db
           .transaction('main', idbModeReadOnly)
           .objectStore('main')
-          .getObject('toggle') as bool;
+          .getObject('toggle') as bool?;
       toggle = !(toggle ?? false);
       await db
           .transaction('main', idbModeReadWrite)

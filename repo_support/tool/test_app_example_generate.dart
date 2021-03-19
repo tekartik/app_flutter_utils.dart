@@ -12,7 +12,7 @@ Future main() async {
   await generate();
 }
 
-Future generate({bool force}) async {
+Future generate({bool? force}) async {
   await run('dart --version');
   await run('flutter --version');
   await gitGenerate(dirName: dirName, appName: appName, force: force);
