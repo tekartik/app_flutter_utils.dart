@@ -11,14 +11,14 @@ export 'src/content_path.dart'
         ContentPath,
         ContentPathBase,
         HomeContentPath,
-        // ignore: deprecated_member_use_from_same_package
+        // ignore: deprecated_member_use_from_same_package, deprecated_member_use
         homeContentPath,
         rootContentPath;
 export 'src/content_path_field.dart' show ContentPathField;
 export 'src/content_path_part.dart' show ContentPathPart;
 export 'src/content_path_route_settings.dart'
     show
-        ContentRoutePath, // ignore: deprecated_member_use_from_same_package
+        ContentRoutePath, // ignore: deprecated_member_use_from_same_package, deprecated_member_use
         ContentPathRouteSettings,
         ContentPathRouteExt;
 export 'src/route_information_parser.dart' show ContentRouteInformationParser;

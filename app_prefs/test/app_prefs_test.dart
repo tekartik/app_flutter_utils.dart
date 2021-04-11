@@ -1,6 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_prefs/app_prefs.dart';
-// ignore_for_file: unused_local_variable
+import 'package:tekartik_app_prefs/app_prefs.dart' as app_prefs;
+
+PrefsFactory get prefsFactory {
+  // Special mac handling
+  if (platformContext.io?.isMac ?? false) {
+    return prefsFactoryMemory;
+  } else {
+    // Try regular
+    return app_prefs.prefsFactory;
+  }
+}
+
+PrefsFactory getPrefsFactory({String? packageName}) {
+  // Special mack handling
+  if (platformContext.io?.isMac ?? false) {
+    return prefsFactoryMemory;
+  } else {
+    // Try regular
+    return app_prefs.getPrefsFactory(packageName: packageName);
+  }
+}
 
 void main() async {
   group('app_prefs', () {
@@ -12,7 +33,7 @@ void main() async {
       // Should increment at each test
     });
     test('doc', () async {
-// Get the default persistent prefs factory.
+      // Get the default persistent prefs factory.
       var prefsFactory = getPrefsFactory();
       var prefs = await prefsFactory.openPreferences('my_shared_prefs');
 
@@ -24,17 +45,22 @@ void main() async {
 // For Windows/Linux support you can add package name to find a shared
 // location on the file system
         var prefsFactory = getPrefsFactory(packageName: 'my.package.name');
+
+        expect(prefsFactory, isNotNull);
       }
 
       // Memory
       {
         // In memory prefs factory.
-        var prefsFactory = prefsFactoryMemory;
+        var prefsFactory = newPrefsFactoryMemory();
         var prefs = await prefsFactory.openPreferences('test_prefs.db');
         expect(prefs.getInt('value'), isNull);
         prefs.setInt('value', 1);
         expect(prefs.getInt('value'), 1);
       }
+
+      // ignore: unnecessary_statements
+      title;
     });
   });
 }

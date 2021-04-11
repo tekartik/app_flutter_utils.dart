@@ -17,7 +17,7 @@ class EmitFutureOrBuilder<T> extends StatefulWidget {
   _EmitFutureOrBuilderState<T> createState() => _EmitFutureOrBuilderState<T>();
 }
 
-// ignore: deprecated_member_use_from_same_package
+// ignore: deprecated_member_use_from_same_package, deprecated_member_use
 class _EmitFutureOrBuilderState<T> extends State<EmitFutureOrBuilder<T>> {
   EmitFutureOrSubscription<T>? subscription;
 
