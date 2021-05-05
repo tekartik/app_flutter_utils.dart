@@ -1,6 +1,6 @@
 name: tekartik_app_prefs
 description: Prefs helper
-version: 0.4.0
+version: 0.4.2
 publish_to: none
 
 environment:
@@ -28,11 +28,17 @@ dependencies:
       ref: null_safety
     version: '>=0.1.0'
   path:
+  process_run:
 
 dev_dependencies:
+  tekartik_app_platform:
+    git:
+      url: git://github.com/tekartik/app_flutter_utils.dart
+      ref: null_safety
+      path: app_platform
+    version: '>=0.1.0'
   flutter_test:
     sdk: flutter
-  process_run:
   dev_test:
 
 dependency_overrides:

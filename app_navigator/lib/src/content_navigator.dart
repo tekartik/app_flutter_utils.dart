@@ -26,7 +26,7 @@ class _ContentPageInStack {
 
   /// Build for navigator
   Page build() {
-    // ignore: deprecated_member_use_from_same_package
+    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
     var page = def!.builder!(rs);
     // Name and arguments must match
     assert(page.name == rs.path!.toPath(),

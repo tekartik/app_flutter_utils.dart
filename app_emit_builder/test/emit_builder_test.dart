@@ -9,7 +9,7 @@ void main() {
       var controller = EmitFutureOrController<String>();
       Widget getMaterialApp() {
         return MaterialApp(
-            // ignore: deprecated_member_use_from_same_package
+            // ignore: deprecated_member_use_from_same_package, deprecated_member_use
             home: EmitFutureOrBuilder<String>(
                 futureOr: controller.futureOr,
                 builder: (context, snapshot) =>
