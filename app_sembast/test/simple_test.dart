@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_sembast/sembast.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart'
@@ -6,6 +8,7 @@ import 'package:tekartik_app_flutter_sqflite/sqflite.dart'
 void main() {
   var rootPath = '.dart_tool/tekartik_app_flutter_sembast/db';
   sqfliteWindowsFfiInit();
+  print(Platform.environment);
   var factory = getDatabaseFactory(rootPath: rootPath);
   group('sembast', () {
     test('factory', () {
