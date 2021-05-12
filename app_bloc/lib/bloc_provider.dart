@@ -10,12 +10,12 @@ class BlocProvider<T extends BaseBloc> extends StatefulWidget {
   @override
   _BlocProviderState createState() => _BlocProviderState<T>();
 
-  static T? of<T extends BaseBloc>(BuildContext context) {
+  static T of<T extends BaseBloc>(BuildContext context) {
     var provider = context
         .getElementForInheritedWidgetOfExactType<_BlocProviderInherited<T>>()
-        ?.widget as _BlocProviderInherited<T>?;
+        ?.widget as _BlocProviderInherited<T>;
 
-    return provider?.bloc;
+    return provider.bloc;
   }
 }
 
