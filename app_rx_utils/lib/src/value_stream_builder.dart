@@ -14,7 +14,7 @@ class ValueStreamBuilder<T> extends StatelessWidget {
     return StreamBuilder(
       builder: builder,
       stream: stream,
-      initialData: stream.value,
+      initialData: stream.hasValue ? stream.value : null,
     );
   }
 }
