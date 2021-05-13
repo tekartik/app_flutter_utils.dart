@@ -19,7 +19,7 @@ void main() {
       await tester.pumpWidget(ContentNavigator(
           def: contentNavigatorDef,
           child: Builder(builder: (context) {
-            var cn = ContentNavigator.of(context)!;
+            var cn = ContentNavigator.of(context);
             return MaterialApp.router(
               title: 'Stable app',
               routerDelegate: cn.routerDelegate,

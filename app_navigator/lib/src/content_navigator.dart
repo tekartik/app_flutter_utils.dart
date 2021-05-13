@@ -392,7 +392,7 @@ class ContentNavigator extends StatefulWidget {
   final Widget? child;
 
   /// The global navigator object
-  static ContentNavigatorBloc? of(BuildContext context) =>
+  static ContentNavigatorBloc of(BuildContext context) =>
       BlocProvider.of<ContentNavigatorBloc>(context);
 
   const ContentNavigator({Key? key, required this.def, this.child})
@@ -403,7 +403,7 @@ class ContentNavigator extends StatefulWidget {
 
   static Future<T?> push<T>(
       BuildContext context, ContentPathRouteSettings rs) async {
-    return await ContentNavigator.of(context)!.push<T>(rs);
+    return await ContentNavigator.of(context).push<T>(rs);
   }
 }
 

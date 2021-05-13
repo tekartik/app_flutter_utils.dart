@@ -19,8 +19,11 @@ String buildDatabasesPath(String packageName) {
   return dataPath;
 }
 
+/// Workaround for flutter test
+bool get _inFlutterTest => Platform.environment['FLUTTER_TEST'] == 'true';
+
 DatabaseFactory get _defaultDatabaseFactory =>
-    (Platform.isLinux || Platform.isWindows)
+    (Platform.isLinux || Platform.isWindows || _inFlutterTest)
         ? databaseFactoryFfi
         : sqflite.databaseFactory;
 
