@@ -14,7 +14,7 @@ class BehaviorSubjectBuilder<T> extends StatelessWidget {
     return StreamBuilder<T>(
       builder: builder,
       stream: subject,
-      initialData: subject.value,
+      initialData: subject.hasValue ? subject.value : null,
     );
   }
 }
