@@ -231,6 +231,13 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
+  /// Pop last route
+  ///
+  /// You must push another route after calling this.
+  void transientPop([Object result]) {
+    transientPopItem(_stack.length - 1, result);
+  }
+
   @deprecated
   void popAll() => transientPopAll();
 
