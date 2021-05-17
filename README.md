@@ -1,3 +1,3 @@
-# app_common_utils.dart
+# app_flutter_utils.dart
 
-Common app utility project for dart
+Common app utility project for flutter
