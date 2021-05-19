@@ -1,6 +1,9 @@
-# tekartik_app_flutter_idb
+# tekartik_app_flutter_sqflite
 
-IDB factory for flutter app (mobile & web)
+sqflite database factory for flutter app (mobile & desktop)
+- Uses sqflite on Android/iOS/MacOS
+- Uses sqflite_common_ffi on Linux/Android
+- No web support
 
 ## Getting Started
 
@@ -22,7 +25,20 @@ dependencies:
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 
 Future<Database> open() async {
-  var db = await databaseFactory.openDatabase('test.db');
-  return db;
+  var db = await databaseFactory.openDatabase('test.db',
+      options: OpenDatabaseOptions(
+          version: 1,
+          onCreate: (db, version) async {
+            await db.execute('''
+    CREATE TABLE Pref (
+      id TEXT PRIMARY KEY,
+      value INTEGER NOT NULL
+    )
+            ''');
+          }));
+  await db.close();
 }
 ```
+
+Since `getDatabasePath()` implementation is lame on platform other than Android, you should use a package such as 
+`path_provider` to find the proper database location.
