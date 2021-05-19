@@ -58,6 +58,7 @@ class _ContentPageDef implements ContentPageDef {
           ));
     };
   }
+
   @override
   String toString() => 'def:$path';
 }

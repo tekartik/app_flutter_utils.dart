@@ -1,14 +1,16 @@
 @TestOn('vm')
 import 'dart:io';
+
+import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
-import 'package:tekartik_build_utils/cmd_run.dart';
-import 'package:test/test.dart';
 import 'package:process_run/shell_run.dart';
+import 'package:tekartik_build_utils/cmd_run.dart';
 import 'package:tekartik_build_utils/flutter/app/generate.dart';
 import 'package:tekartik_build_utils/flutter/flutter.dart';
-import 'package:fs_shim/utils/io/copy.dart';
+import 'package:test/test.dart';
 
 var topDir = '..';
+
 void main() {
   group(
     'min_app',

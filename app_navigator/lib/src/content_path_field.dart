@@ -10,6 +10,7 @@ class ContentPathField {
   /// The field value, null for any
   String? get value => _value;
   String? _value;
+
   set value(String? value) {
     if (value == _wildcard) {
       value = null;
