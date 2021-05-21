@@ -29,7 +29,7 @@ class _ContentPageInStack {
     // ignore: deprecated_member_use_from_same_package, deprecated_member_use
     var page = def!.builder!(rs);
     // Name and arguments must match
-    assert(page.name == rs.path!.toPath(),
+    assert(page.name == rs.path.toPath(),
         'name of page must match the content path');
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
@@ -317,7 +317,7 @@ class ContentNavigatorBloc extends BaseBloc {
 
     // devPrint('looking for $absPath in $_stack');
     var index =
-        lastIndexWhere((routePath) => routePath.path!.toPath() == absPath);
+        lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
     if (index != -1) {
       // print('found and reuse $index');
       transientPopUntil(index);
@@ -363,7 +363,7 @@ class ContentNavigatorDef {
       for (var def in defs) {
         var path = def.path;
         for (var existing in defSet) {
-          assert(!path!.matchesPath(existing),
+          assert(!path.matchesPath(existing),
               '$def already exists in ${defs.map((def) => def.path)}');
         }
         defSet.add(path);
@@ -375,7 +375,7 @@ class ContentNavigatorDef {
     if (path != null) {
       // TODO optimize in a map by parts
       for (var def in defs) {
-        if (def.path!.matchesPath(path)) {
+        if (def.path.matchesPath(path)) {
           return def;
         }
       }

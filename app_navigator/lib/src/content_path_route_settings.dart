@@ -9,7 +9,7 @@ class ContentRoutePath extends ContentPathRouteSettings {
 }
 
 class ContentPathRouteSettings {
-  final ContentPath? path;
+  final ContentPath path;
   final Object? arguments;
 
   ContentPathRouteSettings(this.path, [this.arguments]);

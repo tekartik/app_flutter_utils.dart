@@ -18,7 +18,7 @@ abstract class ContentPageDef {
   }
 
   /// The path definition
-  ContentPath? path;
+  late ContentPath path;
 
   /// The builder, if used, name and arguments must match
   @deprecated
@@ -36,17 +36,17 @@ class _ContentPageDef implements ContentPageDef {
   Page Function(ContentPathRouteSettings crp)? builder;
 
   @override
-  ContentPath? path;
+  ContentPath path;
 
   @override
   final Widget Function(ContentPathRouteSettings crp)? screenBuilder;
 
-  _ContentPageDef({this.builder, this.path, this.screenBuilder}) {
+  _ContentPageDef({this.builder, required this.path, this.screenBuilder}) {
     // var name = path?.toPath();
     // devPrint('Building material page from $name');
 
     builder ??= (routePath) {
-      var name = routePath.path!.toPath();
+      var name = routePath.path.toPath();
       return MaterialPage(
           name: name,
           arguments: routePath.arguments,
