@@ -20,6 +20,8 @@ dependencies:
 ### Usage
 
 ```dart
+import 'package:tekartik_app_prefs/app_prefs.dart';
+
 // Get the default persistent prefs factory.
 var prefsFactory = getPrefsFactory();
 var prefs = await prefsFactory.openPreferences('my_shared_prefs');
