@@ -5,6 +5,7 @@ import 'package:tekartik_app_rx_utils/app_rx_utils.dart';
 
 abstract class _BaseWidget extends StatelessWidget {
   final subject = BehaviorSubject<String>();
+
   _BaseWidget({Key? key}) : super(key: key);
 }
 

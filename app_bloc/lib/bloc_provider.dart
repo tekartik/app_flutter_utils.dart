@@ -1,12 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:tekartik_app_bloc/base_bloc.dart';
+
 export 'package:tekartik_app_bloc/base_bloc.dart';
 
 class BlocProvider<T extends BaseBloc> extends StatefulWidget {
   final Widget child;
   final T Function() blocBuilder;
+
   const BlocProvider({Key? key, required this.blocBuilder, required this.child})
       : super(key: key);
+
   @override
   _BlocProviderState createState() => _BlocProviderState<T>();
 
@@ -21,6 +24,7 @@ class BlocProvider<T extends BaseBloc> extends StatefulWidget {
 
 class _BlocProviderState<T extends BaseBloc> extends State<BlocProvider> {
   late T _bloc;
+
   @override
   void initState() {
     super.initState();

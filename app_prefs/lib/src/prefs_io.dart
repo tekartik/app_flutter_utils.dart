@@ -1,14 +1,16 @@
 import 'dart:io';
+
+import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
+import 'package:sembast/sembast_io.dart';
 import 'package:tekartik_prefs/prefs.dart';
 import 'package:tekartik_prefs_flutter/prefs.dart';
 import 'package:tekartik_prefs_sembast/prefs.dart';
-import 'package:path/path.dart';
-import 'package:sembast/sembast_io.dart';
 
 PrefsFactory get prefsFactory => prefsFactoryFlutter;
 
 final _prefsFactoryMap = <String?, PrefsFactory>{};
+
 PrefsFactory newPrefsFactorySembast(String? packageName) {
   var dataPath =
       join(userAppDataPath, packageName ?? 'com.tekartik.app_prefs', 'prefs');

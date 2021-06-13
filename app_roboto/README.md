@@ -29,6 +29,14 @@ flutter:
         - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Regular.ttf
 ```
 
+```yaml
+flutter:
+  fonts:
+    - family: RobotoMono
+      fonts:
+        - asset: packages/tekartik_app_roboto/fonts/RobotoMono/RobotoMono-Regular.ttf
+```
+
 All:
 
 ```yaml
@@ -48,4 +56,10 @@ flutter:
           weight: 700
         - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Black.ttf
           weight: 900
+    - family: RobotoMono
+      fonts:
+        - asset: packages/tekartik_app_roboto/fonts/RobotoMono/RobotoMono-Regular.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoMono/RobotoMono-Bold.ttf
+          weight: 700
+
 ```

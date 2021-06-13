@@ -111,6 +111,7 @@ mixin PathMixin implements ContentPath {
   @override
   ContentPathField? field(String? name) =>
       fields.firstWhereOrNull((field) => field.name == name);
+
   @override
   String toString() => '$runtimeType(${toPath()})';
 }
