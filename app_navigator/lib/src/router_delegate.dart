@@ -7,6 +7,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
 
   final ContentNavigatorBloc cnBloc;
 
+  /// Optional observers
   ContentRouterDelegate(this.cnBloc)
       : navigatorKey = GlobalKey<NavigatorState>() {
     // Temp set in bloc until bloc holds the router.
@@ -42,6 +43,8 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
     if (contentNavigatorDebug) {
       _log('build navigator $cnPages');
     }
+
+    var observers = cnBloc.contentNavigator?.observers;
 
     return Navigator(
       key: navigatorKey,
@@ -85,6 +88,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
 
         return true;
       },
+      observers: observers != null ? observers : <NavigatorObserver>[],
     );
   }
 

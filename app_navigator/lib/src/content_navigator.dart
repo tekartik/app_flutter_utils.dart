@@ -51,6 +51,7 @@ class _ContentRoutePathInStack {
   String toString() => '<$id> $rs';
 }
 
+/// Main content navigator bloc
 class ContentNavigatorBloc extends BaseBloc {
   final ContentNavigator? contentNavigator;
   ContentRouteInformationParser? _routeInformationParser;
@@ -61,9 +62,11 @@ class ContentNavigatorBloc extends BaseBloc {
       {this.contentNavigator,
       this.transitionDelegate = const DefaultTransitionDelegate()});
 
+  /// Router delegate for MaterialApp.router
   ContentRouterDelegate get routerDelegate =>
       _routerDelegate ??= ContentRouterDelegate(this);
 
+  /// RouteInformationParser for MaterialApp.router
   ContentRouteInformationParser get routeInformationParser =>
       _routeInformationParser ??= ContentRouteInformationParser(this);
 
@@ -387,15 +390,20 @@ class ContentNavigatorDef {
   String toString() => defs.toString();
 }
 
+/// Content navigator top object.
 class ContentNavigator extends StatefulWidget {
   final ContentNavigatorDef def;
   final Widget? child;
+
+  /// Optional observers
+  final List<NavigatorObserver>? observers;
 
   /// The global navigator object
   static ContentNavigatorBloc of(BuildContext context) =>
       BlocProvider.of<ContentNavigatorBloc>(context);
 
-  const ContentNavigator({Key? key, required this.def, this.child})
+  const ContentNavigator(
+      {Key? key, required this.def, this.child, this.observers})
       : super(key: key);
 
   @override
