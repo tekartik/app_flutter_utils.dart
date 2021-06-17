@@ -10,7 +10,7 @@ abstract class ContentPageDef {
   factory ContentPageDef(
       {
       // should a build a default MaterialPage
-      @deprecated ContentPageBuilder? builder,
+      @Deprecated('Not supported anymore') ContentPageBuilder? builder,
       required ContentPath path,
       required ContentScreenBuilder? screenBuilder}) {
     return _ContentPageDef(
@@ -21,7 +21,7 @@ abstract class ContentPageDef {
   late ContentPath path;
 
   /// The builder, if used, name and arguments must match
-  @deprecated
+  @Deprecated('Not supported anymore')
   ContentPageBuilder? builder;
 
   @override

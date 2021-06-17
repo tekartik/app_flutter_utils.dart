@@ -162,7 +162,7 @@ class ContentNavigatorBloc extends BaseBloc {
       _log('found: $pageDef');
     }
     if (pageDef == null) {
-      print('No page found for route settings ${rs.path}');
+      _log('No page found for route settings ${rs.path}');
     }
 
     // Find in stack, if found remove
@@ -218,7 +218,7 @@ class ContentNavigatorBloc extends BaseBloc {
     return index;
   }
 
-  @deprecated
+  @Deprecated('Not supported anymore')
   void popUntil(int index) => transientPopUntil(index);
 
   /// Remove all route until index is reached from the top
@@ -234,7 +234,7 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
-  @deprecated
+  @Deprecated('Not supported anymore')
   void popAll() => transientPopAll();
 
   /// Remove all route until index is reached from the top
@@ -259,6 +259,7 @@ class ContentNavigatorBloc extends BaseBloc {
   }*/
 
   void _log(String message) {
+    // ignore: avoid_print
     print('/cn $message');
   }
 

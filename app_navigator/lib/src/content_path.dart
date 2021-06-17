@@ -116,7 +116,7 @@ mixin PathMixin implements ContentPath {
   String toString() => '$runtimeType(${toPath()})';
 }
 
-@deprecated
+@Deprecated('Not supported anymore')
 final homeContentPath = HomeContentPath();
 
 /// root content path.

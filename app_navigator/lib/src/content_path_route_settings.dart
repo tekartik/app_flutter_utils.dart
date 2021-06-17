@@ -2,7 +2,7 @@ import 'import.dart';
 
 /// An route settings
 /// arguments are discouraged and null should be handled
-@deprecated
+@Deprecated('Not supported anymore')
 class ContentRoutePath extends ContentPathRouteSettings {
   ContentRoutePath(ContentPath path, [Object? arguments])
       : super(path, arguments);
