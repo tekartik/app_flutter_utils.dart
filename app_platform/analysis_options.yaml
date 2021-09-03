@@ -1,2 +1,2 @@
-# tekartik analysis_options extension to pedantic
-include: package:tekartik_common_utils/pedantic/analysis_options.strong_mode.yaml
+# tekartik flutter recommended lints (extension over google lints and pedantic)
+include: package:tekartik_app_lints_flutter/recommended.yaml

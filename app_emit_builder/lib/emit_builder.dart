@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:tekartik_app_emit/emit.dart';
 
 /// Very bad idea....
-@deprecated
+@Deprecated('Do not use')
 class EmitFutureOrBuilder<T> extends StatefulWidget {
   final EmitFutureOr<T> futureOr;
   final AsyncWidgetBuilder<T> builder;

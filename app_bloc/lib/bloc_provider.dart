@@ -47,7 +47,7 @@ class _BlocProviderState<T extends BaseBloc> extends State<BlocProvider> {
 }
 
 class _BlocProviderInherited<T> extends InheritedWidget {
-  _BlocProviderInherited({
+  const _BlocProviderInherited({
     Key? key,
     required Widget child,
     required this.bloc,

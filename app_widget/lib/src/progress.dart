@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// A bad but efficient catch all place holder.
 class CenteredProgress extends StatelessWidget {
+  const CenteredProgress({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const Center(child: CircularProgressIndicator());
@@ -10,6 +11,7 @@ class CenteredProgress extends StatelessWidget {
 
 /// Small icon, typically for leading/trailing
 class SmallProgress extends StatelessWidget {
+  const SmallProgress({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = IconTheme.of(context).size!;
@@ -27,6 +29,7 @@ class SmallProgress extends StatelessWidget {
 
 /// Small icon, typically for leading/trailing
 class SmallConnectivityError extends StatelessWidget {
+  const SmallConnectivityError({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);

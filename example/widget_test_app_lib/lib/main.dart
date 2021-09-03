@@ -15,7 +15,7 @@ void defineMenu() {
             appBar: AppBar(
               title: const Text('App Widget'),
             ),
-            body: CenteredProgress(),
+            body: const CenteredProgress(),
           ));
     }
 
@@ -37,10 +37,10 @@ void defineMenu() {
               title: const Text('App Widget'),
             ),
             body: Wrap(
-              children: [
+              children: const [
                 SmallProgress(),
                 SmallConnectivityError(),
-                const Icon(Icons.email)
+                Icon(Icons.email)
               ],
             ),
           ));

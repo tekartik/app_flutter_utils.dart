@@ -29,7 +29,7 @@ void main() async {
       var prefs = await prefsFactory.openPreferences('test_prefs.db');
       var value = prefs.getInt('value') ?? 0;
       prefs.setInt('value', ++value);
-      print('prefs set to $value');
+      // print('prefs set to $value');
       // Should increment at each test
     });
     test('doc', () async {

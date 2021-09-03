@@ -10,7 +10,7 @@ DatabaseFactory get databaseFactory => src.databaseFactory;
 /// For all flutter app (including linux and windows)
 ///
 /// [packageName] only used on linux and windows for now
-@deprecated
+@Deprecated('Use getDatabaseFactory()')
 Future<DatabaseFactory> initDatabaseFactory(String packageName) =>
     src.initDatabaseFactory(packageName);
 

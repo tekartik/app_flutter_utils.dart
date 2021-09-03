@@ -12,7 +12,7 @@ void main() async {
       getPrefsFactory;
       prefsFactory;
       prefsFactoryMemory;
-      print(prefsFactory.runtimeType);
+      print(prefsFactory.runtimeType); // ignore: avoid_print
     });
   });
 }

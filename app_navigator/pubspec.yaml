@@ -27,6 +27,7 @@ dev_dependencies:
       ref: null_safety
       path: app_lints
     version: '>=0.1.0'
+
 dependency_overrides:
   tekartik_app_flutter_bloc:
     path: ../app_bloc
