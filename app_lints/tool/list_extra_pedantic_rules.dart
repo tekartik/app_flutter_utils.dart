@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart';
-import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:yaml/yaml.dart';
 
 /// Read info from `.packages` file, key being the package, value being the path
@@ -46,16 +46,16 @@ Future<void> _writeRules(String name, List<String> rules) async {
 Future<void> main() async {
   var dotPackagesMap = await getDotPackagesMap('.');
 
-  var commonUtilsLibPath =
-      Uri.parse(dotPackagesMap['tekartik_common_utils']!).toFilePath();
+  var tekartikLintsLibPath =
+      Uri.parse(dotPackagesMap['tekartik_lints']!).toFilePath();
   var pedanticLibPath = Uri.parse(dotPackagesMap['pedantic']!).toFilePath();
   var flutterLintsLibPath =
       Uri.parse(dotPackagesMap['flutter_lints']!).toFilePath();
   var lintsLibPath = Uri.parse(dotPackagesMap['lints']!).toFilePath();
 
-  var commonUtilsRules =
-      await getRules(join(commonUtilsLibPath, 'lints', 'recommended.yaml'));
-  await _writeRules('common_utils', commonUtilsRules);
+  var tekartikLintsRules =
+      await getRules(join(tekartikLintsLibPath, 'recommended.yaml'));
+  await _writeRules('common_utils', tekartikLintsRules);
   var pedanticRules =
       await getRules(join(pedanticLibPath, 'analysis_options.1.11.0.yaml'));
   await _writeRules('pedantic', pedanticRules);
@@ -66,10 +66,10 @@ Future<void> main() async {
 
   await _writeRules('lints', lintsRules);
 
-  var diffRules = List<String>.from(commonUtilsRules);
+  var diffRules = List<String>.from(tekartikLintsRules);
   diffRules.removeWhere((element) => pedanticRules.contains(element));
   await _writeRules('pedantic_diff', diffRules);
-  diffRules = List<String>.from(commonUtilsRules);
+  diffRules = List<String>.from(tekartikLintsRules);
   diffRules.removeWhere((element) => flutterLintsRules.contains(element));
   await _writeRules('lints_diff', diffRules);
   diffRules = List<String>.from(flutterLintsRules);
@@ -80,7 +80,7 @@ Future<void> main() async {
   await _writeRules('pedantic_over_lints', diffRules);
 
   var all = <String>{}
-    ..addAll(commonUtilsRules)
+    ..addAll(tekartikLintsRules)
     ..addAll(pedanticRules)
     ..addAll(flutterLintsRules)
     ..addAll(lintsRules);
