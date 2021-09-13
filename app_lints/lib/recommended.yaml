@@ -68,5 +68,6 @@ linter:
     - unnecessary_statements
     - unrelated_type_equality_checks
     - unsafe_html
+    - use_full_hex_values_for_flutter_colors
     - valid_regexps
 
