@@ -18,6 +18,7 @@ Future main() async {
     'app_platform',
     'app_roboto',
     'app_sembast',
+    'app_lints',
     join('example', 'test_app')
   ]) {
     await packageRunCi(join('..', dir));

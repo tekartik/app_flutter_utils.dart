@@ -116,7 +116,7 @@ mixin PathMixin implements ContentPath {
   String toString() => '$runtimeType(${toPath()})';
 }
 
-@deprecated
+@Deprecated('Not supported anymore')
 final homeContentPath = HomeContentPath();
 
 /// root content path.
@@ -153,27 +153,29 @@ class _PathFromPath with PathMixin implements ContentPath {
 
   _PathFromPath(String path) {
     var parts = p.url.split(path);
-    // devPrint(parts);
-    var start = 0;
-    if (parts[0] == ContentPath.separator) {
-      start++;
-    }
-    var end = parts.length;
-    if (parts[end - 1] == ContentPath.separator) {
-      end--;
-    }
-    for (var i = start; i < end; i++) {
-      var name = parts[i++];
-      String? value;
-      ContentPathField field;
-      if (i < end) {
-        value = parts[i];
-        // Won't set if null however cannot happen
-        field = ContentPathField(name, value);
-      } else {
-        field = ContentPathPart(name);
+    if (parts.isNotEmpty) {
+      // devPrint(parts);
+      var start = 0;
+      if (parts[0] == ContentPath.separator) {
+        start++;
       }
-      fields.add(field);
+      var end = parts.length;
+      if (parts[end - 1] == ContentPath.separator) {
+        end--;
+      }
+      for (var i = start; i < end; i++) {
+        var name = parts[i++];
+        String? value;
+        ContentPathField field;
+        if (i < end) {
+          value = parts[i];
+          // Won't set if null however cannot happen
+          field = ContentPathField(name, value);
+        } else {
+          field = ContentPathPart(name);
+        }
+        fields.add(field);
+      }
     }
   }
 

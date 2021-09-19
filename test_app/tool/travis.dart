@@ -39,7 +39,7 @@ flutter analyze
       flutter build apk
 ''');
   } else {
-    print('Android build tools not installed');
+    stderr.writeln('Android build tools not installed');
   }
 
   if (Platform.isMacOS) {
@@ -48,7 +48,7 @@ flutter analyze
       flutter build ios
 ''');
     } else {
-      print('iOS build tools not installed');
+      stderr.writeln('iOS build tools not installed');
     }
   }
 }

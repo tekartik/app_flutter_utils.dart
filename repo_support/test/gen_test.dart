@@ -24,7 +24,7 @@ void main() {
           'sqflite_test_app_lib',
           'widget_test_app_lib'
         ]) {
-          await copyDirectory(Directory(join(topDir, 'example', '$dir')),
+          await copyDirectory(Directory(join(topDir, 'example', dir)),
               Directory(join(topDir, '.dart_tool', dir)));
         }
         var dirName = join(topDir, '.dart_tool', 'test_app');

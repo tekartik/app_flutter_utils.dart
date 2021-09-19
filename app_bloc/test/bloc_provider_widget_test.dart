@@ -8,6 +8,7 @@ class TestBloc extends BaseBloc {
 }
 
 class TestApp extends StatelessWidget {
+  const TestApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +29,7 @@ class TestApp extends StatelessWidget {
 
 void main() {
   testWidgets('Provider', (WidgetTester tester) async {
-    await tester.pumpWidget(TestApp());
+    await tester.pumpWidget(const TestApp());
     final resultFinder = find.text('test_result');
     expect(resultFinder, findsOneWidget);
   });

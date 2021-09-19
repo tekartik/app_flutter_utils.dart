@@ -13,6 +13,7 @@ class ContentRouteInformationParser
   }
 
   void _log(String message) {
+    // ignore: avoid_print
     print('/cnip $message');
   }
 
@@ -46,11 +47,11 @@ class ContentRouteInformationParser
   }
 
   @override
-  RouteInformation restoreRouteInformation(ContentPath? path) {
+  RouteInformation restoreRouteInformation(ContentPath? configuration) {
     // devPrint('restore: ${path}');
     // Convert the current path to a displayable string
-    if (path is ContentPath) {
-      var location = path.toPath();
+    if (configuration is ContentPath) {
+      var location = configuration.toPath();
       return RouteInformation(location: location);
     }
     return const RouteInformation(location: '/?');

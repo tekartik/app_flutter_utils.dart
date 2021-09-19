@@ -51,6 +51,7 @@ class _ContentRoutePathInStack {
   String toString() => '<$id> $rs';
 }
 
+/// Main content navigator bloc
 class ContentNavigatorBloc extends BaseBloc {
   final ContentNavigator? contentNavigator;
   ContentRouteInformationParser? _routeInformationParser;
@@ -61,9 +62,11 @@ class ContentNavigatorBloc extends BaseBloc {
       {this.contentNavigator,
       this.transitionDelegate = const DefaultTransitionDelegate()});
 
+  /// Router delegate for MaterialApp.router
   ContentRouterDelegate get routerDelegate =>
       _routerDelegate ??= ContentRouterDelegate(this);
 
+  /// RouteInformationParser for MaterialApp.router
   ContentRouteInformationParser get routeInformationParser =>
       _routeInformationParser ??= ContentRouteInformationParser(this);
 
@@ -159,7 +162,7 @@ class ContentNavigatorBloc extends BaseBloc {
       _log('found: $pageDef');
     }
     if (pageDef == null) {
-      print('No page found for route settings ${rs.path}');
+      _log('No page found for route settings ${rs.path}');
     }
 
     // Find in stack, if found remove
@@ -215,7 +218,7 @@ class ContentNavigatorBloc extends BaseBloc {
     return index;
   }
 
-  @deprecated
+  @Deprecated('Not supported anymore')
   void popUntil(int index) => transientPopUntil(index);
 
   /// Remove all route until index is reached from the top
@@ -231,7 +234,7 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
-  @deprecated
+  @Deprecated('Not supported anymore')
   void popAll() => transientPopAll();
 
   /// Remove all route until index is reached from the top
@@ -256,6 +259,7 @@ class ContentNavigatorBloc extends BaseBloc {
   }*/
 
   void _log(String message) {
+    // ignore: avoid_print
     print('/cn $message');
   }
 
@@ -387,15 +391,20 @@ class ContentNavigatorDef {
   String toString() => defs.toString();
 }
 
+/// Content navigator top object.
 class ContentNavigator extends StatefulWidget {
   final ContentNavigatorDef def;
   final Widget? child;
+
+  /// Optional observers
+  final List<NavigatorObserver>? observers;
 
   /// The global navigator object
   static ContentNavigatorBloc of(BuildContext context) =>
       BlocProvider.of<ContentNavigatorBloc>(context);
 
-  const ContentNavigator({Key? key, required this.def, this.child})
+  const ContentNavigator(
+      {Key? key, required this.def, this.child, this.observers})
       : super(key: key);
 
   @override

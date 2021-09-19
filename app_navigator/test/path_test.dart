@@ -140,6 +140,9 @@ void main() {
           ContentPath.fromString('test/1')
               .matchesPath(ContentPath.fromString('test')),
           isFalse);
+
+      expect(ContentPath.fromString('').matchesPath(ContentPath.fromString('')),
+          isTrue);
     });
 
     test('startsWith', () {

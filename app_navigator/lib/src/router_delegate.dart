@@ -7,6 +7,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
 
   final ContentNavigatorBloc cnBloc;
 
+  /// Optional observers
   ContentRouterDelegate(this.cnBloc)
       : navigatorKey = GlobalKey<NavigatorState>() {
     // Temp set in bloc until bloc holds the router.
@@ -33,6 +34,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
   //final _stack = <ContentPageDef>[];
 
   void _log(String message) {
+    // ignore: avoid_print
     print('/cnr $message');
   }
 
@@ -42,6 +44,8 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
     if (contentNavigatorDebug) {
       _log('build navigator $cnPages');
     }
+
+    var observers = cnBloc.contentNavigator?.observers;
 
     return Navigator(
       key: navigatorKey,
@@ -85,14 +89,15 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
 
         return true;
       },
+      observers: observers ?? <NavigatorObserver>[],
     );
   }
 
   @override
-  Future<void> setNewRoutePath(ContentPath path) async {
+  Future<void> setNewRoutePath(ContentPath configuration) async {
     if (contentNavigatorDebug) {
-      _log('delegate.setNewRoutePath($path) called');
+      _log('delegate.setNewRoutePath($configuration) called');
     }
-    await cnBloc.setNewRoutePath(path);
+    await cnBloc.setNewRoutePath(configuration);
   }
 }

@@ -21,7 +21,7 @@ class TekartikAppFlutterPlugin {
         return running;
       } catch (e) {
         if (isDebug) {
-          print('error $e');
+          print('error $e'); // ignore: avoid_print
         }
       }
     }

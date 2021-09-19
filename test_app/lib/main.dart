@@ -4,7 +4,7 @@ import 'fs_main.dart' as fs;
 import 'monkey_main.dart' as monkey;
 
 void main() {
-  print('Starting test app');
+  // print('Starting test app');
   mainMenu(() {
     fs.main();
     monkey.main();
