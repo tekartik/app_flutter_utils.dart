@@ -35,11 +35,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  tekartik_app_lints_flutter:
+  tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
+      url: git://github.com/tekartik/common_flutter.dart
       ref: null_safety
-      path: app_lints
+      path: packages/lints_flutter
     version: '>=0.1.0'
 
 dependency_overrides:

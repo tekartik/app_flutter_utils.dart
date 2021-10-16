@@ -7,14 +7,14 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  flutter_lints:
+  tekartik_lints_flutter:
+    git:
+      url: git://github.com/tekartik/common_flutter.dart
+      ref: null_safety
+      path: packages/lints_flutter
+    version: '>=0.1.0'
 
 dev_dependencies:
   test: ^1.16.0
   pedantic:
-  tekartik_lints:
-    git:
-      url: git://github.com/tekartik/common.dart
-      ref: null_safety
-      path: packages/lints
-    version: '>=0.1.0'
+
