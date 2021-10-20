@@ -275,7 +275,7 @@ class ContentNavigatorBloc extends BaseBloc {
     for (var i = _stack.length - 1; i >= 0; i--) {
       var item = _stack[i];
       if (item.rs.path == contentPath) {
-        transientPopItem(i, null);
+        transientPopItem(i, result);
         return true;
       }
     }
