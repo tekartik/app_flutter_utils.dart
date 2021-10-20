@@ -35,6 +35,8 @@ dependencies:
     path: ../sembast_test_app_lib
   tekartik_widget_test_app_lib:
     path: ../widget_test_app_lib
+  tekartik_app_plugin_test_app_lib:
+    path: ../app_plugin_test_app_lib
   tekartik_test_menu_flutter:
     git:
       url: git://github.com/tekartik/test_menu_flutter
@@ -68,6 +70,8 @@ dependency_overrides:
     path: ../../app_fs
   tekartik_app_roboto:
     path: ../../app_roboto
+  tekartik_app_flutter_plugin:
+    path: ../../app_plugin
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

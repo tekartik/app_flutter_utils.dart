@@ -2,32 +2,35 @@ package com.tekartik.tekartik_app_flutter_plugin;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * TekartikAppFlutterPlugin
  */
-public class TekartikAppFlutterPlugin implements MethodCallHandler {
-    private final Context context;
+public class TekartikAppFlutterPlugin implements FlutterPlugin, MethodCallHandler {
+    private Context context;
 
-    public TekartikAppFlutterPlugin(Context context) {
-        this.context = context;
-    }
+    /// The MethodChannel that will the communication between Flutter and native Android
+    ///
+    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+    /// when the Flutter Engine is detached from the Activity
+    private MethodChannel channel;
 
-    /**
-     * Plugin registration.
-     */
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "tekartik_app_flutter_plugin");
-        channel.setMethodCallHandler(new TekartikAppFlutterPlugin(registrar.context()));
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPlugin.FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "tekartik_app_flutter_plugin");
+        channel.setMethodCallHandler(this);
+        context = flutterPluginBinding.getApplicationContext();
     }
 
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("getPlatformVersion")) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
         } else if (call.method.equals("isMonkeyRunning")) {
@@ -35,5 +38,10 @@ public class TekartikAppFlutterPlugin implements MethodCallHandler {
         } else {
             result.notImplemented();
         }
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPlugin.FlutterPluginBinding binding) {
+        channel.setMethodCallHandler(null);
     }
 }
