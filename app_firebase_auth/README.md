@@ -10,8 +10,8 @@ Firebaase for flutter app (mobile & web)
 dependencies:
   tekartik_app_flutter_firebase_auth:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_firebase_auth
     version: '>=0.1.0'
 ```

@@ -10,8 +10,8 @@ pubspec.yaml:
 dependencies:
   tekartik_app_roboto:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_roboto
       version: '>=0.1.0'
 ```

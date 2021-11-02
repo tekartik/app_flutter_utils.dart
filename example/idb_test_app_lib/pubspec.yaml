@@ -11,25 +11,25 @@ dependencies:
     sdk: flutter
   tekartik_test_menu_flutter:
     git:
-      url: git://github.com/tekartik/test_menu_flutter
-      ref: null_safety
+      url: https://github.com/tekartik/test_menu_flutter
+      ref: dart2_3
       path: test_menu_flutter
     version: '>=0.2.3'
   tekartik_common_utils:
     git:
-      url: git://github.com/tekartik/common_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/common_utils.dart
+      ref: dart2_3
     version: '>=0.2.3'
   tekartik_app_flutter_idb:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_idb
     version: '>=0.1.0'
   tekartik_app_platform:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_platform
     version: '>=0.1.0'
 dev_dependencies:
@@ -37,8 +37,8 @@ dev_dependencies:
     sdk: flutter
   tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/common_flutter.dart
-      ref: null_safety
+      url: https://github.com/tekartik/common_flutter.dart
+      ref: dart2_3
       path: packages/lints_flutter
     version: '>=0.1.0'
 

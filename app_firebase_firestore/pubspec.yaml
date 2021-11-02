@@ -11,29 +11,29 @@ dependencies:
     sdk: flutter
   tekartik_firebase_firestore_browser:
     git:
-      url: git://github.com/tekartik/firebase_firestore.dart
+      url: https://github.com/tekartik/firebase_firestore.dart
       path: firestore_browser
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.4.0'
   tekartik_firebase_firestore_flutter:
     git:
-      url: git://github.com/tekartik/firebase_flutter
+      url: https://github.com/tekartik/firebase_flutter
       path: firestore_flutter
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.4.0'
   tekartik_app_flutter_firebase:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
+      url: https://github.com/tekartik/app_flutter_utils.dart
       path: app_firebase
-      ref: null_safety
+      ref: dart2_3
 dev_dependencies:
   flutter_test:
     sdk: flutter
   process_run: '>=0.10.3'
   tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/common_flutter.dart
-      ref: null_safety
+      url: https://github.com/tekartik/common_flutter.dart
+      ref: dart2_3
       path: packages/lints_flutter
     version: '>=0.1.0'
 
