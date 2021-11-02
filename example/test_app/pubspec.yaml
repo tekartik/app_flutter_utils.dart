@@ -29,6 +29,8 @@ dependencies:
     path: ../idb_test_app_lib
   tekartik_sqflite_test_app_lib:
     path: ../sqflite_test_app_lib
+  tekartik_app_flutter_sqflite:
+    path: ../../app_sqflite
   tekartik_fs_test_app_lib:
     path: ../fs_test_app_lib
   tekartik_sembast_test_app_lib:
