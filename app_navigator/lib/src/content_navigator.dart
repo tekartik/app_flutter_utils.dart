@@ -14,7 +14,8 @@ var contentNavigatorDebug = false; // devWarning(true);
 class _ContentPageInStack {
   final ContentPathRouteSettings rs;
   final ContentPageDef? def;
-  final completer = Completer.sync();
+  final completer =
+      Completer(); // Not async we need the return value in the next sequence to allow popping again
 
   _ContentPageInStack({required this.def, required this.rs});
 
@@ -275,7 +276,7 @@ class ContentNavigatorBloc extends BaseBloc {
     for (var i = _stack.length - 1; i >= 0; i--) {
       var item = _stack[i];
       if (item.rs.path == contentPath) {
-        transientPopItem(i, null);
+        transientPopItem(i, result);
         return true;
       }
     }

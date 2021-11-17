@@ -16,17 +16,16 @@ dependencies:
   path:
   tekartik_app_flutter_sqflite:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_sqflite
     version: '>=0.5.0'
-  tekartik_app_lints_flutter:
+  tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
-      path: app_lints
+      url: https://github.com/tekartik/common_flutter.dart
+      ref: dart2_3
+      path: packages/lints_flutter
     version: '>=0.1.0'
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

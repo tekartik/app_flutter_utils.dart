@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
+import 'package:tekartik_app_plugin_test_app_lib/main.dart' as app_plugin;
 import 'package:tekartik_fs_test_app_lib/main.dart' as fs;
 import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
@@ -22,5 +23,6 @@ void main() {
     sembast.defineMenu();
     sqflite.defineMenu();
     widget.defineMenu();
+    app_plugin.defineMenu();
   }, showConsole: true);
 }

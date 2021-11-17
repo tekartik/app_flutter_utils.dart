@@ -11,21 +11,21 @@ dependencies:
     sdk: flutter
   tekartik_prefs_flutter:
     git:
-      url: git://github.com/tekartik/prefs.dart
+      url: https://github.com/tekartik/prefs.dart
       path: prefs_flutter
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.1.0'
   tekartik_prefs_sembast:
     git:
-      url: git://github.com/tekartik/prefs.dart
+      url: https://github.com/tekartik/prefs.dart
       path: prefs_sembast
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.1.0'
   tekartik_prefs_browser:
     git:
-      url: git://github.com/tekartik/prefs.dart
+      url: https://github.com/tekartik/prefs.dart
       path: prefs_browser
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.1.0'
   path:
   process_run:
@@ -33,18 +33,18 @@ dependencies:
 dev_dependencies:
   tekartik_app_platform:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_platform
     version: '>=0.1.0'
   flutter_test:
     sdk: flutter
   dev_test:
-  tekartik_app_lints_flutter:
+  tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
-      path: app_lints
+      url: https://github.com/tekartik/common_flutter.dart
+      ref: dart2_3
+      path: packages/lints_flutter
     version: '>=0.1.0'
 
 dependency_overrides:

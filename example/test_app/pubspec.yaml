@@ -29,26 +29,30 @@ dependencies:
     path: ../idb_test_app_lib
   tekartik_sqflite_test_app_lib:
     path: ../sqflite_test_app_lib
+  tekartik_app_flutter_sqflite:
+    path: ../../app_sqflite
   tekartik_fs_test_app_lib:
     path: ../fs_test_app_lib
   tekartik_sembast_test_app_lib:
     path: ../sembast_test_app_lib
   tekartik_widget_test_app_lib:
     path: ../widget_test_app_lib
+  tekartik_app_plugin_test_app_lib:
+    path: ../app_plugin_test_app_lib
   tekartik_test_menu_flutter:
     git:
-      url: git://github.com/tekartik/test_menu_flutter
-      ref: null_safety
+      url: https://github.com/tekartik/test_menu_flutter
+      ref: dart2_3
       path: test_menu_flutter
     version: '>=0.2.3'
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  tekartik_app_lints_flutter:
+  tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
-      path: app_lints
+      url: https://github.com/tekartik/common_flutter.dart
+      ref: dart2_3
+      path: packages/lints_flutter
     version: '>=0.1.0'
 
 dependency_overrides:
@@ -68,6 +72,8 @@ dependency_overrides:
     path: ../../app_fs
   tekartik_app_roboto:
     path: ../../app_roboto
+  tekartik_app_flutter_plugin:
+    path: ../../app_plugin
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

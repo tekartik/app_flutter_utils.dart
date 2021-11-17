@@ -11,23 +11,23 @@ dev_dependencies:
   pub_semver:
   tekartik_travis_ci_flutter:
     git:
-      url: git://github.com/tekartik/travis_ci_flutter.dart
-      ref: null_safety
+      url: https://github.com/tekartik/travis_ci_flutter.dart
+      ref: dart2_3
     version: '>=0.1.0'
   process_run: '>=0.10.3'
   tekartik_build_utils:
     git:
-      url: git://github.com/tekartik/build_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/build_utils.dart
+      ref: dart2_3
     version: '>=0.7.8'
 
   test:
   dev_test:
   pedantic:
-  tekartik_app_lints_flutter:
+  tekartik_lints:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
-      path: app_lints
+      url: https://github.com/tekartik/common.dart
+      ref: dart2_3
+      path: packages/lints
     version: '>=0.1.0'
 

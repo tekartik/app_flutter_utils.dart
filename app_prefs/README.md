@@ -11,8 +11,8 @@ on the web.
 dependencies:
   tekartik_app_prefs:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_prefs
     version: '>=0.1.0'
 ```
