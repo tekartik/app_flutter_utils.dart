@@ -12,6 +12,7 @@ dependencies:
   sqflite: '>=2.0.0+1'
   sqflite_common_ffi: '>=2.0.0'
   sqflite_common: '>=2.0.0+1'
+  process_run:
 
 dev_dependencies:
   flutter_test:
