@@ -1,6 +1,4 @@
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:path/path.dart' as p;
-import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 
 import 'import.dart';
 
