@@ -1,4 +1,3 @@
-import 'package:fs_shim/fs.dart';
 import 'package:fs_shim/fs_memory.dart';
 import 'package:tekartik_app_flutter_fs/src/fs.dart';
 

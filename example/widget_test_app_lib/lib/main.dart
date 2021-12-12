@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_widget/app_widget.dart';
 import 'package:tekartik_app_platform/app_platform.dart';

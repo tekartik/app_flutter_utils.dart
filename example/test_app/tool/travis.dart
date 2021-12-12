@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:process_run/cmd_run.dart';
 import 'package:process_run/shell_run.dart';
-import 'package:process_run/which.dart';
 
 /*Future<String> _flutterVersion = () async {
   return await getFlutterBinVersion();
