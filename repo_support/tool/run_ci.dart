@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 
 Future main() async {
   for (var dir in [
+    'app_firebase_storage',
     'app_widget',
     'app_bloc',
     'app_fs',
