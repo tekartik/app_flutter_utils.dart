@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_platform/platform.dart' as p;
+// ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/common_utils_import.dart';
 
 void main() async {

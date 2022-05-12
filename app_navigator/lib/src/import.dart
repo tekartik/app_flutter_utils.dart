@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 export 'package:collection/collection.dart' hide UnmodifiableSetView;
 export 'package:flutter/material.dart';
 export 'package:tekartik_app_flutter_bloc/bloc_provider.dart';

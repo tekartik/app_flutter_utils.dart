@@ -13,7 +13,7 @@ dependencies:
   path_provider:
   process_run:
   path:
-
+  idb_shim:
 dev_dependencies:
   flutter_test:
     sdk: flutter

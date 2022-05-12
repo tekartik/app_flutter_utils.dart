@@ -17,4 +17,5 @@ dependencies:
 dev_dependencies:
   test: ^1.16.0
   pedantic:
-
+  path:
+  yaml:

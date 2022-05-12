@@ -26,12 +26,14 @@ dependencies:
       ref: dart2_3
       path: packages/lints_flutter
     version: '>=0.1.0'
+  sqflite_common_ffi:
+  sqflite_common:
 dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic:
   process_run:
-
+  sqflite:
 dependency_overrides:
 
   tekartik_app_flutter_sqflite:

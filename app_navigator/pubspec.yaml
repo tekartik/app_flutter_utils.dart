@@ -16,7 +16,8 @@ dependencies:
       ref: dart2_3
       path: app_bloc
     version: '>=0.2.2'
-  collection: ^1.15.0-nullsafety.4
+  collection: '>=1.15.0-nullsafety.4'
+  path:
 dev_dependencies:
   flutter_test:
     sdk: flutter

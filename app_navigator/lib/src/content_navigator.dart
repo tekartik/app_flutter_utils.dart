@@ -409,7 +409,7 @@ class ContentNavigator extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ContentNavigatorState createState() => _ContentNavigatorState();
+  State<ContentNavigator> createState() => _ContentNavigatorState();
 
   static Future<T?> push<T>(
       BuildContext context, ContentPathRouteSettings rs) async {

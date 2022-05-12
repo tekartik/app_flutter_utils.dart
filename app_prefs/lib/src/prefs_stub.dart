@@ -1,4 +1,4 @@
-import 'package:tekartik_prefs/prefs.dart';
+import 'import.dart';
 
 PrefsFactory get prefsFactory => _stub('prefsFactory');
 

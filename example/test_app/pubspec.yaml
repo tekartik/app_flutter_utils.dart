@@ -54,7 +54,7 @@ dev_dependencies:
       ref: dart2_3
       path: packages/lints_flutter
     version: '>=0.1.0'
-
+  process_run:
 dependency_overrides:
   tekartik_app_prefs:
     path: ../../app_prefs

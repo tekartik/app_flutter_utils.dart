@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:tekartik_platform/context.dart' show PlatformContext;
 import 'package:tekartik_platform_io/context_io.dart';
+
+import 'import.dart' show PlatformContext;
 
 void platformInit() {
   // No need to handle macOS, as it has now been added to TargetPlatform.

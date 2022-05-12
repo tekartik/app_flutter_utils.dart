@@ -1,4 +1,4 @@
-import 'package:tekartik_firebase/firebase.dart';
+import 'import.dart';
 
 Firebase get firebase => _stub('firebase');
 
