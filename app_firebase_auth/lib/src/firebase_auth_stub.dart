@@ -1,4 +1,4 @@
-import 'package:tekartik_firebase_auth/auth.dart';
+import 'import.dart';
 
 AuthService get authService => _stub('authService');
 

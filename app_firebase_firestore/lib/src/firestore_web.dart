@@ -1,4 +1,5 @@
-import 'package:tekartik_firebase_firestore/firestore.dart';
-import 'package:tekartik_firebase_firestore_browser/firestore_browser.dart';
+import 'package:tekartik_firebase_firestore_flutter/firestore_flutter.dart';
 
-FirestoreService get firestoreService => firestoreServiceBrowser;
+import 'import.dart';
+
+FirestoreService get firestoreService => firestoreServiceFlutter;

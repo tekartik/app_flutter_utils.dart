@@ -11,7 +11,7 @@ class BlocProvider<T extends BaseBloc> extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BlocProviderState createState() => _BlocProviderState<T>();
+  State<BlocProvider> createState() => _BlocProviderState<T>();
 
   static T of<T extends BaseBloc>(BuildContext context) {
     var provider = context

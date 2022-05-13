@@ -163,7 +163,7 @@ class ContentNavigatorBloc extends BaseBloc {
       _log('found: $pageDef');
     }
     if (pageDef == null) {
-      _log('No page found for route settings ${rs.path}');
+      throw StateError('No page found for route settings ${rs.path}');
     }
 
     // Find in stack, if found remove
@@ -409,7 +409,7 @@ class ContentNavigator extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ContentNavigatorState createState() => _ContentNavigatorState();
+  State<ContentNavigator> createState() => _ContentNavigatorState();
 
   static Future<T?> push<T>(
       BuildContext context, ContentPathRouteSettings rs) async {

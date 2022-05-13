@@ -6,8 +6,6 @@ import 'package:sqflite/sqflite.dart' as sqflite show databaseFactory;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'sqflite_import.dart';
-
 String? buildDatabasesPath(String? packageName) {
   if (packageName == null) {
     return null;
@@ -34,8 +32,7 @@ DatabaseFactory get databaseFactory => _defaultDatabaseFactory;
 Future<DatabaseFactory> initDatabaseFactory(String packageName) async {
   if (Platform.isLinux || Platform.isWindows) {
     var databaseFactory = databaseFactoryFfi;
-    await databaseFactory
-        .compatSetDatabasesPath(buildDatabasesPath(packageName)!);
+    await databaseFactory.setDatabasesPath(buildDatabasesPath(packageName)!);
     return databaseFactory;
   } else {
     return databaseFactory;
@@ -48,7 +45,7 @@ DatabaseFactory getDatabaseFactory({String? packageName, String? rootPath}) {
     var databaseFactory = databaseFactoryFfi;
     // Should not return a future...or ignore
     databaseFactory
-        .compatSetDatabasesPath(rootPath ?? buildDatabasesPath(packageName)!);
+        .setDatabasesPath(rootPath ?? buildDatabasesPath(packageName)!);
     return databaseFactory;
   } else {
     return databaseFactory;

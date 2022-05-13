@@ -1,4 +1,5 @@
-import 'package:tekartik_firebase/firebase.dart';
-import 'package:tekartik_firebase_browser/firebase_browser.dart';
+import 'package:tekartik_firebase_flutter/firebase_flutter.dart';
 
-Firebase get firebase => firebaseBrowser;
+import 'import.dart';
+
+Firebase get firebase => firebaseFlutter;

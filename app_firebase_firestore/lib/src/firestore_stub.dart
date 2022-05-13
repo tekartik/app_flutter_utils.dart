@@ -1,4 +1,4 @@
-import 'package:tekartik_firebase_firestore/firestore.dart';
+import 'import.dart';
 
 FirestoreService get firestoreService => _stub('firestoreService');
 

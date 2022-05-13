@@ -1,2 +1,6 @@
 # tekartik flutter recommended lints (extension over google lints and pedantic)
 include: package:tekartik_lints/recommended.yaml
+
+linter:
+  rules:
+    depend_on_referenced_packages: false

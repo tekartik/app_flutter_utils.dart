@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:sqflite_common/sqflite_dev.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
@@ -22,7 +21,7 @@ void defineMenu() {
 
       item('open and toggle value', () async {
         // ignore: deprecated_member_use
-        await sqfliteFactory.setLogLevel(sqfliteLogLevelVerbose);
+        await sqfliteFactory.debugSetLogLevel(sqfliteLogLevelVerbose);
         var prefs = await sqfliteFactory.openDatabase(dbName,
             options: OpenDatabaseOptions(
                 version: 1,

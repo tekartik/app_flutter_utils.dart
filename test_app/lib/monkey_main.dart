@@ -1,5 +1,7 @@
 import 'package:tekartik_app_flutter_plugin/monkey.dart';
+// ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/common_utils_import.dart';
+// ignore: depend_on_referenced_packages
 import 'package:tekartik_test_menu/test.dart';
 
 void main() {

@@ -1,5 +1,6 @@
-import 'package:tekartik_firebase_auth/auth.dart';
 import 'package:tekartik_firebase_auth_flutter/auth_flutter.dart';
+
+import 'import.dart';
 
 AuthService get authService => authServiceFlutter;
 

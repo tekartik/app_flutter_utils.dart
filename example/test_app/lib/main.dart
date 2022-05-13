@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_plugin_test_app_lib/main.dart' as app_plugin;
 import 'package:tekartik_fs_test_app_lib/main.dart' as fs;

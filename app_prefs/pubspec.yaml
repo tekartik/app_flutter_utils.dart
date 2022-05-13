@@ -29,7 +29,7 @@ dependencies:
     version: '>=0.1.0'
   path:
   process_run:
-
+  sembast:
 dev_dependencies:
   tekartik_app_platform:
     git:
