@@ -23,24 +23,24 @@ void main() {
       Widget getMaterialApp() {
         var ready = false;
 
-        Future<String> _getReady() async {
+        Future<String> getReady() async {
           // Getting ready
           // ... doStuff
           ready = true;
           return 'done';
         }
 
-        FutureOr<String> _loadData() {
+        FutureOr<String> loadData() {
           // ... do Stuff
           if (!ready) {
-            return _getReady();
+            return getReady();
           }
           return 'done';
         }
 
         return MaterialApp(
             home: FutureOrBuilder<String>(
-                futureOr: _loadData(),
+                futureOr: loadData(),
                 builder: (context, snapshot) =>
                     Text(snapshot.data ?? 'no data')));
       }
