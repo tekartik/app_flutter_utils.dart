@@ -34,7 +34,7 @@ Simplified usage:
 * Keep it open
 
 ```dart
-import 'package:tekartik_app_flutter_idb/app_sembast.dart';
+import 'package:tekartik_app_flutter_sembast/sembast.dart';
 Future main() {
   // Get the sembast database factory according to the current platform
   // * sembast_web for FlutterWeb and Web
