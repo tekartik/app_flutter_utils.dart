@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   idb_shim: '>=2.0.0+1'
-  idb_sqflite: '>=1.0.0'
+  idb_sqflite: '>=1.1.1'
   sqflite: '>=2.0.0+1'
   tekartik_app_flutter_sqflite:
     git:

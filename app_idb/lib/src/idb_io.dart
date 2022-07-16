@@ -14,7 +14,7 @@ IdbFactory get idbFactory => getIdbFactorySqflite(sqflite.databaseFactory);
 
 final _prefsFactoryMap = <String?, IdbFactory>{};
 
-String buildDatabasesPath(String? packageName) {
+String buildDatabasesPath({required String packageName}) {
   var dataPath = join(userAppDataPath, packageName, 'databases');
   try {
     var dir = Directory(dataPath);
@@ -25,18 +25,30 @@ String buildDatabasesPath(String? packageName) {
   return dataPath;
 }
 
-IdbFactory newIdbFactorySembast(String? packageName) {
-  var dataPath = buildDatabasesPath(packageName);
+IdbFactory newIdbFactorySembast({String? packageName, String? dataPath}) {
+  if (dataPath == null) {
+    if (packageName != null) {
+      dataPath = buildDatabasesPath(packageName: packageName);
+    }
+  }
   return IdbFactorySembast(sembast.databaseFactoryIo, dataPath);
+}
+
+IdbFactory newIdbFactorySqflite({String? packageName}) {
+  return getIdbFactorySqflite(
+      sqflite.getDatabaseFactory(packageName: packageName));
 }
 
 /// Use sqflite_ffi on linux and windows
 IdbFactory getIdbFactory({String? packageName}) {
   if (Platform.isLinux || Platform.isWindows) {
-    var idbFactory = _prefsFactoryMap[packageName];
+    IdbFactory? idbFactory;
+    if (packageName != null) {
+      idbFactory = _prefsFactoryMap[packageName];
+    }
     if (idbFactory == null) {
-      _prefsFactoryMap[packageName] = idbFactory = getIdbFactorySqflite(
-          sqflite.getDatabaseFactory(packageName: packageName));
+      _prefsFactoryMap[packageName] =
+          idbFactory = newIdbFactorySqflite(packageName: packageName);
     }
     return idbFactory;
   } else {
