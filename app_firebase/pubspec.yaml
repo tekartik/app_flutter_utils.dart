@@ -9,12 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  tekartik_firebase_browser:
-    git:
-      url: https://github.com/tekartik/firebase.dart
-      path: firebase_browser
-      ref: dart2_3
-    version: '>=0.4.0'
   tekartik_firebase_flutter:
     git:
       url: https://github.com/tekartik/firebase_flutter
