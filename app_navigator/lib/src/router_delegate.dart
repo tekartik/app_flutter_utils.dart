@@ -47,27 +47,17 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
 
     var observers = cnBloc.contentNavigator?.observers;
 
+    var pages = cnBloc.currentPages;
+
     return Navigator(
       key: navigatorKey,
-      transitionDelegate: cnBloc.transitionDelegate,
 
-      pages: [
-        /*
-        if (false)
-          MaterialPage(
-              key: ValueKey('Start Page'),
-              child: Builder(
-                builder: (context) => Scaffold(
-                    appBar: AppBar(
-                      title: Text('Start Page'),
-                    ),
-                    body: Placeholder()),
-              )),
-        */
-        //if (_selectedBook != null) BookDetailsPage(book: _selectedBook),
-        //..._stack.map((e) => e.builder()),
-        ...cnBloc.currentPages
-      ],
+      /// Use the current transitionDelegate if any...
+
+      transitionDelegate:
+          // ignore: invalid_use_of_protected_member
+          cnBloc.currentTransitionDelegate ?? cnBloc.transitionDelegate,
+      pages: pages.toList(),
       // Handle imperative way
       onGenerateRoute:
           contentNavigatorUseDeclarative // devWarning(false) // (contentNavigatorUseDeclarative)
