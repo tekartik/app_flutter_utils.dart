@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// No animation delegate.
 class NoAnimationTransitionDelegate extends TransitionDelegate<void> {
   @override
   Iterable<RouteTransitionRecord> resolve({

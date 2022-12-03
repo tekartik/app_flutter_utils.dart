@@ -23,3 +23,4 @@ export 'src/content_path_route_settings.dart'
         ContentPathRouteExt;
 export 'src/route_information_parser.dart' show ContentRouteInformationParser;
 export 'src/router_delegate.dart' show ContentRouterDelegate;
+export 'src/transition_delegate.dart' show NoAnimationTransitionDelegate;

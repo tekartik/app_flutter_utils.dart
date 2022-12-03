@@ -12,12 +12,15 @@ bool contentNavigatorUseDeclarative =
 var contentNavigatorDebug = false; // devWarning(true);
 
 class _ContentPageInStack {
+  /// Optional custom transition.
+  final TransitionDelegate? transitionDelegate;
   final ContentPathRouteSettings rs;
   final ContentPageDef? def;
   final completer =
       Completer(); // Not async we need the return value in the next sequence to allow popping again
 
-  _ContentPageInStack({required this.def, required this.rs});
+  _ContentPageInStack(
+      {required this.def, required this.rs, this.transitionDelegate});
 
   void dispose() {
     if (!completer.isCompleted) {
@@ -74,6 +77,11 @@ class ContentNavigatorBloc extends BaseBloc {
   final _stack = <_ContentPageInStack>[];
 
   final _crpStack = <_ContentRoutePathInStack>[];
+
+  /// Custom transition if any
+  @protected
+  TransitionDelegate? get currentTransitionDelegate =>
+      _currentPageInStack?.transitionDelegate;
 
   // Current pages
   Iterable<Page> get currentPages {
@@ -155,7 +163,8 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   // TODO @alex remove call to notify listener
-  Future<T> _push<T>(ContentPathRouteSettings rs) async {
+  Future<T> _push<T>(ContentPathRouteSettings rs,
+      {TransitionDelegate? transitionDelegate}) async {
     // devPrint('Changed $routePath');
 
     var pageDef = contentNavigator!.def.findPageDef(rs.path);
@@ -173,7 +182,8 @@ class ContentNavigatorBloc extends BaseBloc {
         transientPopItem(i, null);
       }
     }
-    var item = _ContentPageInStack(def: pageDef, rs: rs);
+    var item = _ContentPageInStack(
+        def: pageDef, rs: rs, transitionDelegate: transitionDelegate);
     _stack.add(item);
     _notifyNavigatorChanges();
     // TODO handled future completion
@@ -184,12 +194,14 @@ class ContentNavigatorBloc extends BaseBloc {
 
   // User ContentNavigator.push instead
   // @protected
-  Future<T?> push<T>(ContentPathRouteSettings rs) async {
+  /// Push a new route, with an optional transitionDelegate
+  Future<T?> push<T>(ContentPathRouteSettings rs,
+      {TransitionDelegate? transitionDelegate}) async {
     if (contentNavigatorDebug) {
       _log('Push $rs');
     }
     if (contentNavigatorUseDeclarative) {
-      return _push(rs);
+      return _push(rs, transitionDelegate: transitionDelegate);
     } else {
       /*
       // Compat imperative way

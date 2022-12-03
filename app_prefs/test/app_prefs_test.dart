@@ -24,6 +24,7 @@ PrefsFactory getPrefsFactory({String? packageName}) {
 }
 
 void main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('app_prefs', () {
     test('default', () async {
       var prefs = await prefsFactory.openPreferences('test_prefs.db');
