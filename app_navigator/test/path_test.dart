@@ -34,11 +34,11 @@ void main() {
   group('Path', () {
     test('fromString', () {
       var path = ContentPath.fromString('/');
-      expect(path.fields, []);
+      expect(path.fields, isEmpty);
       path = ContentPath.fromString('/');
-      expect(path.fields, []);
+      expect(path.fields, isEmpty);
       path = ContentPath.fromString('//');
-      expect(path.fields, []);
+      expect(path.fields, isEmpty);
       path = ContentPath.fromString('/test');
       expect(path.fields, [ContentPathPart('test')]);
       expect(path.fields, isNot([ContentPathField('test')]));
@@ -106,7 +106,7 @@ void main() {
         return ContentPath.fromString(path).toStringMap();
       }
 
-      expect(rt('/'), {});
+      expect(rt('/'), isEmpty);
       // expect(rt('/test/'), {'test': null});
       expect(rt('/test/'), {'test': ''});
       expect(rt('/test/1'), {'test': '1'});
