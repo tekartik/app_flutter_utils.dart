@@ -98,7 +98,8 @@ mixin PathMixin implements ContentPath {
   @override
   bool operator ==(Object other) {
     if (other is ContentPath) {
-      if (!const ListEquality().equals(other.fields, fields)) {
+      if (!const ListEquality<ContentPathField>()
+          .equals(other.fields, fields)) {
         return false;
       }
       return true;

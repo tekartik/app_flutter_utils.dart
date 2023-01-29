@@ -19,12 +19,12 @@ void defineMenu() {
     }
 
     item('CenteredProgress', () async {
-      await navigator.push(MaterialPageRoute(builder: (context) {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
         return centeredProgressScreen();
       }));
     });
     item('CenteredProgress dark', () async {
-      await navigator.push(MaterialPageRoute(builder: (context) {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
         return centeredProgressScreen(themeData: ThemeData.dark());
       }));
     });
@@ -46,12 +46,12 @@ void defineMenu() {
     }
 
     item('SmallIcons', () async {
-      await navigator.push(MaterialPageRoute(builder: (context) {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
         return smallIconsScreen();
       }));
     });
     item('SmallIcons dark', () async {
-      await navigator.push(MaterialPageRoute(builder: (context) {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
         return smallIconsScreen(themeData: ThemeData.dark());
       }));
     });

@@ -25,7 +25,7 @@ void defineMenu() {
       write('dir: $dir');
       await dir.list(recursive: true).listen((event) {
         write('file: ${event.path}');
-      }).asFuture();
+      }).asFuture<void>();
     });
     item('write hello', () async {
       var file = await fileAsync;
