@@ -2,13 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_prefs/app_prefs.dart';
 import 'package:tekartik_app_prefs/app_prefs.dart' as app_prefs;
+import 'package:tekartik_prefs_flutter/prefs_mock.dart';
 
 PrefsFactory get prefsFactory {
   // Special mac handling
   if (platformContext.io?.isMac ?? false) {
     return prefsFactoryMemory;
   } else {
-    // Try regular
+    // Try regular, need to mock it first (just calling the constructor is enough).
+    PrefsFactoryFlutterMock();
     return app_prefs.prefsFactory;
   }
 }
