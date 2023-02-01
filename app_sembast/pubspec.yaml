@@ -31,7 +31,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic:
   process_run:
   sqflite:
 dependency_overrides:

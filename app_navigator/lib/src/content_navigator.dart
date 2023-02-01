@@ -16,8 +16,8 @@ class _ContentPageInStack {
   final TransitionDelegate? transitionDelegate;
   final ContentPathRouteSettings rs;
   final ContentPageDef? def;
-  final completer =
-      Completer(); // Not async we need the return value in the next sequence to allow popping again
+  final completer = Completer<
+      Object?>(); // Not async we need the return value in the next sequence to allow popping again
 
   _ContentPageInStack(
       {required this.def, required this.rs, this.transitionDelegate});

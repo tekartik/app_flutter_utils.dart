@@ -21,7 +21,6 @@ dependencies:
       ref: dart2_3
     version: '>=0.7.0'
 dev_dependencies:
-  pedantic:
   flutter_test:
     sdk: flutter
   process_run: '>=0.10.3'
