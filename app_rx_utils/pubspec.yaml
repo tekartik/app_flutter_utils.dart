@@ -15,7 +15,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   process_run:
-  pedantic:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart

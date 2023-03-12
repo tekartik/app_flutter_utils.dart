@@ -24,7 +24,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic:
   dev_test:
   tekartik_lints_flutter:
     git:

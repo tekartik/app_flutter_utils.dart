@@ -23,7 +23,6 @@ dev_dependencies:
 
   test:
   dev_test:
-  pedantic:
   tekartik_lints:
     git:
       url: https://github.com/tekartik/common.dart
