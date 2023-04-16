@@ -7,14 +7,21 @@ void main() {
 
   const channel = MethodChannel('tekartik_app_flutter_plugin');
 
+  /// Supports for access being non-nullable in Dart 3.
+  T? makeNullable<T>(T? value) => value;
+
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
+    makeNullable(TestDefaultBinaryMessengerBinding.instance)!
+        .defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
       return true;
     });
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    makeNullable(TestDefaultBinaryMessengerBinding.instance)!
+        .defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
   test('getPlatformVersion', () async {
