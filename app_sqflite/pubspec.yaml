@@ -4,14 +4,14 @@ version: 0.6.0
 publish_to: none
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=2.18.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: '>=2.0.0+1'
+  sqflite: '>=2.2.8-0'
   sqflite_common_ffi_web:
-  sqflite_common_ffi: '>=2.0.0'
+  sqflite_common_ffi: '>=2.2.5-0'
   sqflite_common: '>=2.0.0+1'
   process_run:
   path:
