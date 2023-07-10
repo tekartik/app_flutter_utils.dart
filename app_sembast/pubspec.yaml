@@ -4,7 +4,7 @@ version: 0.5.1
 publish_to: none
 
 environment:
-  sdk: '>=2.18.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -17,13 +17,13 @@ dependencies:
   tekartik_app_flutter_sqflite:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_sqflite
     version: '>=0.5.0'
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart2_3
+      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
   sqflite_common_ffi:

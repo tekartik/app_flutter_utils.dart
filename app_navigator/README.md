@@ -9,7 +9,7 @@ dependencies:
   tekartik_app_navigator_flutter:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_navigator
     version: '>=0.2.4+1'
 ```

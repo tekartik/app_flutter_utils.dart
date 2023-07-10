@@ -4,7 +4,7 @@ version: 0.4.2
 publish_to: none
 
 environment:
-  sdk: '>=2.18.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -13,19 +13,19 @@ dependencies:
     git:
       url: https://github.com/tekartik/prefs.dart
       path: prefs_flutter
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.1.0'
   tekartik_prefs_sembast:
     git:
       url: https://github.com/tekartik/prefs.dart
       path: prefs_sembast
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.1.0'
   tekartik_prefs_browser:
     git:
       url: https://github.com/tekartik/prefs.dart
       path: prefs_browser
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.1.0'
   path:
   process_run:
@@ -34,7 +34,7 @@ dev_dependencies:
   tekartik_app_platform:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_platform
     version: '>=0.1.0'
   flutter_test:
@@ -43,12 +43,13 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart2_3
+      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 
 dependency_overrides:
-
+  tekartik_app_platform:
+    path: ../app_platform
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
