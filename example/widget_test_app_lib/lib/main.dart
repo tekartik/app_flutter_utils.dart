@@ -35,8 +35,8 @@ void defineMenu() {
             appBar: AppBar(
               title: const Text('App Widget'),
             ),
-            body: Wrap(
-              children: const [
+            body: const Wrap(
+              children: [
                 SmallProgress(),
                 SmallConnectivityError(),
                 Icon(Icons.email)
