@@ -6,3 +6,6 @@ const robotoFontFamily = 'Roboto';
 
 /// Roboto mono font.
 const robotoMonoFontFamily = 'RobotoMono';
+
+/// Roboto condensed font.
+const robotoCondensedFontFamily = 'RobotoCondensed';
