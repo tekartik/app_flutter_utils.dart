@@ -14,7 +14,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -39,10 +39,12 @@ dependencies:
     path: ../widget_test_app_lib
   tekartik_app_plugin_test_app_lib:
     path: ../app_plugin_test_app_lib
+  tekartik_app_flutter_sembast:
+    path: ../../app_sembast
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
-      ref: dart2_3
+      ref: dart3a
       path: test_menu_flutter
     version: '>=0.2.3'
 dev_dependencies:
@@ -51,7 +53,7 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart2_3
+      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
   process_run:

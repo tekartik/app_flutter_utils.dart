@@ -4,7 +4,7 @@ version: 0.1.0
 publish_to: none
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -13,19 +13,19 @@ dependencies:
     git:
       url: https://github.com/tekartik/firebase_firestore.dart
       path: firestore_browser
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.4.0'
   tekartik_firebase_firestore_flutter:
     git:
       url: https://github.com/tekartik/firebase_flutter
       path: firestore_flutter
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.4.0'
   tekartik_app_flutter_firebase:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
       path: app_firebase
-      ref: dart2_3
+      ref: dart3a
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,7 +33,7 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart2_3
+      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 

@@ -15,7 +15,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -27,37 +27,37 @@ dependencies:
   tekartik_app_flutter_plugin:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_plugin
     version: '>=0.1.0'
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
-      ref: dart2_3
+      ref: dart3a
       path: test_menu_flutter
     version: '>=0.2.4'
   tekartik_app_flutter_firebase:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_firebase
     version: '>=0.1.0'
   tekartik_app_flutter_firebase_auth:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_firebase_auth
     version: '>=0.1.0'
   tekartik_app_flutter_firebase_firestore:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_firebase_firestore
     version: '>=0.1.0'
   tekartik_app_roboto:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_roboto
       version: '>=0.1.0'
   process_run: '>=0.10.9+1'
@@ -68,9 +68,10 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart2_3
+      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
+
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
@@ -114,11 +115,12 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 dependency_overrides:
-
   tekartik_app_flutter_plugin:
     path: ../app_plugin
   tekartik_app_flutter_idb:
     path: ../app_idb
+  tekartik_app_flutter_sqflite:
+    path: ../app_sqflite
   tekartik_app_flutter_fs:
     path: ../app_fs
   tekartik_app_flutter_firebase:

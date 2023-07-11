@@ -11,7 +11,7 @@ dependencies:
   tekartik_app_roboto:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_roboto
       version: '>=0.1.0'
 ```
@@ -26,7 +26,7 @@ flutter:
   fonts:
     - family: Roboto
       fonts:
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Regular.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf
 ```
 
 ```yaml
@@ -44,22 +44,35 @@ flutter:
   fonts:
     - family: Roboto
       fonts:
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Thin.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Thin.ttf
           weight: 100
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Light.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Light.ttf
           weight: 300
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Regular.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf
           weight: 400
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Medium.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Medium.ttf
           weight: 500
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Bold.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Bold.ttf
           weight: 700
-        - asset: packages/tekartik_app_roboto/fonts/Roboto/Roboto-Black.ttf
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Black.ttf
           weight: 900
     - family: RobotoMono
       fonts:
         - asset: packages/tekartik_app_roboto/fonts/RobotoMono/RobotoMono-Regular.ttf
         - asset: packages/tekartik_app_roboto/fonts/RobotoMono/RobotoMono-Bold.ttf
           weight: 700
-
+    - family: RobotoCondensed
+      fonts:
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Thin.ttf
+          weight: 100
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Light.ttf
+          weight: 300
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf
+          weight: 400
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Medium.ttf
+          weight: 500
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Bold.ttf
+          weight: 700
+        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Black.ttf
+          weight: 900
 ```
