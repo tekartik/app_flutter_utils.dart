@@ -78,8 +78,6 @@ dependency_overrides:
     path: ../../app_roboto
   tekartik_app_flutter_plugin:
     path: ../../app_plugin
-  tekartik_common_test_app_lib:
-    path: ../common_test_app_lib
   tekartik_app_flutter_common_utils:
     path: ../../app_common
 

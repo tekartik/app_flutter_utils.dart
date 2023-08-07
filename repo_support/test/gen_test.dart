@@ -22,6 +22,7 @@ void main() {
           'sembast_test_app_lib',
           'sqflite_test_app_lib',
           'widget_test_app_lib',
+          'common_test_app_lib',
           'app_plugin_test_app_lib',
         ]) {
           await copyDirectory(Directory(join(topDir, 'example', dir)),
