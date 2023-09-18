@@ -67,10 +67,20 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
         if (contentNavigatorDebug) {
           _log('popping ${route.settings.name} result $result');
         }
-        if (!route.didPop(result)) {
-          return false;
+        // test 2023-09-18
+        // if (false) {
+        try {
+          if (!route.didPop(result)) {
+            return false;
+          }
+        } catch (e, st) {
+          _log('onPopPage error $e $st');
+          // rethrow;
         }
 
+        // if (contentNavigatorDebug) {
+        //  _log('popping2 ${route.settings.name} result $result');
+        // }
         // ignore: invalid_use_of_protected_member
         cnBloc.onPopPage(route, result);
         // Update the list of pages by setting _selectedBook to null

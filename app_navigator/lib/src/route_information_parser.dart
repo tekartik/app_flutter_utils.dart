@@ -18,7 +18,7 @@ class ContentRouteInformationParser
   }
 
   ContentPath parseAnyRouteInformationSync(RouteInformation routeInformation) {
-    final uri = Uri.parse(routeInformation.location!);
+    final uri = routeInformation.uri;
 
     var path = ContentPath.fromString(uri.path);
     if (contentNavigatorDebug) {
@@ -43,7 +43,7 @@ class ContentRouteInformationParser
     if (contentNavigatorDebug) {
       _log('/cnip:  !!!parseRouteInformation nothing found!');
     }
-    throw StateError('invalid path: ${routeInformation.location}');
+    throw StateError('invalid path: ${routeInformation.uri}');
   }
 
   @override
@@ -52,8 +52,8 @@ class ContentRouteInformationParser
     // Convert the current path to a displayable string
     if (configuration is ContentPath) {
       var location = configuration.toPath();
-      return RouteInformation(location: location);
+      return RouteInformation(uri: Uri.parse(location));
     }
-    return const RouteInformation(location: '/?');
+    return RouteInformation(uri: Uri.parse('/?'));
   }
 }

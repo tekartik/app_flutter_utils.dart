@@ -7,11 +7,13 @@ void main() {
     test('restore', () {
       var bloc = ContentNavigatorBloc();
       var crip = ContentRouteInformationParser(bloc);
-      expect(crip.restoreRouteInformation(HomeContentPath()).location, '/');
+      expect(
+          crip.restoreRouteInformation(HomeContentPath()).uri.toString(), '/');
       expect(
           crip
               .restoreRouteInformation(ContentPath([ContentPathPart('test')]))
-              .location,
+              .uri
+              .toString(),
           '/test');
     });
     test('parse', () {
@@ -19,11 +21,11 @@ void main() {
       var crip = ContentRouteInformationParser(bloc);
       expect(
           crip.parseAnyRouteInformationSync(
-              const RouteInformation(location: '/')),
+              RouteInformation(uri: Uri.parse('/'))),
           rootContentPath);
       expect(
           crip.parseAnyRouteInformationSync(
-              const RouteInformation(location: '/test')),
+              RouteInformation(uri: Uri.parse('/test'))),
           ContentPath([ContentPathPart('test')]));
     });
   });
