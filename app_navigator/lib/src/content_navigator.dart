@@ -220,18 +220,21 @@ class ContentNavigatorBloc extends BaseBloc {
 
   void _popUntilPathOrPush(BuildContext context, ContentPath path) {
     var found = false;
-    Navigator.of(context).popUntil((route) {
-      // print('popUntil($path) checking ${route.settings.name}');
-      var matches = route.settings.name != null &&
-          path.matchesString(route.settings.name!);
-      if (!matches) {
-        if (_routeAwareManager != null) {
-          routeAwareManager.popPaths.add(route.settings.name!);
-        }
-      }
 
-      found = found || matches;
-      return matches;
+    Navigator.of(context).popUntil((route) {
+      var name = route.settings.name;
+      if (name != null) {
+        var matches = path.matchesString(name);
+        if (!matches) {
+          if (_routeAwareManager != null) {
+            routeAwareManager.popPaths.add(name);
+          }
+        }
+
+        found = found || matches;
+        return matches;
+      }
+      return false;
     });
     // print('popUntil($path) found $found');
     if (!found) {

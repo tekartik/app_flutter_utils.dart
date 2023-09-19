@@ -1,6 +1,6 @@
 name: tekartik_app_navigator_flutter
 description: Experimental app navigator flutter
-version: 0.4.5
+version: 0.4.6
 publish_to: none
 
 environment:
