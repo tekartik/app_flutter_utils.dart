@@ -4,7 +4,12 @@ import 'import.dart';
 
 abstract class ContentPathBase with PathMixin {}
 
-/// Like firestore type/id/type/id in url format for url reference
+/// Like firestore type/id/type/id in url format for url reference.
+///
+/// Warning toString() should not be used to convert to a path, use
+/// toStringPath() instead.
+///
+/// root is / (or empty string)
 abstract class ContentPath {
   static var separator = p.url.separator;
 
@@ -21,7 +26,8 @@ abstract class ContentPath {
 
   void fromPath(ContentPath path);
 
-  String toPath();
+  /// to a path as string path.
+  String toPathString();
 
   /// A map representing the data, but likely unorderd.
   Map<String?, String?> toStringMap();
@@ -36,9 +42,18 @@ abstract class ContentPath {
   ContentPathField? field(String? name);
 }
 
+extension ContentPathExt on ContentPath {
+  /// Helper to match a string path directly
+  bool matchesString(String path) {
+    return matchesPath(ContentPath.fromString(path));
+  }
+
+  String toPath() => toPathString();
+}
+
 mixin PathMixin implements ContentPath {
   @override
-  String toPath() {
+  String toPathString() {
     var sb = StringBuffer();
     for (var field in fields) {
       sb.write(ContentPath.separator);
@@ -120,6 +135,9 @@ final homeContentPath = HomeContentPath();
 
 /// root content path.
 final rootContentPath = RootContentPath();
+
+/// Root content path '/'
+final rootContentPathString = rootContentPath.toPath();
 
 // To deprecate, use RootContentPath instead
 class HomeContentPath extends ContentPathBase {

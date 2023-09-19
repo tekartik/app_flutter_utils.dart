@@ -1,4 +1,6 @@
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
+import 'package:tekartik_app_navigator_flutter/route_aware.dart' as route_aware;
+import 'package:tekartik_app_navigator_flutter/src/route_aware.dart';
 
 import 'import.dart';
 
@@ -77,6 +79,14 @@ class ContentNavigatorBloc extends BaseBloc {
   final _stack = <_ContentPageInStack>[];
 
   final _crpStack = <_ContentRoutePathInStack>[];
+
+  late final RouteAwareManager? _routeAwareManager = (contentNavigator
+              ?.observers
+              ?.where((element) => element == route_aware.routeAwareObserver)
+              .isNotEmpty ??
+          false)
+      ? routeAwareManager
+      : null;
 
   /// Custom transition if any
   @protected
@@ -192,7 +202,44 @@ class ContentNavigatorBloc extends BaseBloc {
     return await item.completer.future as T;
   }
 
-  // User ContentNavigator.push instead
+  /// Pop until a matching path or push it
+  void popUntilPathOrPush(BuildContext context, ContentPath path) {
+    if (_routeAwareManager != null) {
+      _routeAwareManager!.popLock.synchronized(() {
+        _popUntilPathOrPush(context, path);
+
+        /// Late cleanup
+        routeAwareManager.popLock.synchronized(() {
+          routeAwareManager.popPaths.clear();
+        });
+      });
+    } else {
+      _popUntilPathOrPush(context, path);
+    }
+  }
+
+  void _popUntilPathOrPush(BuildContext context, ContentPath path) {
+    var found = false;
+    Navigator.of(context).popUntil((route) {
+      // print('popUntil($path) checking ${route.settings.name}');
+      var matches = route.settings.name != null &&
+          path.matchesString(route.settings.name!);
+      if (!matches) {
+        if (_routeAwareManager != null) {
+          routeAwareManager.popPaths.add(route.settings.name!);
+        }
+      }
+
+      found = found || matches;
+      return matches;
+    });
+    // print('popUntil($path) found $found');
+    if (!found) {
+      pushPath<void>(path);
+    }
+  }
+
+  // Use ContentNavigator.push instead
   // @protected
   /// Push a new route, with an optional transitionDelegate
   Future<T?> push<T>(ContentPathRouteSettings rs,
@@ -368,6 +415,15 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 }
 
+extension ContentNavigatorBlocExt on ContentNavigatorBloc {
+  /// Push a path.
+  Future<T?> pushPath<T>(ContentPath path,
+      {Object? arguments, TransitionDelegate? transitionDelegate}) {
+    return push<T>(path.routeSettings(arguments),
+        transitionDelegate: transitionDelegate);
+  }
+}
+
 /// global object
 class ContentNavigatorDef {
   final List<ContentPageDef> defs;
@@ -426,6 +482,11 @@ class ContentNavigator extends StatefulWidget {
   static Future<T?> push<T>(
       BuildContext context, ContentPathRouteSettings rs) async {
     return await ContentNavigator.of(context).push<T>(rs);
+  }
+
+  /// Pop until a matching path or push it
+  static void popUntilPathOrPush(BuildContext context, ContentPath path) {
+    ContentNavigator.of(context).popUntilPathOrPush(context, path);
   }
 }
 

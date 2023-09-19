@@ -71,6 +71,8 @@ void main() {
         return ContentPath.fromString(path).toPath();
       }
 
+      expect(rt('//'), '/');
+      expect(rt(''), '/');
       expect(rt('/'), '/');
       expect(rt('/test/*'), '/test/*');
       expect(rt('/test/'), '/test');
@@ -93,7 +95,7 @@ void main() {
       //simple.section.clear();
       //expect(simple.toPath(), 'section/*');
       simple.section.value = '123';
-      expect(simple.toPath(), '/section/123');
+      expect(simple.toPathString(), '/section/123');
 
       var object = SchoolStudentPath();
       expect(object.toPath(), '/school/*/student/*');
@@ -140,6 +142,18 @@ void main() {
           ContentPath.fromString('test/1')
               .matchesPath(ContentPath.fromString('test')),
           isFalse);
+      expect(
+          ContentPath.fromString('/test/1')
+              .matchesPath(ContentPath.fromString('test/1')),
+          isTrue);
+      expect(
+          ContentPath.fromString('test/1')
+              .matchesPath(ContentPath.fromString('/test/1')),
+          isTrue);
+      expect(
+          ContentPath.fromString('test/1')
+              .matchesPath(ContentPath.fromString('test/2')),
+          isFalse);
 
       expect(ContentPath.fromString('').matchesPath(ContentPath.fromString('')),
           isTrue);
@@ -173,6 +187,15 @@ void main() {
       expect(boxCp.categoryId.value, 'my_cat');
       expect(boxCp.action.value, '');
       expect(boxCp.toPath(), '/category/my_cat/action');
+    });
+
+    test('root', () {
+      expect(rootContentPathString, '/');
+      expect(rootContentPath.matchesString('/'), isTrue);
+      expect(rootContentPath.matchesString('//'), isTrue);
+      expect(rootContentPath.matchesString(''), isTrue);
+      expect(rootContentPath.matchesString('a'), isFalse);
+      expect(rootContentPath.matchesString('/a'), isFalse);
     });
   });
 }

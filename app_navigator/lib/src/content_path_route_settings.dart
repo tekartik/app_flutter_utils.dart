@@ -14,8 +14,24 @@ class ContentPathRouteSettings {
 
   ContentPathRouteSettings(this.path, [this.arguments]);
 
+  /// From raw representation.
+  static ContentPathRouteSettings fromRaw(RouteSettings settings) {
+    return ContentPathRouteSettings(
+      ContentPath.fromString(settings.name!),
+      settings.arguments,
+    );
+  }
+
   @override
   String toString() => '$path $arguments';
+}
+
+extension ContentPathRouteSettingsExt on ContentPathRouteSettings {
+  /// To raw representation.
+  RouteSettings toRaw() => RouteSettings(
+        name: path.toPathString(),
+        arguments: arguments,
+      );
 }
 
 /// Helper for push
