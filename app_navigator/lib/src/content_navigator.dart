@@ -202,6 +202,12 @@ class ContentNavigatorBloc extends BaseBloc {
     return await item.completer.future as T;
   }
 
+  /*
+  void transientPop([Object? result]) {
+    if (_stack.isNotEmpty) {
+      transientPopItem(_stack.length - 1, result);
+    }
+  }*/
   /// Pop until a matching path or push it
   void popUntilPathOrPush(BuildContext context, ContentPath path) {
     if (_routeAwareManager != null) {
@@ -218,7 +224,49 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
+  /// Returns true if found
+  void transientPopUntilPath(BuildContext context, ContentPath path) {
+    if (_routeAwareManager != null) {
+      _routeAwareManager!.popLock.synchronized(() {
+        _popUntilPath(context, path);
+
+        /// Late cleanup
+        routeAwareManager.popLock.synchronized(() {
+          routeAwareManager.popPaths.clear();
+        });
+      });
+    } else {
+      _popUntilPath(context, path);
+    }
+  }
+
+  /// Pop until a matching path or push it
+  void transientPop(BuildContext context, [Object? result]) {
+    if (_routeAwareManager != null) {
+      _routeAwareManager!.popLock.synchronized(() {
+        routeAwareManager.popTransient = true;
+        _transientPop(context, result);
+
+        /// Late cleanup
+        routeAwareManager.popLock.synchronized(() {
+          routeAwareManager.popTransient = false;
+        });
+      });
+    } else {
+      _transientPop(context, result);
+    }
+  }
+
   void _popUntilPathOrPush(BuildContext context, ContentPath path) {
+    var found =
+        _popUntilPath(context, path); // print('popUntil($path) found $found');
+    if (!found) {
+      pushPath<void>(path);
+    }
+  }
+
+  /// Returns true if fount
+  bool _popUntilPath(BuildContext context, ContentPath path) {
     var found = false;
 
     Navigator.of(context).popUntil((route) {
@@ -236,10 +284,12 @@ class ContentNavigatorBloc extends BaseBloc {
       }
       return false;
     });
-    // print('popUntil($path) found $found');
-    if (!found) {
-      pushPath<void>(path);
-    }
+    return found;
+  }
+
+  /// Pop last no onResume
+  void _transientPop(BuildContext context, Object? result) {
+    Navigator.of(context).pop(result);
   }
 
   // Use ContentNavigator.push instead
@@ -482,14 +532,27 @@ class ContentNavigator extends StatefulWidget {
   @override
   State<ContentNavigator> createState() => _ContentNavigatorState();
 
+  /// Push a path setting.
   static Future<T?> push<T>(
       BuildContext context, ContentPathRouteSettings rs) async {
     return await ContentNavigator.of(context).push<T>(rs);
   }
 
+  /// Do not trigger onResume()...WIP
+  static void transientPop(BuildContext context, [Object? result]) {
+    return ContentNavigator.of(context).transientPop(context, result);
+  }
+
   /// Pop until a matching path or push it
+  /// Do not trigger onResume()...WIP
   static void popUntilPathOrPush(BuildContext context, ContentPath path) {
     ContentNavigator.of(context).popUntilPathOrPush(context, path);
+  }
+
+  /// Pop until a matching path
+  /// Do not trigger onResume()...WIP
+  static void transientPopUntilPath(BuildContext context, ContentPath path) {
+    ContentNavigator.of(context).transientPopUntilPath(context, path);
   }
 }
 

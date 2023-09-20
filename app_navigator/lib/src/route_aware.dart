@@ -11,7 +11,10 @@ class RouteAwareManager {
       RouteObserver<ModalRoute<void>>();
 
   final popLock = Lock();
+
+  /// Only valid during pop
   var popPaths = <String>[];
+  var popTransient = false;
 }
 
 final routeAwareManager = RouteAwareManager();
@@ -63,6 +66,9 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
 
   @override
   void didPopNext() {
+    if (routeAwareManager.popTransient) {
+      return;
+    }
     if (widget is RouteAwareWithPath) {
       var needOnResume = true;
       var path = (widget as RouteAwareWithPath).contentPath;
