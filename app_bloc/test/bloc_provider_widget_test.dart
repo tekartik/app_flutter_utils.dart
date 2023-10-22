@@ -7,7 +7,7 @@ class TestBloc extends BaseBloc {
 }
 
 class TestApp extends StatelessWidget {
-  const TestApp({Key? key}) : super(key: key);
+  const TestApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -7,8 +7,8 @@ class BlocProvider<T extends BaseBloc> extends StatefulWidget {
   final Widget child;
   final T Function() blocBuilder;
 
-  const BlocProvider({Key? key, required this.blocBuilder, required this.child})
-      : super(key: key);
+  const BlocProvider(
+      {super.key, required this.blocBuilder, required this.child});
 
   @override
   State<BlocProvider> createState() => _BlocProviderState<T>();
@@ -48,10 +48,10 @@ class _BlocProviderState<T extends BaseBloc> extends State<BlocProvider> {
 
 class _BlocProviderInherited<T> extends InheritedWidget {
   const _BlocProviderInherited({
-    Key? key,
-    required Widget child,
+    super.key,
+    required super.child,
     required this.bloc,
-  }) : super(key: key, child: child);
+  });
 
   final T bloc;
 

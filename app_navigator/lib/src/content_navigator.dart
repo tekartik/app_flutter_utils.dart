@@ -228,7 +228,7 @@ class ContentNavigatorBloc extends BaseBloc {
   void transientPopUntilPath(BuildContext context, ContentPath path) {
     if (_routeAwareManager != null) {
       _routeAwareManager!.popLock.synchronized(() {
-        _popUntilPath(context, path);
+        _popUntilPath(context, path, handleRoot: true);
 
         /// Late cleanup
         routeAwareManager.popLock.synchronized(() {
@@ -266,15 +266,18 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   /// Returns true if fount
-  bool _popUntilPath(BuildContext context, ContentPath path) {
+  ///
+  /// if handleRoot is true, the root is handled as well as excluded from onResume
+  bool _popUntilPath(BuildContext context, ContentPath path,
+      {bool? handleRoot}) {
     var found = false;
 
     Navigator.of(context).popUntil((route) {
       var name = route.settings.name;
       if (name != null) {
         var matches = path.matchesString(name);
-        if (!matches) {
-          if (_routeAwareManager != null) {
+        if (_routeAwareManager != null) {
+          if (!matches || (handleRoot ?? false)) {
             routeAwareManager.popPaths.add(name);
           }
         }
@@ -526,8 +529,7 @@ class ContentNavigator extends StatefulWidget {
       BlocProvider.of<ContentNavigatorBloc>(context);
 
   const ContentNavigator(
-      {Key? key, required this.def, this.child, this.observers})
-      : super(key: key);
+      {super.key, required this.def, this.child, this.observers});
 
   @override
   State<ContentNavigator> createState() => _ContentNavigatorState();

@@ -6,11 +6,11 @@ import 'package:tekartik_app_rx_utils/app_rx_utils.dart';
 abstract class _BaseWidget extends StatelessWidget {
   final subject = BehaviorSubject<String>();
 
-  _BaseWidget({Key? key}) : super(key: key);
+  _BaseWidget({super.key});
 }
 
 class TestValueStream extends _BaseWidget {
-  TestValueStream({Key? key}) : super(key: key);
+  TestValueStream({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class TestValueStream extends _BaseWidget {
 }
 
 class TestBehaviorSubject extends _BaseWidget {
-  TestBehaviorSubject({Key? key}) : super(key: key);
+  TestBehaviorSubject({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,7 @@ class ValueStreamBuilder<T> extends StatelessWidget {
   final AsyncWidgetBuilder<T> builder;
 
   const ValueStreamBuilder(
-      {Key? key, required this.stream, required this.builder})
-      : super(key: key);
+      {super.key, required this.stream, required this.builder});
 
   @override
   Widget build(BuildContext context) {

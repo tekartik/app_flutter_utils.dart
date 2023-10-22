@@ -11,8 +11,7 @@ abstract class RouteAwareStatefulWidget extends StatefulWidget
     implements RouteAwareWithPath {
   @override
   final ContentPath contentPath;
-  const RouteAwareStatefulWidget({Key? key, required this.contentPath})
-      : super(key: key);
+  const RouteAwareStatefulWidget({super.key, required this.contentPath});
 
   @override
   RouteAwareState<RouteAwareStatefulWidget> createState();

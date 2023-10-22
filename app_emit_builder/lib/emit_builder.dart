@@ -10,8 +10,7 @@ class EmitFutureOrBuilder<T> extends StatefulWidget {
   final AsyncWidgetBuilder<T> builder;
 
   const EmitFutureOrBuilder(
-      {Key? key, required this.futureOr, required this.builder})
-      : super(key: key);
+      {super.key, required this.futureOr, required this.builder});
 
   @override
   // ignore: library_private_types_in_public_api

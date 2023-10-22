@@ -4,8 +4,7 @@ import 'import.dart';
 /// arguments are discouraged and null should be handled
 @Deprecated('Not supported anymore')
 class ContentRoutePath extends ContentPathRouteSettings {
-  ContentRoutePath(ContentPath path, [Object? arguments])
-      : super(path, arguments);
+  ContentRoutePath(super.path, [super.arguments]);
 }
 
 class ContentPathRouteSettings {

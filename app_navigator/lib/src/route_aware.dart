@@ -40,12 +40,24 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
 
   @override
   void didPushNext() {
-    onPause();
+    _onPauseIfResumed();
+  }
+
+  void _onPauseIfResumed() {
+    if (_resumed) {
+      onPause();
+    }
+  }
+
+  void _onResumeIfPaused() {
+    if (!_resumed) {
+      onResume();
+    }
   }
 
   @override
   void didPop() {
-    onPause();
+    _onPauseIfResumed();
   }
 
   @mustCallSuper
@@ -61,7 +73,7 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
   @override
   void didPush() {
     // print('didPush');
-    onResume();
+    _onResumeIfPaused();
   }
 
   @override
@@ -84,11 +96,11 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
         }
       }).then((_) {
         if (needOnResume) {
-          onResume();
+          _onResumeIfPaused();
         }
       });
     } else {
-      onResume();
+      _onResumeIfPaused();
     }
     if (widget is RouteAwareWithPath) {}
     // print('didPopNext ${routeAwareManager.popPaths}');

@@ -1,4 +1,6 @@
 /// Do not include with flutter_test. or add suffix.
+library;
+
 import 'package:tekartik_app_platform/app_platform.dart';
 
 /// Safe (false) on the web
