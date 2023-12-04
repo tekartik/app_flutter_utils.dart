@@ -26,7 +26,7 @@ dependencies:
       ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
-  sqflite_common_ffi:
+  sqflite_common_ffi: '>=2.3.0+4'
   sqflite_common:
 dev_dependencies:
   flutter_test:
