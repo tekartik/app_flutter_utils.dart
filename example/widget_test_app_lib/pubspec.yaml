@@ -9,6 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  tekartik_app_flutter_common_utils:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_common
+    version: '>=0.1.0'
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
@@ -51,8 +57,11 @@ dependency_overrides:
     path: ../../app_widget
   tekartik_app_flutter_sqflite:
     path: ../../app_sqflite
-flutter:
+  tekartik_app_flutter_common_utils:
+    path: ../../app_common
 
+flutter:
+  uses-material-design: true
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
