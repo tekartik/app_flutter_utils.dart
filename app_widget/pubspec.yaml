@@ -9,27 +9,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  tekartik_app_common_utils:
+  tekartik_app_flutter_common_utils:
     git:
-      url: https://github.com/tekartik/app_common_utils.dart
+      url: https://github.com/tekartik/app_flutter_utils.dart
       ref: dart3a
-      path: app
+      path: app_common
     version: '>=0.1.0'
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   process_run:
-  dev_test: '>=0.13.3+11'
-  tekartik_lints_flutter:
-    git:
-      url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
-      path: packages/lints_flutter
-    version: '>=0.1.0'
+
 
 dependency_overrides:
-
+  tekartik_app_flutter_common_utils:
+    path: ../app_common
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
