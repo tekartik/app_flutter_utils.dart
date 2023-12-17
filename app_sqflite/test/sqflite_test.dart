@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+// ignore: depend_on_referenced_packages
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  sqflite_ffi.sqfliteFfiInit();
   DatabaseFactory factory;
   setUpAll(() async {});
 

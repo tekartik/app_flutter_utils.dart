@@ -3,12 +3,16 @@ library demo_test;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
+// ignore: depend_on_referenced_packages
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
 import 'package:tekartik_app_flutter_idb/idb.dart';
 import 'package:tekartik_app_flutter_idb/src/idb_io.dart';
 
 var objectStoreName = 'test';
 
 void main() {
+  // needed on windows
+  sqflite_ffi.sqfliteFfiInit();
   for (var factory in [
     newIdbFactorySembast(
         dataPath: join('.dart_tool', 'app_idb_test_databases')),
