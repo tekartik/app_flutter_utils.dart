@@ -2,12 +2,12 @@
 library;
 
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html' show window;
 
-import 'package:tekartik_common_utils/async_utils.dart';
+import 'package:tekartik_app_common_utils/common_utils_import.dart';
+import 'package:web/web.dart' as web;
 
 var _useFixLoop = true;
-var _debugCursor = false; // devWarning(true);
+var _debugCursor = devWarning(true); // false; // devWarning(true);
 Future<void> hideCursor() async {
   await _flutterCursorWeb.hide();
 }
@@ -24,11 +24,12 @@ class FlutterCursorWeb {
   }
   Future<void> _fix() async {
     while (true) {
-      var element = window.document.querySelector('flutter-view');
+      var element = web.window.document.querySelector('flutter-view');
 
       if (element != null) {
+        var styleAttribute = (element.attributes.getNamedItem('style'));
         //  Wait for cursor to appear
-        var style = element.attributes['style'];
+        var style = styleAttribute?.value;
 
         // devPrint('$_shouldShow style: $style');
         var cursorDefault = 'cursor: default;';
@@ -48,10 +49,10 @@ class FlutterCursorWeb {
           }
         }
         if (style?.contains(previousCursorStyle) ?? false) {
-          element.attributes['style'] =
+          styleAttribute?.value =
               style!.replaceAll(previousCursorStyle, cursorStyle);
         } else {
-          element.attributes['style'] =
+          styleAttribute?.value =
               '$cursorStyle${style == null ? '' : ' $style'}';
         }
       }

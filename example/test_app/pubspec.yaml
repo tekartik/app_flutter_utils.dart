@@ -1,5 +1,5 @@
 name: tekartik_app_utils_test_app
-description: A test app.
+description: flutter utils test app
 publish_to: none
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -43,6 +43,14 @@ dependencies:
     path: ../../app_sembast
   tekartik_common_test_app_lib:
     path: ../common_test_app_lib
+  tekartik_common_web_test_app_lib:
+    path: ../common_web_test_app_lib
+  tekartik_app_flutter_common_web_utils:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_common_web
+    version: '>=0.1.0'
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
@@ -82,6 +90,8 @@ dependency_overrides:
     path: ../../app_plugin
   tekartik_app_flutter_common_utils:
     path: ../../app_common
+  tekartik_app_flutter_common_web_utils:
+    path: ../../app_common_web
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

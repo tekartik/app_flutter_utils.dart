@@ -1,5 +1,4 @@
 import 'package:tekartik_app_flutter_common_utils/asset/asset_utils.dart';
-import 'package:tekartik_app_flutter_common_utils/cursor_utils.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 
 void defineMenu() {
@@ -8,16 +7,6 @@ void defineMenu() {
       for (var asset in await getAssetList()) {
         write(asset);
       }
-    });
-    menu('cursor', () {
-      item('hide cursor', () {
-        write('hiding cursor');
-        hideCursor();
-      });
-      item('show cursor', () {
-        write('showing cursor');
-        showCursor();
-      });
     });
   });
 }
