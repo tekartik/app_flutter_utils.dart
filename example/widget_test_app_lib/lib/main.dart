@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_widget/app_widget.dart';
+import 'package:tekartik_app_flutter_widget/delayed_display.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
@@ -57,6 +58,33 @@ void defineMenu() {
     item('SmallIcons dark', () async {
       await navigator.push<void>(MaterialPageRoute(builder: (context) {
         return smallIconsScreen(themeData: ThemeData.dark());
+      }));
+    });
+    item('Delayed Display dark', () async {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('Delayed display')),
+          body: const Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DelayedDisplay(
+                  child: Text('DEMO', style: TextStyle(fontSize: 32))),
+              DelayedDisplay(
+                  delay: Duration(milliseconds: 2000),
+                  child:
+                      Text('DEMO delay 2000', style: TextStyle(fontSize: 32))),
+              DelayedDisplay(
+                  fadingDuration: Duration(milliseconds: 2000),
+                  child:
+                      Text('DEMO fading 2000', style: TextStyle(fontSize: 32))),
+              DelayedDisplay(
+                  slidingBeginOffset: Offset(-32.0, -32.0),
+                  child: Text('DEMO left, top 32',
+                      style: TextStyle(fontSize: 32))),
+            ],
+          )),
+        );
       }));
     });
   });
