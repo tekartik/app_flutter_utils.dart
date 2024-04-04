@@ -5,6 +5,23 @@ import 'package:tekartik_test_menu_flutter/test.dart';
 
 void menuMinuUi() {
   menu('Mini ui', () {
+    item('MenuBodyWidget', () async {
+      var result = await Navigator.of(castAsNullable(buildContext)!)
+          .push(MaterialPageRoute<Object?>(builder: (_) {
+        return Scaffold(
+            appBar: AppBar(title: const Text('MenuBodyWidget')),
+            body: muiBodyWidget(() {
+              muiItem(
+                  'Pop null', () => Navigator.of(muiBuildContext).pop(null));
+              muiItem(
+                  'Pop true', () => Navigator.of(muiBuildContext).pop(true));
+            }));
+      }));
+      if (muiBuildContext.mounted) {
+        await muiSnack(muiBuildContext, 'result: $result');
+      }
+    });
+
     item('showMuiMenu', () async {
       var result = await showMuiMenu<Object?>(
           castAsNullable(buildContext)!, 'simple', () {

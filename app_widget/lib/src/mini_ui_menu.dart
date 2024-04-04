@@ -6,11 +6,13 @@ class MuiMenuContext {}
 class _MuiMenuContext implements MuiMenuContext {
   final _MuiMenuContext? parent;
   final List<MuiItem> items = [];
+
   _MuiMenuContext({this.parent});
 }
 
 _MuiMenuContext? _context;
 BuildContext? _muiBuildContext;
+
 BuildContext get muiBuildContext {
   assert(_muiBuildContext != null,
       'muiBuildContext must be called in a muiMenu context');
@@ -35,6 +37,14 @@ void muiItem(String name, void Function() body) {
 MuiScreenWidget muiScreenWidget(String name, void Function() body) {
   var muiMenuContext = muiMenu(name, body) as _MuiMenuContext;
   return MuiScreenWidget(name: name, items: muiMenuContext.items);
+}
+
+MuiBodyWidget muiBodyWidget(void Function() body, {bool? shrinkWrap}) {
+  var muiMenuContext = muiMenu('body', body) as _MuiMenuContext;
+  return MuiBodyWidget(
+    items: muiMenuContext.items,
+    shinkWrap: true,
+  );
 }
 
 MuiMenuContext muiMenu(String name, void Function() body) {
@@ -66,6 +76,7 @@ class MuiScreenWidget extends StatefulWidget {
   final MuiMenuContext? context;
   final String name;
   final List<MuiItem> items;
+
   const MuiScreenWidget(
       {super.key, required this.items, required this.name, this.context});
 
@@ -88,5 +99,38 @@ class _MuiScreenWidgetState extends State<MuiScreenWidget> {
               },
             )
         ]));
+  }
+}
+
+class MuiBodyWidget extends StatefulWidget {
+  /// Optional parent context.
+  final MuiMenuContext? context;
+  final bool? shinkWrap;
+
+  final List<MuiItem> items;
+
+  const MuiBodyWidget(
+      {super.key, required this.items, this.context, this.shinkWrap});
+
+  @override
+  State<MuiBodyWidget> createState() => _MuiBodyWidgetState();
+}
+
+class _MuiBodyWidgetState extends State<MuiBodyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: widget.shinkWrap ?? false,
+      children: [
+        for (var item in widget.items)
+          ListTile(
+            title: Text(item.name),
+            onTap: () {
+              _muiBuildContext = context;
+              item.callback();
+            },
+          )
+      ],
+    );
   }
 }
