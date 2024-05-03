@@ -211,7 +211,7 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Pop until a matching path or push it
   void popUntilPathOrPush(BuildContext context, ContentPath path) {
     if (_routeAwareManager != null) {
-      _routeAwareManager!.popLock.synchronized(() {
+      _routeAwareManager.popLock.synchronized(() {
         _popUntilPathOrPush(context, path);
 
         /// Late cleanup
@@ -227,7 +227,7 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Returns true if found
   void transientPopUntilPath(BuildContext context, ContentPath path) {
     if (_routeAwareManager != null) {
-      _routeAwareManager!.popLock.synchronized(() {
+      _routeAwareManager.popLock.synchronized(() {
         _popUntilPath(context, path, handleRoot: true);
 
         /// Late cleanup
@@ -243,7 +243,7 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Pop until a matching path or push it
   void transientPop(BuildContext context, [Object? result]) {
     if (_routeAwareManager != null) {
-      _routeAwareManager!.popLock.synchronized(() {
+      _routeAwareManager.popLock.synchronized(() {
         routeAwareManager.popTransient = true;
         _transientPop(context, result);
 
