@@ -1,4 +1,3 @@
-@Deprecated('include hide_cursor.dart instead')
 library;
 
 // ignore: avoid_web_libraries_in_flutter
@@ -7,7 +6,7 @@ import 'package:tekartik_app_common_utils/common_utils_import.dart';
 import 'package:web/web.dart' as web;
 
 var _useFixLoop = true;
-var _debugCursor = devWarning(true); // false; // devWarning(true);
+var _debugCursor = false;
 Future<void> hideCursor() async {
   await _flutterCursorWeb.hide();
 }

@@ -1,4 +1,3 @@
-@Deprecated('include hide_cursor.dart instead')
 library;
 
 Future<void> hideCursor() async {
