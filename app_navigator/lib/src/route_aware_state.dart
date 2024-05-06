@@ -14,11 +14,20 @@ abstract class RouteAwareStatefulWidget extends StatefulWidget
   const RouteAwareStatefulWidget({super.key, required this.contentPath});
 
   @override
-  RouteAwareState<RouteAwareStatefulWidget> createState();
+  RouteAwareWidgetState<RouteAwareStatefulWidget> createState();
 }
 
+/// Interface
+abstract class RouteAwareWidgetState<T extends StatefulWidget>
+    implements State<T> {
+  bool get resumed;
+}
+
+/// Compate
+typedef RouteAwareState<T extends StatefulWidget> = RouteAwareStateBase<T>;
+
 /// Base class for supporting onResume/onPause
-abstract class RouteAwareState<T extends StatefulWidget> extends State<T>
+abstract class RouteAwareStateBase<T extends StatefulWidget> extends State<T>
     with RouteAware, RouteAwareMixin<T> {
   /// Current content path
   ContentPath? _contentPath;
@@ -48,7 +57,7 @@ abstract class RouteAwareState<T extends StatefulWidget> extends State<T>
 }
 
 extension RouteAwareStatePrvExt<T extends StatefulWidget>
-    on RouteAwareState<T> {
+    on RouteAwareStateBase<T> {
   /// Current content path
   ContentPath? get contentPath => _contentPath;
 }

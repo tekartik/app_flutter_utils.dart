@@ -26,7 +26,8 @@ final routeAwareManager = RouteAwareManager();
 ///   with RouteAware, RouteAwareMixin<MyScreen> {}
 /// ```
 mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
-    implements RouteAware {
+    implements RouteAware, RouteAwareWidgetState<T> {
+  @override
   bool get resumed => _resumed;
   var _resumed = false;
 

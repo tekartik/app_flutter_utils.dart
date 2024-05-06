@@ -28,7 +28,7 @@ class TestNamedScreen extends StatefulWidget {
   State<TestNamedScreen> createState() => _TestNamedScreenState();
 }
 
-class _TestNamedScreenState extends RouteAwareState<TestNamedScreen> {
+class _TestNamedScreenState extends RouteAwareStateBase<TestNamedScreen> {
   String get name => widget.name;
   @override
   Widget build(BuildContext context) {
