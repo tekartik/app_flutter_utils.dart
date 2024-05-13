@@ -10,7 +10,7 @@ class ValueStreamBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<T>(
       builder: builder,
       stream: stream,
       initialData: stream.hasValue ? stream.value : null,

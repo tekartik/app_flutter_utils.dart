@@ -1,6 +1,6 @@
 name: tekartik_app_rx_utils
 description: Rx subject builder
-version: 0.5.0
+version: 0.5.1
 publish_to: none
 
 environment:
