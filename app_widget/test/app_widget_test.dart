@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tekartik_app_flutter_widget/with_header_footer_list_view.dart';
-
-// ignore: depend_on_referenced_packages
+import 'package:tekartik_app_flutter_widget/app_widget.dart';
 
 void main() {
   group('WithHeaderFooterListView', () {

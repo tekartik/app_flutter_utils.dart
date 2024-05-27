@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// ListView with header and footer
 class WithHeaderFooterListView extends StatelessWidget {
   final NullableIndexedWidgetBuilder itemBuilder;
   final int itemCount;
