@@ -7,10 +7,21 @@ String _toHex(int value) {
 extension HexColor on Color {
   /// String is in the format 'aabbcc' or 'ffaabbcc' with an optional leading '#'.
   static Color fromHex(String hexString) {
+    return fromHexOrNull(hexString)!;
+  }
+
+  static Color? fromHexOrNull(String? hexString) {
     final buffer = StringBuffer();
+    if (hexString == null) {
+      return null;
+    }
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
     buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
+    var value = int.tryParse(buffer.toString(), radix: 16);
+    if (value == null) {
+      return null;
+    }
+    return Color(value);
   }
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).

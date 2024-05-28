@@ -11,6 +11,9 @@ void main() {
       expect(HexColor.fromHex('0000FF'), const Color(0xff0000ff));
       expect(HexColor.fromHex('ffffffff'), Colors.white);
       expect(HexColor.fromHex('ff000000'), Colors.black);
+
+      expect(HexColor.fromHexOrNull(''), isNull);
+      expect(HexColor.fromHexOrNull('ffffffff'), Colors.white);
     });
     test('toHex', () {
       expect(const Color(0xffff0000).toHex(), '#ffff0000');
