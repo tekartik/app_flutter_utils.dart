@@ -27,7 +27,7 @@ void defineMenu() {
 
 void main() {
   platformInit();
-  mainMenu(() {
+  mainMenuFlutter(() {
     defineMenu();
   }, showConsole: true);
 }

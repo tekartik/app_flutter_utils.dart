@@ -55,5 +55,5 @@ void defineMenu() {
 
 void main() {
   platformInit();
-  mainMenu(() {}, showConsole: true);
+  mainMenuFlutter(() {}, showConsole: true);
 }

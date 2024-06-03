@@ -21,7 +21,7 @@ void main() {
   if (!kIsWeb) {
     sqfliteWindowsFfiInit();
   }
-  mainMenu(() {
+  mainMenuFlutter(() {
     prefs.defineMenu();
     idb.defineMenu();
     fs.defineMenu();

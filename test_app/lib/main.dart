@@ -5,7 +5,7 @@ import 'monkey_main.dart' as monkey;
 
 void main() {
   // print('Starting test app');
-  mainMenu(() {
+  mainMenuFlutter(() {
     fs.main();
     monkey.main();
   });
