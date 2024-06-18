@@ -1,4 +1,5 @@
 export 'src/confirm_dialog.dart' show muiConfirm;
+export 'src/input_text_dialog.dart' show muiGetString;
 export 'src/mini_ui_menu.dart'
     show
         MuiItem,

@@ -60,5 +60,15 @@ void menuMinuUi() {
       });
       write('result: $result');
     });
+    item('muiConfirm', () async {
+      var result = await muiConfirm(buildContext!);
+      write('result: $result');
+    });
+    String? value;
+    item('getString', () async {
+      var result = await muiGetString(buildContext!, value: value);
+      value = result;
+      write('result: $result');
+    });
   });
 }
