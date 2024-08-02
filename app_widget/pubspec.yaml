@@ -9,12 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  rxdart: '>=0.27.0'
   tekartik_app_flutter_common_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
       ref: dart3a
       path: app_common
     version: '>=0.1.0'
+  tekartik_app_rx_utils:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_rx_utils
 
 dev_dependencies:
   flutter_test:
