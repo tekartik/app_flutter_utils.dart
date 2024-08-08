@@ -18,14 +18,14 @@ class WillPopScopeCompat extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (invoked) async {
+      onPopInvokedWithResult: (invoked, result) async {
         if (invoked) {
           return;
         }
         var willPop = (await onWillPop?.call() ?? false);
         if (willPop) {
           if (context.mounted) {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(result);
           }
         }
       },

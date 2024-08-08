@@ -3,160 +3,141 @@
 version: 2
 
 enable-beta-ecosystems: true
+
 updates:
   - package-ecosystem: "pub"
     directory: "app_bloc"
     schedule:
       interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_emit_builder"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_firebase"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_firebase_auth"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_firebase_firestore"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_firebase_storage"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_fs"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_idb"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_intl"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_lints"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_navigator"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_platform"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_plugin"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_prefs"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_roboto"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_rx_utils"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_sembast"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_sqflite"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "app_widget"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/app_plugin_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/fs_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/idb_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/prefs_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/sembast_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/sqflite_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/test_app"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "example/widget_test_app_lib"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "repo_support"
-    schedule:
-      interval: "monthly"
-
-  - package-ecosystem: "pub"
-    directory: "test_app"
-    schedule:
-      interval: "monthly"
-
   - package-ecosystem: "pub"
     directory: "app_common"
     schedule:
       interval: "monthly"
-
+  - package-ecosystem: "pub"
+    directory: "app_common_web"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_emit_builder"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_firebase"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_firebase_auth"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_firebase_firestore"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_firebase_storage"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_fs"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_idb"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_intl"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_lints"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_navigator"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_platform"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_plugin"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_prefs"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_roboto"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_rx_utils"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_sembast"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_sqflite"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_widget"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/app_plugin_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/common_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/common_web_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/fs_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/idb_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/prefs_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/sembast_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/sqflite_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/test_app"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/widget_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "repo_support"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "test_app"
+    schedule:
+      interval: "monthly"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
-    labels:
-      - autosubmit
