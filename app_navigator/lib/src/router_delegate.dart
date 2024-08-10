@@ -59,10 +59,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
           cnBloc.currentTransitionDelegate ?? cnBloc.transitionDelegate,
       pages: pages.toList(),
       // Handle imperative way
-      onGenerateRoute:
-          contentNavigatorUseDeclarative // devWarning(false) // (contentNavigatorUseDeclarative)
-              ? null
-              : (settings) => cnBloc.onGenerateRoute(settings),
+
       // ignore: deprecated_member_use
       onPopPage: (route, result) {
         if (contentNavigatorDebug) {

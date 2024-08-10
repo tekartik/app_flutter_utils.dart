@@ -8,13 +8,9 @@ typedef ContentScreenBuilder = Widget Function(ContentPathRouteSettings rs);
 
 abstract class ContentPageDef {
   factory ContentPageDef(
-      {
-      // should a build a default MaterialPage
-      @Deprecated('Not supported anymore') ContentPageBuilder? builder,
-      required ContentPath path,
+      {required ContentPath path,
       required ContentScreenBuilder? screenBuilder}) {
-    return _ContentPageDef(
-        builder: builder, path: path, screenBuilder: screenBuilder);
+    return _ContentPageDef(path: path, screenBuilder: screenBuilder);
   }
 
   /// The path definition
@@ -41,7 +37,7 @@ class _ContentPageDef implements ContentPageDef {
   @override
   final Widget Function(ContentPathRouteSettings crp)? screenBuilder;
 
-  _ContentPageDef({this.builder, required this.path, this.screenBuilder}) {
+  _ContentPageDef({required this.path, this.screenBuilder}) {
     // var name = path?.toPath();
     // devPrint('Building material page from $name');
 
@@ -55,7 +51,8 @@ class _ContentPageDef implements ContentPageDef {
             builder: (_) {
               return screenBuilder!(routePath);
             },
-          ));
+          ),
+          onPopInvoked: (didPop, result) {});
     };
   }
 

@@ -9,6 +9,7 @@ import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_web_test_app_lib/main.dart' as common_web;
 import 'package:tekartik_fs_test_app_lib/main.dart' as fs;
 import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
+import 'package:tekartik_navigator_test_app_lib/main.dart';
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
 import 'package:tekartik_sembast_test_app_lib/main.dart' as sembast;
 import 'package:tekartik_sqflite_test_app_lib/main.dart' as sqflite;
@@ -31,6 +32,7 @@ void main() {
     app_plugin.defineMenu();
     common.defineMenu();
     common_web.defineMenu();
+    defineNavigatorMenu();
     menu('platform', () {
       item('context', () {
         write(jsonPretty(platformContext.toMap())); // ignore: avoid_print

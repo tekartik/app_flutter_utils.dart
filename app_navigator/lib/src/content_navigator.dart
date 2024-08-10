@@ -7,6 +7,7 @@ import 'import.dart';
 /// Should be true
 // false to use the old way
 /// The new Navigator 2.0 way
+@Deprecated('do not use')
 bool contentNavigatorUseDeclarative =
     true; // devWarning(false); // true; // devWarning(false);
 
@@ -46,17 +47,6 @@ class _ContentPageInStack {
   String toString() => rs.toString();
 }
 
-class _ContentRoutePathInStack {
-  static int _id = 0;
-  final int id;
-  final ContentPathRouteSettings rs;
-
-  _ContentRoutePathInStack(this.rs) : id = ++_id;
-
-  @override
-  String toString() => '<$id> $rs';
-}
-
 /// Main content navigator bloc
 class ContentNavigatorBloc extends BaseBloc {
   final ContentNavigator? contentNavigator;
@@ -77,8 +67,6 @@ class ContentNavigatorBloc extends BaseBloc {
       _routeInformationParser ??= ContentRouteInformationParser(this);
 
   final _stack = <_ContentPageInStack>[];
-
-  final _crpStack = <_ContentRoutePathInStack>[];
 
   late final RouteAwareManager? _routeAwareManager = (contentNavigator
               ?.observers
@@ -113,18 +101,7 @@ class ContentNavigatorBloc extends BaseBloc {
   _ContentPageInStack? get _currentPageInStack =>
       _stack.isEmpty ? null : _stack.last;
 
-  ContentPathRouteSettings? get currentRoutePath =>
-      contentNavigatorUseDeclarative
-          ? _currentPageInStack?.rs
-          : _currentContentRoutePathInStack?.rs;
-
-  _ContentRoutePathInStack? get _currentContentRoutePathInStack =>
-      _crpStack.isEmpty ? null : _crpStack.last;
-
-  // If last matches
-  bool _crpCurrentPathEquals(ContentPath path) {
-    return (_currentContentRoutePathInStack?.rs.path == path);
-  }
+  ContentPathRouteSettings? get currentRoutePath => _currentPageInStack?.rs;
 
   /// Current path.
   ContentPath? get currentPath => currentRoutePath?.path;
@@ -149,20 +126,6 @@ class ContentNavigatorBloc extends BaseBloc {
     var pageDef = contentNavigator!.def.findPageDef(contentPath);
 
     var rs = ContentPathRouteSettings(contentPath, arguments);
-    if (!contentNavigatorUseDeclarative) {
-      // var current = _currentContentRoutePathInStack;
-      // devPrint('current: $current');
-      // Find last added if it matches
-      if (_crpCurrentPathEquals(contentPath)) {
-        // devPrint('matching: $current');
-      } else {
-        // devPrint('onGenerateRoute: $crp not matching current: $current, push?');
-        if (!contentNavigatorUseDeclarative) {
-          // Compat imperative way, a route was pushed by name?
-          _crpAdd(rs);
-        }
-      }
-    }
 
     return MaterialPageRoute(builder: (context) => pageDef!.screenBuilder!(rs));
   }
@@ -303,22 +266,8 @@ class ContentNavigatorBloc extends BaseBloc {
     if (contentNavigatorDebug) {
       _log('Push $rs');
     }
-    if (contentNavigatorUseDeclarative) {
-      return _push(rs, transitionDelegate: transitionDelegate);
-    } else {
-      /*
-      // Compat imperative way
-      var crpItem = _crpAdd(routePath);
-      try {
-        return await Navigator.of(context)
-            .pushNamed(routePath.path.toPath(), arguments: routePath.arguments);
-      } finally {
-        _crpRemoveItem(crpItem);
-      }
 
-       */
-      return null;
-    }
+    return _push(rs, transitionDelegate: transitionDelegate);
   }
 
   /// index of the page verifying the predicate, -1 if none
@@ -361,18 +310,6 @@ class ContentNavigatorBloc extends BaseBloc {
       transientPopItem(i, null);
     }
   }
-
-  _ContentRoutePathInStack _crpAdd(ContentPathRouteSettings rs) {
-    var crpItem = _ContentRoutePathInStack(rs);
-    _crpStack.add(crpItem);
-    return crpItem;
-  }
-
-  /*
-  void _crpRemoveItem(_ContentRoutePathInStack item) {
-    _crpStack.removeWhere((element) => element.id == item.id);
-    // devPrint(_crpStack);
-  }*/
 
   void _log(String message) {
     // ignore: avoid_print
@@ -456,18 +393,7 @@ class ContentNavigatorBloc extends BaseBloc {
     } else {
          */
 
-    if (contentNavigatorUseDeclarative) {
-      return await _push(rs);
-    } else {
-      // var current = _currentContentRoutePathInStack;
-      // devPrint('current: $current');
-      // Find last added if it matches
-      if (_crpCurrentPathEquals(path)) {
-        // devPrint('matching: $current');
-      } else {
-        // devPrint('${current?.routePath?.path} not matching current: $current, push?');
-      }
-    }
+    return await _push(rs);
   }
 }
 
