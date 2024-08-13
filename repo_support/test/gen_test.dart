@@ -27,6 +27,7 @@ void main() {
           'common_test_app_lib',
           'common_web_test_app_lib',
           'app_plugin_test_app_lib',
+          'navigator_test_app_lib',
         ]) {
           await copyDirectory(Directory(join(topDir, 'example', dir)),
               Directory(join(topDir, '.dart_tool', dir)));
