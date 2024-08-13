@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// No animation material page route
 class NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
+  /// Constructor
   NoAnimationMaterialPageRoute({
     required super.builder,
     super.settings,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 
+/// Navigator extension
 extension TekartikNavigatorStateExt on NavigatorState {
   /// Pop until a path is matched. Returns true if found.
   bool popUntilPath(ContentPath path) {
@@ -16,6 +17,7 @@ extension TekartikNavigatorStateExt on NavigatorState {
   }
 }
 
+/// Navigator extension
 extension TekartikNavigatorStatePrvExt on NavigatorState {
   /// Pop until a path is matched. Returns true if found.
   bool popUntilPath(ContentPath path) {

@@ -3,22 +3,30 @@
 
 import 'import.dart';
 
+/// A content page definition (protected)
 typedef ContentPageBuilder = Page Function(ContentPathRouteSettings crp);
-typedef ContentScreenBuilder = Widget Function(ContentPathRouteSettings rs);
 
+/// A content screen builder
+typedef ContentScreenBuilder = Widget Function(ContentPathRouteSettings rs);
+void _log(String message) {
+  // ignore: avoid_print
+  print('/cnpd $message');
+}
+
+/// A content page definition
 abstract class ContentPageDef {
+  /// Create a content page definition
   factory ContentPageDef(
       {required ContentPath path,
-      required ContentScreenBuilder? screenBuilder}) {
+      required ContentScreenBuilder screenBuilder}) {
     return _ContentPageDef(path: path, screenBuilder: screenBuilder);
   }
 
   /// The path definition
   late ContentPath path;
 
-  /// The builder, if used, name and arguments must match
-  @Deprecated('Not supported anymore')
-  ContentPageBuilder? builder;
+  /// The builder generagted
+  ContentPageBuilder get builder;
 
   @override
   String toString() => 'def: $path';
@@ -29,7 +37,7 @@ abstract class ContentPageDef {
 
 class _ContentPageDef implements ContentPageDef {
   @override
-  Page Function(ContentPathRouteSettings crp)? builder;
+  late Page Function(ContentPathRouteSettings crp) builder;
 
   @override
   ContentPath path;
@@ -41,18 +49,30 @@ class _ContentPageDef implements ContentPageDef {
     // var name = path?.toPath();
     // devPrint('Building material page from $name');
 
-    builder ??= (routePath) {
-      var name = routePath.path.toPath();
+    late ContentNavigatorBloc cnBloc;
+    builder = (routePath) {
+      var pageContentPath = routePath.path;
+      var name = pageContentPath.toPathString();
       return MaterialPage(
           name: name,
           arguments: routePath.arguments,
           key: ValueKey(name),
           child: Builder(
-            builder: (_) {
+            builder: (context) {
+              cnBloc = ContentNavigator.of(context);
               return screenBuilder!(routePath);
             },
           ),
-          onPopInvoked: (didPop, result) {});
+          onPopInvoked: contentNavigatorUseOnPopPage
+              ? (didPop, result) {}
+              : (didPop, result) {
+                  if (contentNavigatorDebug) {
+                    _log('onPopInvoked($routePath, didPop: $didPop, $result');
+                  }
+                  if (didPop) {
+                    cnBloc.onPopInvoked(pageContentPath, result);
+                  }
+                });
     };
   }
 

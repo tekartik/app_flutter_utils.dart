@@ -3,14 +3,19 @@ import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 
 import 'route_aware.dart';
 
+/// Route aware with path
 abstract class RouteAwareWithPath {
+  /// Current content path
   ContentPath get contentPath;
 }
 
+/// Route aware stateful widget
 abstract class RouteAwareStatefulWidget extends StatefulWidget
     implements RouteAwareWithPath {
   @override
   final ContentPath contentPath;
+
+  /// Constructor
   const RouteAwareStatefulWidget({super.key, required this.contentPath});
 
   @override
@@ -20,6 +25,7 @@ abstract class RouteAwareStatefulWidget extends StatefulWidget
 /// Interface
 abstract class RouteAwareWidgetState<T extends StatefulWidget>
     implements State<T> {
+  /// True if resumed
   bool get resumed;
 }
 
@@ -56,6 +62,7 @@ abstract class RouteAwareStateBase<T extends StatefulWidget> extends State<T>
   }
 }
 
+/// Extension (private)
 extension RouteAwareStatePrvExt<T extends StatefulWidget>
     on RouteAwareStateBase<T> {
   /// Current content path

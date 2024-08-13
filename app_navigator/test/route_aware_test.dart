@@ -6,7 +6,7 @@ var homePageDef = ContentPageDef(
     screenBuilder: (_) {
       return const HomeScreen();
     },
-    path: HomeContentPath());
+    path: rootContentPath);
 ContentPageDef namedPageDef(String name) => ContentPageDef(
     screenBuilder: (_) {
       return TestNamedScreen(name: name);

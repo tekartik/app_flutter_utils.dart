@@ -6,7 +6,7 @@ var homePageDef = ContentPageDef(
     screenBuilder: (_) {
       return const Text('home');
     },
-    path: HomeContentPath());
+    path: rootContentPath);
 
 final contentNavigatorDef = ContentNavigatorDef(defs: [
   homePageDef,

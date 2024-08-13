@@ -6,17 +6,38 @@ import 'package:tekartik_app_navigator_flutter/src/route_aware_state.dart';
 RouteObserver<ModalRoute<void>> get routeAwareObserver =>
     routeAwareManager.routeAwareObserver;
 
+/// To add to the material app observers
 class RouteAwareManager {
+  /// Route observer
   final RouteObserver<ModalRoute<void>> routeAwareObserver =
       RouteObserver<ModalRoute<void>>();
 
-  final popLock = Lock();
+  @protected
 
-  /// Only valid during pop
-  var popPaths = <String>[];
-  var popTransient = false;
+  /// Pop lock
+  final _popLock = Lock();
+
+  final _popPaths = <String>[];
+
+  var _popTransient = false;
 }
 
+/// Private extension
+extension RouteAwareManagerPrvExt on RouteAwareManager {
+  /// Pop lock
+  Lock get popLock => _popLock;
+
+  /// Only valid during pop
+  List<String> get popPaths => _popPaths;
+
+  /// Set to true to ignore the next pop
+  bool get popTransient => _popTransient;
+  set popTransient(bool value) {
+    _popTransient = value;
+  }
+}
+
+/// Route aware manager
 final routeAwareManager = RouteAwareManager();
 
 /// Use it along with RouteAware mixin
@@ -31,10 +52,12 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
   bool get resumed => _resumed;
   var _resumed = false;
 
+  /// Route aware did change dependencies
   void routeAwareDidChangeDependencies() {
     routeAwareObserver.subscribe(this, ModalRoute.of(context)!);
   }
 
+  /// Route aware dispose
   void routeAwareDispose() {
     routeAwareObserver.unsubscribe(this);
   }
@@ -61,16 +84,19 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
     _onPauseIfResumed();
   }
 
+  /// On pause
   @mustCallSuper
   void onPause() {
     _resumed = false;
   }
 
+  /// On resume
   @mustCallSuper
   void onResume() {
     _resumed = true;
   }
 
+  /// did Push
   @override
   void didPush() {
     // print('didPush');

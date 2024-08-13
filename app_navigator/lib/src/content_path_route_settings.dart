@@ -1,16 +1,14 @@
 import 'import.dart';
 
-/// An route settings
-/// arguments are discouraged and null should be handled
-@Deprecated('Not supported anymore')
-class ContentRoutePath extends ContentPathRouteSettings {
-  ContentRoutePath(super.path, [super.arguments]);
-}
-
+/// Content path route settings
 class ContentPathRouteSettings {
+  /// The path
   final ContentPath path;
+
+  /// The arguments
   final Object? arguments;
 
+  /// Create a new route settings
   ContentPathRouteSettings(this.path, [this.arguments]);
 
   /// From raw representation.
@@ -22,9 +20,10 @@ class ContentPathRouteSettings {
   }
 
   @override
-  String toString() => '$path $arguments';
+  String toString() => 'cp: $path${(arguments != null) ? ' $arguments' : ''}';
 }
 
+/// Helper for push
 extension ContentPathRouteSettingsExt on ContentPathRouteSettings {
   /// To raw representation.
   RouteSettings toRaw() => RouteSettings(

@@ -68,7 +68,7 @@ void main() {
     });
     test('toPath', () {
       String rt(String path) {
-        return ContentPath.fromString(path).toPath();
+        return ContentPath.fromString(path).toPathString();
       }
 
       expect(rt('//'), '/');
@@ -81,15 +81,15 @@ void main() {
       var object = SchoolStudentPath()
         ..student.value = '124'
         ..school.value = 'the_school';
-      expect(object.toPath(), '/school/the_school/student/124');
+      expect(object.toPathString(), '/school/the_school/student/124');
 
       object = SchoolStudentPath();
-      expect(object.toPath(), '/school/*/student/*');
+      expect(object.toPathString(), '/school/*/student/*');
     });
 
     test('Path.toPath', () {
       var simple = SimplePath();
-      expect(simple.toPath(), '/section/*');
+      expect(simple.toPathString(), '/section/*');
       //simple.section.setNull();
       //expect(simple.toPath(), 'section');
       //simple.section.clear();
@@ -98,9 +98,9 @@ void main() {
       expect(simple.toPathString(), '/section/123');
 
       var object = SchoolStudentPath();
-      expect(object.toPath(), '/school/*/student/*');
+      expect(object.toPathString(), '/school/*/student/*');
       //object.student.setNull();
-      expect(object.toPath(), '/school/*/student/*');
+      expect(object.toPathString(), '/school/*/student/*');
     });
 
     test('toMap', () {
@@ -168,25 +168,25 @@ void main() {
     test('fromPath', () {
       var object = SchoolStudentPath()
         ..fromPath(ContentPath.fromString('school/the_school/student/124'));
-      expect(object.toPath(), '/school/the_school/student/124');
+      expect(object.toPathString(), '/school/the_school/student/124');
       expect(object.toString(),
           'SchoolStudentPath(/school/the_school/student/124)');
 
       object = SchoolStudentPath()
         ..fromPath(ContentPath.fromString('/school/the_school/student/124'));
-      expect(object.toPath(), '/school/the_school/student/124');
+      expect(object.toPathString(), '/school/the_school/student/124');
       expect(object.toString(),
           'SchoolStudentPath(/school/the_school/student/124)');
 
       object = SchoolStudentPath()
         ..fromPath(ContentPath.fromString('school/the_school/student'));
-      expect(object.toPath(), '/school/the_school/student');
+      expect(object.toPathString(), '/school/the_school/student');
 
       var boxCp = BoxAddObservationContentPath()
         ..fromPath(ContentPath.fromString('/category/my_cat/action'));
       expect(boxCp.categoryId.value, 'my_cat');
       expect(boxCp.action.value, '');
-      expect(boxCp.toPath(), '/category/my_cat/action');
+      expect(boxCp.toPathString(), '/category/my_cat/action');
     });
 
     test('root', () {

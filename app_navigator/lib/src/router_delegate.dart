@@ -1,10 +1,12 @@
 import 'import.dart';
 
+/// Router delegate for content navigator
 class ContentRouterDelegate extends RouterDelegate<ContentPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<ContentPath> {
   @override
   final GlobalKey<NavigatorState> navigatorKey;
 
+  /// Content navigator bloc
   final ContentNavigatorBloc cnBloc;
 
   /// Optional observers
@@ -61,30 +63,42 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
       // Handle imperative way
 
       // ignore: deprecated_member_use
-      onPopPage: (route, result) {
-        if (contentNavigatorDebug) {
-          _log('popping ${route.settings.name} result $result');
-        }
-        // test 2023-09-18
-        // if (false) {
-        try {
-          if (!route.didPop(result)) {
-            return false;
-          }
-        } catch (e, st) {
-          _log('onPopPage error $e $st');
-          // rethrow;
-        }
+      onPopPage: contentNavigatorUseOnPopPage
+          ? (route, result) {
+              if (contentNavigatorDebug) {
+                _log('popping ${route.settings.name} result $result');
+              }
+              // test 2023-09-18
+              // if (false) {
+              try {
+                if (!route.didPop(result)) {
+                  return false;
+                }
+              } catch (e, st) {
+                _log('onPopPage error $e $st');
+                // rethrow;
+              }
 
-        // if (contentNavigatorDebug) {
-        //  _log('popping2 ${route.settings.name} result $result');
-        // }
-        // ignore: invalid_use_of_protected_member
-        cnBloc.onPopPage(route, result);
-        notifyListeners();
+              // if (contentNavigatorDebug) {
+              //  _log('popping2 ${route.settings.name} result $result');
+              // }
+              // ignore: invalid_use_of_protected_member
+              cnBloc.onPopPageRoute(route, result);
+              notifyListeners();
 
-        return true;
-      },
+              return true;
+            }
+          : null,
+      onDidRemovePage: contentNavigatorUseOnPopPage
+          ? null
+          : (page) {
+              if (contentNavigatorDebug) {
+                _log('onDidRemovePage $page');
+              }
+              // ignore: invalid_use_of_protected_member
+              cnBloc.onDidRemovePage(page);
+              notifyListeners();
+            },
       observers: observers ?? <NavigatorObserver>[],
     );
   }

@@ -2,6 +2,7 @@ import 'package:path/path.dart' as p;
 
 import 'import.dart';
 
+/// Content path base class.
 abstract class ContentPathBase with PathMixin {}
 
 /// Like firestore type/id/type/id in url format for url reference.
@@ -11,6 +12,7 @@ abstract class ContentPathBase with PathMixin {}
 ///
 /// root is / (or empty string)
 abstract class ContentPath {
+  /// The separator used in the path
   static var separator = p.url.separator;
 
   /// Field accessor
@@ -24,6 +26,7 @@ abstract class ContentPath {
   /// Direct constructor
   factory ContentPath(List<ContentPathField> fields) => _ContentPath(fields);
 
+  /// Copy from a path
   void fromPath(ContentPath path);
 
   /// to a path as string path.
@@ -42,22 +45,26 @@ abstract class ContentPath {
   ContentPathField? field(String? name);
 }
 
+/// Extension to help with content path
 extension ContentPathExt on ContentPath {
   /// Helper to match a string path directly
   bool matchesString(String path) {
     return matchesPath(ContentPath.fromString(path));
   }
 
+  /// Helper to match a string path directly
+  @Deprecated('Use toPathString instead')
   String toPath() => toPathString();
 }
 
+/// A field in a content path.
 mixin PathMixin implements ContentPath {
   @override
   String toPathString() {
     var sb = StringBuffer();
     for (var field in fields) {
       sb.write(ContentPath.separator);
-      sb.write(field.toPath());
+      sb.write(field.toPathStringPart());
     }
     if (sb.isEmpty) {
       return ContentPath.separator;
@@ -127,24 +134,16 @@ mixin PathMixin implements ContentPath {
       fields.firstWhereOrNull((field) => field.name == name);
 
   @override
-  String toString() => '$runtimeType(${toPath()})';
+  String toString() => '$runtimeType(${toPathString()})';
 }
-
-@Deprecated('Not supported anymore')
-final homeContentPath = HomeContentPath();
 
 /// root content path.
-final rootContentPath = RootContentPath();
+final ContentPath rootContentPath = RootContentPath();
 
 /// Root content path '/'
-final rootContentPathString = rootContentPath.toPath();
+final rootContentPathString = rootContentPath.toPathString();
 
-// To deprecate, use RootContentPath instead
-class HomeContentPath extends ContentPathBase {
-  @override
-  List<ContentPathField> get fields => const <ContentPathField>[];
-}
-
+/// Root content path.
 class RootContentPath extends ContentPathBase {
   @override
   List<ContentPathField> get fields => const <ContentPathField>[];
@@ -197,5 +196,5 @@ class _PathFromPath with PathMixin implements ContentPath {
   }
 
   @override
-  String toString() => toPath();
+  String toString() => toPathString();
 }

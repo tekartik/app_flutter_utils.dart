@@ -11,12 +11,6 @@ void main() {
           ContentPathField('name', '1'), isNot(ContentPathField('name', '2')));
       expect(ContentPathField('name'), isNot(ContentPathField('name2')));
       expect(ContentPathField('name'), isNot(ContentPathField('name', '1')));
-      try {
-        ContentPathField(null);
-        fail('should fail');
-      } catch (e) {
-        expect(e, isNot(const TypeMatcher<TestFailure>()));
-      }
     });
 
     test('fromField', () {

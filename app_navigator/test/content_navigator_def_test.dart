@@ -1,5 +1,6 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
-import 'package:test/test.dart';
 
 class StartContentPath extends ContentPathBase {
   final start = ContentPathPart('start');
@@ -9,7 +10,8 @@ class StartContentPath extends ContentPathBase {
 }
 
 void main() {
-  var startDef = ContentPageDef(path: StartContentPath(), screenBuilder: null);
+  var startDef = ContentPageDef(
+      path: StartContentPath(), screenBuilder: (_) => Container());
 
   group('ContentNavigatorDef', () {
     test('find', () {

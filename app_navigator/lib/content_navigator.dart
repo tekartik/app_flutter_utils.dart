@@ -4,24 +4,20 @@ export 'src/content_navigator.dart'
         ContentNavigatorBloc,
         ContentNavigatorBlocExt,
         ContentNavigatorDef,
-        contentNavigatorDebug;
-export 'src/content_page.dart'
-    show ContentPageDef, ContentPageBuilder, ContentScreenBuilder;
+        contentNavigatorDebug,
+        contentNavigatorUseOnPopPage;
+export 'src/content_page.dart' show ContentPageDef, ContentScreenBuilder;
 export 'src/content_path.dart'
     show
         ContentPath,
         ContentPathExt,
         ContentPathBase,
-        HomeContentPath,
-        // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-        homeContentPath,
         rootContentPath,
         rootContentPathString;
 export 'src/content_path_field.dart' show ContentPathField;
 export 'src/content_path_part.dart' show ContentPathPart;
 export 'src/content_path_route_settings.dart'
     show
-        ContentRoutePath, // ignore: deprecated_member_use_from_same_package, deprecated_member_use
         ContentPathRouteSettings,
         ContentPathRouteSettingsExt,
         ContentPathRouteExt;

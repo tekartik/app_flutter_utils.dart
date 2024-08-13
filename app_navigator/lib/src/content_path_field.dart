@@ -5,7 +5,8 @@ const _part = '';
 ///
 /// value '*' is a wildcard value (translated to null), value '' is a simple part without value
 class ContentPathField {
-  final String? name;
+  /// The field name
+  final String name;
 
   /// The field value, null for any
   String? get value => _value;
@@ -21,10 +22,9 @@ class ContentPathField {
     _value = value;
   }
 
+  /// Create a field with a name and an optional value
   ContentPathField(this.name, [String? value])
-      : _value = value == _wildcard ? null : value {
-    assert(name != null, 'ContentPathField name cannot be null');
-  }
+      : _value = value == _wildcard ? null : value;
 
   @override
   int get hashCode => super.hashCode + (value?.hashCode ?? 0);
@@ -65,7 +65,8 @@ class ContentPathField {
   @override
   String toString() => '$name:$value';
 
-  String? toPath() {
+  /// Field to path string part
+  String toPathStringPart() {
     if (value == null) {
       return '$name/$_wildcard';
     } else if (value == _part) {
@@ -76,9 +77,11 @@ class ContentPathField {
   }
 }
 
+/// content path list extension
 extension ContentFieldListExt on List<ContentPathField> {
-  Map<String?, String?> toStringMap() {
-    var map = <String?, String?>{};
+  /// Convert to a map
+  Map<String, String?> toStringMap() {
+    var map = <String, String?>{};
     forEach((field) {
       map[field.name] = field.value;
     });

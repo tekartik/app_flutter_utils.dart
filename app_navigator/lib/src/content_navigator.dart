@@ -4,14 +4,11 @@ import 'package:tekartik_app_navigator_flutter/src/route_aware.dart';
 
 import 'import.dart';
 
-/// Should be true
-// false to use the old way
-/// The new Navigator 2.0 way
-@Deprecated('do not use')
-bool contentNavigatorUseDeclarative =
-    true; // devWarning(false); // true; // devWarning(false);
+/// Should be false in the future
+/// The pre flutter 3.24 way
+var contentNavigatorUseOnPopPage = false;
 
-// To set to true for internal debugging and heavy logs
+/// To set to true for internal debugging and heavy logs
 var contentNavigatorDebug = false; // devWarning(true);
 
 class _ContentPageInStack {
@@ -34,9 +31,9 @@ class _ContentPageInStack {
   /// Build for navigator
   Page build() {
     // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-    var page = def!.builder!(rs);
+    var page = def!.builder(rs);
     // Name and arguments must match
-    assert(page.name == rs.path.toPath(),
+    assert(page.name == rs.path.toPathString(),
         'name of page must match the content path');
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
@@ -49,11 +46,15 @@ class _ContentPageInStack {
 
 /// Main content navigator bloc
 class ContentNavigatorBloc extends BaseBloc {
+  /// Content navigator object
   final ContentNavigator? contentNavigator;
   ContentRouteInformationParser? _routeInformationParser;
   ContentRouterDelegate? _routerDelegate;
+
+  /// Custom transition delegate
   TransitionDelegate transitionDelegate;
 
+  /// Route aware manager
   ContentNavigatorBloc(
       {this.contentNavigator,
       this.transitionDelegate = const DefaultTransitionDelegate()});
@@ -61,6 +62,11 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Router delegate for MaterialApp.router
   ContentRouterDelegate get routerDelegate =>
       _routerDelegate ??= ContentRouterDelegate(this);
+
+  /// Convenient router config for MaterialApp.router
+  RouterConfig<ContentPath> get routerConfig => RouterConfig(
+      routerDelegate: routerDelegate,
+      routeInformationParser: routeInformationParser);
 
   /// RouteInformationParser for MaterialApp.router
   ContentRouteInformationParser get routeInformationParser =>
@@ -81,7 +87,7 @@ class ContentNavigatorBloc extends BaseBloc {
   TransitionDelegate? get currentTransitionDelegate =>
       _currentPageInStack?.transitionDelegate;
 
-  // Current pages
+  /// Current pages
   Iterable<Page> get currentPages {
     if (_stack.isEmpty) {
       // Create a root if needed
@@ -101,6 +107,7 @@ class ContentNavigatorBloc extends BaseBloc {
   _ContentPageInStack? get _currentPageInStack =>
       _stack.isEmpty ? null : _stack.last;
 
+  /// Current route path.
   ContentPathRouteSettings? get currentRoutePath => _currentPageInStack?.rs;
 
   /// Current path.
@@ -110,24 +117,6 @@ class ContentNavigatorBloc extends BaseBloc {
     var item = _stack[index];
     item.dispose();
     _stack.removeAt(index);
-  }
-
-  /// Old mechanism simulation
-  Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    // devPrint('using old onGenerateRoute for $settings');
-    //var info = routeInformationParser.parseRouteInformationSync(
-    //    RouteInformation(location: settings.name, state: settings.arguments));
-    var path = settings.name!;
-    var arguments = settings.arguments;
-    var contentPath = ContentPath.fromString(path);
-    if (contentNavigatorDebug) {
-      _log('onGenerateRoute($settings) => $contentPath');
-    }
-    var pageDef = contentNavigator!.def.findPageDef(contentPath);
-
-    var rs = ContentPathRouteSettings(contentPath, arguments);
-
-    return MaterialPageRoute(builder: (context) => pageDef!.screenBuilder!(rs));
   }
 
   void _notifyNavigatorChanges() {
@@ -283,9 +272,6 @@ class ContentNavigatorBloc extends BaseBloc {
     return index;
   }
 
-  @Deprecated('Not supported anymore')
-  void popUntil(int index) => transientPopUntil(index);
-
   /// Remove all route until index is reached from the top
   ///
   /// -1 does nothing
@@ -298,9 +284,6 @@ class ContentNavigatorBloc extends BaseBloc {
       }
     }
   }
-
-  @Deprecated('Not supported anymore')
-  void popAll() => transientPopAll();
 
   /// Remove all route until index is reached from the top
   ///
@@ -321,21 +304,8 @@ class ContentNavigatorBloc extends BaseBloc {
       _stack.isEmpty ? 'ContentNavigator(empty)' : 'CN(${_stack.last.rs.path})';
 
   @protected
-  bool onPopPage(Route route, Object? result) {
-    // pop if found
-    var contentPath = ContentPath.fromString(route.settings.name!);
-    // Find in stack, if found remove
-    for (var i = _stack.length - 1; i >= 0; i--) {
-      var item = _stack[i];
-      if (item.rs.path == contentPath) {
-        transientPopItem(i, result);
-        return true;
-      }
-    }
-    return false;
-  }
 
-  @protected
+  /// Transient pop item
   void transientPopItem(int index, Object? result) {
     var item = _stack[index];
     if (!item.completer.isCompleted) {
@@ -370,11 +340,11 @@ class ContentNavigatorBloc extends BaseBloc {
     }*/
     var rs = ContentPathRouteSettings(path);
     // devPrint('setNewRoutePath($crp)');
-    var absPath = path.toPath();
+    var absPath = path.toPathString();
 
     // devPrint('looking for $absPath in $_stack');
     var index =
-        lastIndexWhere((routePath) => routePath.path.toPath() == absPath);
+        lastIndexWhere((routePath) => routePath.path.toPathString() == absPath);
     if (index != -1) {
       // print('found and reuse $index');
       transientPopUntil(index);
@@ -397,6 +367,7 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 }
 
+/// Bloc provider extension
 extension ContentNavigatorBlocExt on ContentNavigatorBloc {
   /// Push a path.
   Future<T?> pushPath<T>(ContentPath path,
@@ -408,8 +379,10 @@ extension ContentNavigatorBlocExt on ContentNavigatorBloc {
 
 /// global object
 class ContentNavigatorDef {
+  /// List of content page definitions
   final List<ContentPageDef> defs;
 
+  /// Content navigator definition
   ContentNavigatorDef({required this.defs}) {
     // devPrint('defs: ${defs.map((def) => def.path)}');
     // Check defs
@@ -426,6 +399,7 @@ class ContentNavigatorDef {
     }
   }
 
+  /// Find a page definition
   ContentPageDef? findPageDef(ContentPath? path) {
     if (path != null) {
       // TODO optimize in a map by parts
@@ -444,7 +418,10 @@ class ContentNavigatorDef {
 
 /// Content navigator top object.
 class ContentNavigator extends StatefulWidget {
+  /// The content navigator definition
   final ContentNavigatorDef def;
+
+  /// The child widget
   final Widget? child;
 
   /// Optional observers
@@ -454,6 +431,7 @@ class ContentNavigator extends StatefulWidget {
   static ContentNavigatorBloc of(BuildContext context) =>
       BlocProvider.of<ContentNavigatorBloc>(context);
 
+  /// Content navigator
   const ContentNavigator(
       {super.key, required this.def, this.child, this.observers});
 
@@ -461,9 +439,41 @@ class ContentNavigator extends StatefulWidget {
   State<ContentNavigator> createState() => _ContentNavigatorState();
 
   /// Push a path setting.
-  static Future<T?> push<T>(
-      BuildContext context, ContentPathRouteSettings rs) async {
-    return await ContentNavigator.of(context).push<T>(rs);
+  static Future<T?> push<T>(BuildContext context, ContentPathRouteSettings rs,
+      {TransitionDelegate? transitionDelegate}) async {
+    return await ContentNavigator.of(context)
+        .push<T>(rs, transitionDelegate: transitionDelegate);
+  }
+
+  /// Push a replacement path setting.
+  static Future<T?> pushReplacement<T>(
+      BuildContext context, ContentPathRouteSettings rs,
+      {
+      /// current pop result
+      Object? result,
+      TransitionDelegate? transitionDelegate}) {
+    var cn = ContentNavigator.of(context);
+    cn.transientPop(context, result);
+    return cn.push<T>(rs, transitionDelegate: transitionDelegate);
+  }
+
+  /// Push a path.
+  static Future<T?> pushPath<T>(BuildContext context, ContentPath contentPath,
+      {Object? arguments, TransitionDelegate? transitionDelegate}) {
+    return push(context, contentPath.routeSettings(arguments),
+        transitionDelegate: transitionDelegate);
+  }
+
+  /// Push a replacement path.
+  static Future<T?> pushReplacementPath<T>(
+      BuildContext context, ContentPath contentPath,
+      {Object? arguments,
+
+      /// Current pop result
+      Object? result,
+      TransitionDelegate? transitionDelegate}) {
+    return pushReplacement(context, contentPath.routeSettings(arguments),
+        result: result, transitionDelegate: transitionDelegate);
   }
 
   /// Do not trigger onResume()...WIP
@@ -481,6 +491,68 @@ class ContentNavigator extends StatefulWidget {
   /// Do not trigger onResume()...WIP
   static void transientPopUntilPath(BuildContext context, ContentPath path) {
     ContentNavigator.of(context).transientPopUntilPath(context, path);
+  }
+}
+
+/// Bloc provider extension (private)
+extension ContentNavigatorBlocPrvExt on ContentNavigatorBloc {
+  /// Find the index of a content path in the stack
+  int? _findContentPathIndex(ContentPath contentPath) {
+    for (var i = _stack.length - 1; i >= 0; i--) {
+      var item = _stack[i];
+      if (item.rs.path == contentPath) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  /// Transient pop item
+  void _setPopResult(int index, Object? result) {
+    var item = _stack[index];
+    if (!item.completer.isCompleted) {
+      item.completer.complete(result);
+    }
+  }
+
+  /// On pop page
+  bool onPopPageRoute(Route route, Object? result) {
+    var name = route.settings.name;
+    return _onPopPageName(name, result);
+  }
+
+  /// On pop page
+  bool _onPopPageName(String? name, [Object? result]) {
+    if (name == null) {
+      return false;
+    }
+    // pop if found
+    var contentPath = ContentPath.fromString(name);
+    return _onPopContentPath(contentPath, result);
+  }
+
+  bool _onPopContentPath(ContentPath contentPath, Object? result) {
+    // Find in stack, if found remove
+    var i = _findContentPathIndex(contentPath);
+    if (i != null) {
+      transientPopItem(i, result);
+      return true;
+    }
+    return false;
+  }
+
+  /// On pop page
+  bool onDidRemovePage(Page page) {
+    var name = page.name;
+    return _onPopPageName(name);
+  }
+
+  /// Pop a context path.
+  void onPopInvoked(ContentPath contentPath, Object? result) {
+    var i = _findContentPathIndex(contentPath);
+    if (i != null) {
+      _setPopResult(i, result);
+    }
   }
 }
 

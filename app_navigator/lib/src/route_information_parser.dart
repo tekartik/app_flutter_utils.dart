@@ -1,9 +1,12 @@
 import 'import.dart';
 
+/// Route information parser for content navigator
 class ContentRouteInformationParser
     extends RouteInformationParser<ContentPath> {
+  /// Content navigator bloc
   final ContentNavigatorBloc cnBloc;
 
+  /// Constructor
   ContentRouteInformationParser(this.cnBloc);
 
   @override
@@ -17,6 +20,21 @@ class ContentRouteInformationParser
     print('/cnip $message');
   }
 
+  @override
+  RouteInformation restoreRouteInformation(ContentPath? configuration) {
+    // devPrint('restore: ${path}');
+    // Convert the current path to a displayable string
+    if (configuration is ContentPath) {
+      var location = configuration.toPathString();
+      return RouteInformation(uri: Uri.parse(location));
+    }
+    return RouteInformation(uri: Uri.parse('/?'));
+  }
+}
+
+/// Private extension
+extension ContentRouteInformationParserPrvExt on ContentRouteInformationParser {
+  /// Parse a route information to generate a known content path
   ContentPath parseAnyRouteInformationSync(RouteInformation routeInformation) {
     final uri = routeInformation.uri;
 
@@ -44,16 +62,5 @@ class ContentRouteInformationParser
       _log('/cnip:  !!!parseRouteInformation nothing found!');
     }
     throw StateError('invalid path: ${routeInformation.uri}');
-  }
-
-  @override
-  RouteInformation restoreRouteInformation(ContentPath? configuration) {
-    // devPrint('restore: ${path}');
-    // Convert the current path to a displayable string
-    if (configuration is ContentPath) {
-      var location = configuration.toPath();
-      return RouteInformation(uri: Uri.parse(location));
-    }
-    return RouteInformation(uri: Uri.parse('/?'));
   }
 }
