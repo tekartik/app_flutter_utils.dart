@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 /// No animation delegate.
 class NoAnimationTransitionDelegate extends TransitionDelegate<void> {
+  /// No animation delegate.
+  const NoAnimationTransitionDelegate();
   @override
   Iterable<RouteTransitionRecord> resolve({
     required List<RouteTransitionRecord> newPageRouteHistory,
