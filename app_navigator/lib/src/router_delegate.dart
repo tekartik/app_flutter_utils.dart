@@ -97,7 +97,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
               }
               // ignore: invalid_use_of_protected_member
               cnBloc.onDidRemovePage(page);
-              notifyListeners();
+              scheduleMicrotask(() => notifyListeners());
             },
       observers: observers ?? <NavigatorObserver>[],
     );
