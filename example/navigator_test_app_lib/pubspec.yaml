@@ -25,6 +25,12 @@ dependencies:
       ref: dart3a
       path: test_menu_flutter
     version: '>=0.2.3'
+  tekartik_app_flutter_widget:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_widget
+    version: '>=0.2.1'
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +38,8 @@ dev_dependencies:
 
 
 dependency_overrides:
+  tekartik_app_flutter_widget:
+    path: ../../app_widget
   tekartik_app_navigator_flutter:
     path: ../../app_navigator
 flutter:
