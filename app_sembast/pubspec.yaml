@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sembast: '>=3.0.0+2'
-  sembast_web: '>=2.0.0'
+  sembast: '>=3.7.4+2'
+  sembast_web: '>=2.4.0+3'
   sembast_sqflite: '>=2.0.0'
   path_provider:
   path:

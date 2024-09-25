@@ -1,5 +1,3 @@
-import 'package:tekartik_app_flutter_firebase/firebase.dart';
-
 import 'storage.dart';
 
 extension AppFirebaseStorageBucketExt on Bucket {
