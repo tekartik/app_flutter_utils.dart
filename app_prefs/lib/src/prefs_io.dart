@@ -6,8 +6,6 @@ import 'package:sembast/sembast_io.dart';
 import 'package:tekartik_prefs_flutter/prefs.dart';
 import 'package:tekartik_prefs_sembast/prefs.dart';
 
-import 'import.dart';
-
 PrefsFactory get prefsFactory => prefsFactoryFlutter;
 
 final _prefsFactoryMap = <String?, PrefsFactory>{};
