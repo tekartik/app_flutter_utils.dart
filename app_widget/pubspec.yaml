@@ -27,7 +27,6 @@ dev_dependencies:
     sdk: flutter
   process_run:
 
-
 dependency_overrides:
   tekartik_app_flutter_common_utils:
     path: ../app_common
