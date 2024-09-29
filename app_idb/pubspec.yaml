@@ -32,6 +32,7 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
 
+  sqflite_common_ffi: any
 dependency_overrides:
   tekartik_app_flutter_sqflite:
     path: ../app_sqflite

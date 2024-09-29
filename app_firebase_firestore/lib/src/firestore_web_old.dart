@@ -1,5 +1,5 @@
 @Deprecated('User authServiceFlutter instead')
-library tekartik_firebase_firestore_web_deprecated;
+library;
 
 import 'package:tekartik_firebase_firestore_browser/firestore_browser.dart';
 

@@ -1,4 +1,4 @@
-library delayed_display;
+library;
 
 import 'dart:async';
 

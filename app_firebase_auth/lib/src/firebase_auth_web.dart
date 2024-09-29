@@ -1,6 +1,6 @@
 // ignore: provide_deprecation_message
 @Deprecated('No more updated, please remove')
-library tekartik_firebase_auth_web_deprecated;
+library;
 
 import 'package:tekartik_firebase_auth_flutter/auth_flutter.dart';
 

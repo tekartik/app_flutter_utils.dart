@@ -27,6 +27,10 @@ dev_dependencies:
     sdk: flutter
   process_run:
 
+  tekartik_common_utils:
+    git:
+      url: https://github.com/tekartik/common_utils.dart
+      ref: dart3a
 dependency_overrides:
   tekartik_app_flutter_common_utils:
     path: ../app_common
