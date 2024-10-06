@@ -57,7 +57,12 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Route aware manager
   ContentNavigatorBloc(
       {this.contentNavigator,
-      this.transitionDelegate = const DefaultTransitionDelegate()});
+      this.transitionDelegate = const DefaultTransitionDelegate()}) {
+    /// Check here in debug
+    if (isDebug) {
+      contentNavigator?.def._check();
+    }
+  }
 
   /// Router delegate for MaterialApp.router
   ContentRouterDelegate get routerDelegate =>
@@ -383,19 +388,20 @@ class ContentNavigatorDef {
   final List<ContentPageDef> defs;
 
   /// Content navigator definition
-  ContentNavigatorDef({required this.defs}) {
+  const ContentNavigatorDef({required this.defs});
+
+  void _check() {
     // devPrint('defs: ${defs.map((def) => def.path)}');
     // Check defs
-    if (isDebug) {
-      var defSet = <ContentPath?>{};
-      for (var def in defs) {
-        var path = def.path;
-        for (var existing in defSet) {
-          assert(!path.matchesPath(existing),
-              '$def already exists in ${defs.map((def) => def.path)}');
-        }
-        defSet.add(path);
+
+    var defSet = <ContentPath?>{};
+    for (var def in defs) {
+      var path = def.path;
+      for (var existing in defSet) {
+        assert(!path.matchesPath(existing),
+            'ContentNavigator page definition $def already exists ($existing)');
       }
+      defSet.add(path);
     }
   }
 

@@ -19,7 +19,7 @@ Future<void> _pushPage1(BuildContext context) async {
   await muiSnack(muiBuildContext, 'push Page 1 result: $result');
 }
 
-var pageStartDef = ContentPageDef(
+final pageStartDef = ContentPageDef(
     path: rootContentPath,
     screenBuilder: (_) {
       return muiScreenWidget('Start', () {
@@ -28,7 +28,7 @@ var pageStartDef = ContentPageDef(
         });
       });
     });
-var page1Def = ContentPageDef(
+final page1Def = ContentPageDef(
     path: Page1ContentPath(),
     screenBuilder: (_) {
       return muiScreenWidget('Page 1', () {
@@ -81,7 +81,7 @@ class Page2ContentPath extends ContentPathBase {
   List<ContentPathField> get fields => [part];
 }
 
-var contentNavigatorDef =
+final contentNavigatorDef =
     ContentNavigatorDef(defs: [pageStartDef, page1Def, page2Def]);
 void runAppWithNavigator() {
   runApp(ContentNavigator(
