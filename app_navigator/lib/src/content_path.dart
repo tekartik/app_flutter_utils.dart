@@ -55,6 +55,16 @@ extension ContentPathExt on ContentPath {
   /// Helper to match a string path directly
   @Deprecated('Use toPathString instead')
   String toPath() => toPathString();
+
+  /// Check if the path is valid and can be pushed
+  bool isValid() {
+    for (var field in fields) {
+      if (!field.isValid()) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 /// A field in a content path.

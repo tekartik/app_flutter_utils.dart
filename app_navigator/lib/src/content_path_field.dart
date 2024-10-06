@@ -24,7 +24,9 @@ class ContentPathField {
 
   /// Create a field with a name and an optional value
   ContentPathField(this.name, [String? value])
-      : _value = value == _wildcard ? null : value;
+      : _value = value == _wildcard ? null : value {
+    assert(name.isNotEmpty, 'name cannot be empty');
+  }
 
   @override
   int get hashCode => super.hashCode + (value?.hashCode ?? 0);
@@ -74,6 +76,11 @@ class ContentPathField {
     } else {
       return '$name/$value';
     }
+  }
+
+  /// Check if the field is valid
+  bool isValid() {
+    return value != null && value != _wildcard;
   }
 }
 

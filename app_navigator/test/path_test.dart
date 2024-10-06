@@ -197,6 +197,10 @@ void main() {
       expect(rootContentPath.matchesString('a'), isFalse);
       expect(rootContentPath.matchesString('/a'), isFalse);
     });
+    test('isValid', () {
+      expect(SubPath().isValid(), isFalse);
+      expect((SubPath()..base.value = '123').isValid(), isTrue);
+    });
   });
 }
 

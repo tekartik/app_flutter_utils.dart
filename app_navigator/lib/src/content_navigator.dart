@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 import 'package:tekartik_app_navigator_flutter/route_aware.dart' as route_aware;
 import 'package:tekartik_app_navigator_flutter/src/route_aware.dart';
@@ -377,6 +378,11 @@ extension ContentNavigatorBlocExt on ContentNavigatorBloc {
   /// Push a path.
   Future<T?> pushPath<T>(ContentPath path,
       {Object? arguments, TransitionDelegate? transitionDelegate}) {
+    if (kDebugMode) {
+      if (!path.isValid()) {
+        throw ArgumentError('Invalid path', path.toString());
+      }
+    }
     return push<T>(path.routeSettings(arguments),
         transitionDelegate: transitionDelegate);
   }

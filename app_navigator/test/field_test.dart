@@ -51,5 +51,13 @@ void main() {
       expect(field.value, 'my_value');
       expect(field.name, 'my_name');
     });
+    test('isValid', () {
+      var field = ContentPathField('my_name');
+      expect(field.isValid(), isFalse);
+      field.value = 'my_value';
+      expect(field.isValid(), isTrue);
+      var part = ContentPathPart('my_name');
+      expect(part.isValid(), isTrue);
+    });
   });
 }
