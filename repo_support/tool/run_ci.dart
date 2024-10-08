@@ -7,6 +7,7 @@ Future main() async {
     'app_firebase_storage',
     'app_widget',
     'app_bloc',
+    'app_rx_bloc',
     'app_fs',
     'test_app',
     'app_emit_builder',
