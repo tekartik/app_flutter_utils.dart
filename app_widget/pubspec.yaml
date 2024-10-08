@@ -16,6 +16,11 @@ dependencies:
       ref: dart3a
       path: app_common
     version: '>=0.1.0'
+  tekartik_app_rx_bloc_flutter:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_rx_bloc
   tekartik_app_rx_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
@@ -34,7 +39,12 @@ dev_dependencies:
 dependency_overrides:
   tekartik_app_flutter_common_utils:
     path: ../app_common
-
+  tekartik_app_rx_bloc_flutter:
+    path: ../app_rx_bloc
+  tekartik_app_flutter_bloc:
+    path: ../app_bloc
+  tekartik_app_rx_utils:
+    path: ../app_rx_utils
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

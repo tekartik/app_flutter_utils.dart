@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:tekartik_app_rx_bloc_flutter/app_rx_flutter.dart';
 
 class BusyActionResult<T> {
   final T? result;
@@ -14,8 +14,30 @@ class BusyActionResult<T> {
   });
 }
 
-mixin BusyScreenStateMixin<T extends StatefulWidget> on State<T> {
+/// Busy screen state
+abstract class BusyScreenState<T extends StatefulWidget> implements State<T> {
+  BehaviorSubject<bool> get _busySubject;
+}
+
+/// Auto disposed busy screen state mixin
+mixin AutoDisposedBusyScreenStateMixin<T extends StatefulWidget> on State<T>
+    implements BusyScreenState<T>, AutoDispose {
+  @override
+  late final _busySubject =
+      audiAddBehaviorSubject(BehaviorSubject<bool>.seeded(false));
+}
+
+/// Busy screen state mixin
+mixin BusyScreenStateMixin<T extends StatefulWidget> on State<T>
+    implements BusyScreenState<T> {
+  @override
   final _busySubject = BehaviorSubject<bool>.seeded(false);
+}
+
+/// Busy screen state mixin extension
+extension BusyScreenStateMixinExtension<T extends StatefulWidget>
+    on BusyScreenState<T> {
+  Sink<bool> get busySink => _busySubject.sink;
   ValueStream<bool> get busyStream => _busySubject.stream;
 
   bool get busy => _busySubject.value;
