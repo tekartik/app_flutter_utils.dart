@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A simple dialog button
 class DialogButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
