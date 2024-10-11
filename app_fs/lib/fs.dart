@@ -13,8 +13,10 @@ export 'package:fs_shim/fs_shim.dart';
 /// For testing you can use an in memory implementation for idb_shim.
 FileSystem get fs => src.fs;
 
+/// The memory file system to use for your flutter application.
 FileSystem fsMemory = newFileSystemMemory();
 
+/// path provider file system extension
 extension AppFileSystem on FileSystem {
   /// Path to a directory where the application may place data that is
   /// user-generated, or that cannot otherwise be recreated by your application.
@@ -27,6 +29,8 @@ extension AppFileSystem on FileSystem {
   /// to the user.
   ///
   /// On the web, it is the data root directory
+  ///
+  /// [packageName] only used on linux and windows for now
   Future<Directory> getApplicationDocumentsDirectory(
       {String? packageName}) async {
     if (this == fs) {

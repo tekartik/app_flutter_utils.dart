@@ -6,6 +6,7 @@ FileSystem get fs => _stub('fs');
 /// Get the application file system
 FileSystem get testFs => _stub('testFs');
 
+/// Get the application file system
 Future<Directory> getApplicationDocumentsDirectory({String? packageName}) =>
     _stub('getApplicationDocumentsDirectory');
 
