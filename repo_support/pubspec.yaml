@@ -7,20 +7,26 @@ environment:
   sdk: ^3.5.0
 
 dev_dependencies:
-  path:
-  pub_semver:
-  process_run: '>=0.10.3'
+  path: ">=1.9.0"
+  pub_semver: ">=2.1.4"
+  process_run: ">=1.2.1+1"
   tekartik_build_utils:
     git:
       url: https://github.com/tekartik/build_utils.dart
       ref: dart3a
     version: '>=0.7.8'
 
-  test:
-  dev_build:
+  test: ">=1.24.0"
+  dev_build: ">=1.1.0+1"
   tekartik_lints:
     git:
       url: https://github.com/tekartik/common.dart
       ref: dart3a
       path: packages/lints
     version: '>=0.1.0'
+dependencies:
+  tekartik_ci:
+    git:
+      url: https://github.com/tekartik/ci.dart
+      ref: dart3a
+      path: ci

@@ -8,7 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  path:
+  path: ">=1.9.0"
   flutter:
     sdk: flutter
   tekartik_app_intl:
@@ -20,7 +20,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: '>=1.0.0'
+  flutter_lints: ">=5.0.0"
 
 # tmp
 dependency_overrides:

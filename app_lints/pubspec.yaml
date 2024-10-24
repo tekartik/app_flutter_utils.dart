@@ -15,6 +15,6 @@ dependencies:
     version: '>=0.1.0'
 
 dev_dependencies:
-  test: '>=1.16.0'
-  path:
-  yaml:
+  test: ">=1.24.0"
+  path: ">=1.9.0"
+  yaml: ">=3.1.2"

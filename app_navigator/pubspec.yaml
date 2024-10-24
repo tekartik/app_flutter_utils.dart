@@ -16,12 +16,12 @@ dependencies:
       ref: dart3a
       path: app_bloc
     version: '>=0.2.2'
-  collection: '>=1.15.0-nullsafety.4'
-  path:
+  collection: ">=1.18.0"
+  path: ">=1.9.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  test:
+  test: ">=1.24.0"
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart

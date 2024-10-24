@@ -7,16 +7,19 @@ import 'package:web/web.dart' as web;
 
 var _useFixLoop = true;
 var _debugCursor = false;
+
+/// Hide the cursor
 Future<void> hideCursor() async {
   await _flutterCursorWeb.hide();
 }
 
+/// Show the cursor
 Future<void> showCursor() async {
   await _flutterCursorWeb.show();
 }
 
-class FlutterCursorWeb {
-  FlutterCursorWeb() {
+class _FlutterCursorWeb {
+  _FlutterCursorWeb() {
     if (_useFixLoop) {
       _fix();
     }
@@ -82,4 +85,4 @@ class FlutterCursorWeb {
   }
 }
 
-final _flutterCursorWeb = FlutterCursorWeb();
+final _flutterCursorWeb = _FlutterCursorWeb();

@@ -22,7 +22,7 @@ dependencies:
   sqflite_common_ffi_web: '>=0.4.5+1'
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: '>=1.0.0'
+  cupertino_icons: ">=1.0.8"
   tekartik_prefs_test_app_lib:
     path: ../prefs_test_app_lib
   tekartik_idb_test_app_lib:
@@ -62,15 +62,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dev_build:
-  path:
+  dev_build: ">=1.1.0+1"
+  path: ">=1.9.0"
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
       ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
-  process_run:
+  process_run: ">=1.2.1+1"
 dependency_overrides:
   tekartik_app_prefs:
     path: ../../app_prefs
