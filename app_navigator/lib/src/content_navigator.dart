@@ -504,6 +504,11 @@ class ContentNavigator extends StatefulWidget {
     ContentNavigator.of(context).popUntilPathOrPush(context, path);
   }
 
+  /// Pop to root screen
+  static void popToRoot(BuildContext context) {
+    popUntilPathOrPush(context, rootContentPath);
+  }
+
   /// Pop until a matching path
   /// Do not trigger onResume()...WIP
   static void transientPopUntilPath(BuildContext context, ContentPath path) {
