@@ -182,6 +182,11 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
+  /// Pop to root screen
+  void popToRoot(BuildContext context) {
+    popUntilPathOrPush(context, rootContentPath);
+  }
+
   /// Returns true if found
   void transientPopUntilPath(BuildContext context, ContentPath path) {
     if (_routeAwareManager != null) {
