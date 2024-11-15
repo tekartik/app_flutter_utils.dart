@@ -6,11 +6,13 @@ class BusyActionResult<T> {
   // true if result or error is filled, not done if busy
   final bool busy;
   final Object? error;
+  final StackTrace? errorStackTrace;
 
   BusyActionResult({
     this.busy = false,
     this.result,
     this.error,
+    this.errorStackTrace,
   });
 }
 
@@ -51,8 +53,8 @@ extension BusyScreenStateMixinExtension<T extends StatefulWidget>
     try {
       var result = await action();
       return BusyActionResult(result: result, busy: false);
-    } catch (e) {
-      return BusyActionResult(error: e, busy: false);
+    } catch (e, st) {
+      return BusyActionResult(error: e, errorStackTrace: st, busy: false);
     } finally {
       if (mounted) {
         _busySubject.add(false);
