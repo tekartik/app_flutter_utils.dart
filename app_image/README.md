@@ -1,0 +1,17 @@
+# tekartik_app_image_flutter
+
+Image utilities
+
+## Getting Started
+
+### Setup
+
+```yaml
+dependencies:
+  tekartik_app_image_flutter:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart3a
+      path: app_image
+    version: '>=0.1.0'
+```

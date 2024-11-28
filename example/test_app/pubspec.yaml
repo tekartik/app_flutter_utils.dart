@@ -47,6 +47,9 @@ dependencies:
     path: ../common_web_test_app_lib
   tekartik_navigator_test_app_lib:
     path: ../navigator_test_app_lib
+  tekartik_image_test_app_lib:
+    path: ../image_test_app_lib
+
   tekartik_app_flutter_common_web_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
@@ -96,7 +99,8 @@ dependency_overrides:
     path: ../../app_common_web
   tekartik_app_navigator_flutter:
     path: ../../app_navigator
-
+  tekartik_app_image_flutter:
+    path: ../../app_image
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
