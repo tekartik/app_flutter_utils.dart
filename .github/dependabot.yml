@@ -46,6 +46,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "pub"
+    directory: "app_image"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
     directory: "app_intl"
     schedule:
       interval: "monthly"
@@ -71,6 +75,10 @@ updates:
       interval: "monthly"
   - package-ecosystem: "pub"
     directory: "app_roboto"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "app_rx_bloc"
     schedule:
       interval: "monthly"
   - package-ecosystem: "pub"
@@ -107,6 +115,14 @@ updates:
       interval: "monthly"
   - package-ecosystem: "pub"
     directory: "example/idb_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/image_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/navigator_test_app_lib"
     schedule:
       interval: "monthly"
   - package-ecosystem: "pub"
