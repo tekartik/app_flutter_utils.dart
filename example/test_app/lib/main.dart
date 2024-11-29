@@ -9,6 +9,7 @@ import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_web_test_app_lib/main.dart' as common_web;
 import 'package:tekartik_fs_test_app_lib/main.dart' as fs;
 import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
+import 'package:tekartik_image_test_app_lib/main.dart';
 import 'package:tekartik_navigator_test_app_lib/main.dart';
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
 import 'package:tekartik_sembast_test_app_lib/main.dart' as sembast;
@@ -23,6 +24,7 @@ void main() {
     sqfliteWindowsFfiInit();
   }
   mainMenuFlutter(() {
+    defineImageMenu();
     prefs.defineMenu();
     idb.defineMenu();
     fs.defineMenu();
