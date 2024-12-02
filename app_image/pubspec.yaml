@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
