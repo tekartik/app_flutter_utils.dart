@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'color_compat.dart';
 
 String _toHex(int value) {
   return value.toRadixString(16).padLeft(2, '0');
@@ -29,8 +30,8 @@ extension HexColor on Color {
   /// Make it 6 digits if noAlpha is true
   String toHex({bool leadingHashSign = true, bool? noAlpha}) =>
       '${leadingHashSign ? '#' : ''}'
-      '${((noAlpha ?? false) ? '' : alpha.toRadixString(16))}'
-      '${_toHex(red)}'
-      '${_toHex(green)}'
-      '${_toHex(blue)}';
+      '${((noAlpha ?? false) ? '' : compatAlpha.toRadixString(16))}'
+      '${_toHex(compatRed)}'
+      '${_toHex(compatGreen)}'
+      '${_toHex(compatBlue)}';
 }

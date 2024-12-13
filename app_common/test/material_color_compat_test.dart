@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tekartik_app_flutter_widget/src/material_color_compat.dart';
+import 'package:tekartik_app_flutter_common_utils/color.dart';
 import 'package:tekartik_common_utils/hex_utils.dart';
 
 extension on int {
-  List<int> toUint8List32() {
-    return <int>[
-      (this & 0xFF000000) >> 24,
-      (this & 0x00FF0000) >> 16,
-      (this & 0x0000FF00) >> 8,
-      (this & 0x000000FF) >> 0
-    ];
-  }
-
   String toHexString32() {
-    return '0x${toHexString(toUint8List32())}';
+    return '0x${uint32ToHexString()}';
   }
 }
 
@@ -28,6 +19,7 @@ extension on MaterialColor {
 
 Future<void> main() async {
   group('material_color_compat', () {
+    // TO remove when not compiling any more
     test('compat', () {
       for (var color in [Colors.orange, Colors.green]) {
         // ignore: deprecated_member_use
@@ -36,6 +28,8 @@ Future<void> main() async {
         expect(color.compatGreen, color.green);
         // ignore: deprecated_member_use
         expect(color.compatBlue, color.blue);
+        // ignore: deprecated_member_use
+        expect(color.compatAlpha, color.alpha);
       }
     });
 
