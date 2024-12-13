@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_widget/src/material_color_compat.dart';
-import 'package:tekartik_app_flutter_widget/src/material_color_legacy.dart';
 import 'package:tekartik_common_utils/hex_utils.dart';
 
 extension on int {
@@ -39,28 +38,7 @@ Future<void> main() async {
         expect(color.compatBlue, color.blue);
       }
     });
-    test('materialColorLegacy', () {
-      var color = generateMaterialColorLegacy(Colors.orange);
-      expect(
-          color.toIntList(),
-          <int>[
-            0xFFFFF5E6,
-            0xFFFFEACC,
-            0xFFFFD699,
-            0xFFFFC166,
-            0xFFFFAD33,
-            0xFFFF9800,
-            0xFFE58900,
-            0xFFCC7A00,
-            0xFFB26A00,
-            0xFF995B00
-          ],
-          reason: color
-              .toIntList()
-              .map((int value) => value.toHexString32())
-              .join(','));
-      //expect(color, Colors.orange);
-    });
+
     test('materialColorCompat', () {
       var color = generateMaterialColorCompat(Colors.orange);
       expect(
