@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 
 /// A simple dialog button
 class DialogButton extends StatelessWidget {
+  /// Label of the button
   final String text;
+
+  /// Callback when the button is pressed
   final VoidCallback onPressed;
+
+  /// Whether the button is primary
   final bool isPrimary;
 
+  /// Constructor
   const DialogButton(
       {super.key,
       required this.text,
