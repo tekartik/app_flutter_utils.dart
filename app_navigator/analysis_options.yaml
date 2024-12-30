@@ -3,4 +3,4 @@ include: package:tekartik_lints_flutter/strict.yaml
 
 linter:
   rules:
-    public_member_api_docs: true
+    - public_member_api_docs
