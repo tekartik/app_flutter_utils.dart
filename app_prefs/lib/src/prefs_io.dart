@@ -57,15 +57,19 @@ PrefsFactory getPrefsFactory({String? packageName}) {
 
 /// Use sembast on linux and windows
 PrefsAsyncFactory getPrefsAsyncFactory({String? packageName}) {
-  var prefsFactory = _prefsAsyncFactoryMap[packageName];
-  if (prefsFactory == null) {
-    if (packageName == null) {
-      prefsFactory = _defaultPrefsAsyncFactory ??=
-          newPrefsAsyncFactorySembast(packageName: packageName);
-    } else {
-      _prefsAsyncFactoryMap[packageName] =
-          prefsFactory = newPrefsAsyncFactorySembast(packageName: packageName);
+  if (Platform.isLinux || Platform.isWindows) {
+    var prefsFactory = _prefsAsyncFactoryMap[packageName];
+    if (prefsFactory == null) {
+      if (packageName == null) {
+        prefsFactory = _defaultPrefsAsyncFactory ??=
+            newPrefsAsyncFactorySembast(packageName: packageName);
+      } else {
+        _prefsAsyncFactoryMap[packageName] = prefsFactory =
+            newPrefsAsyncFactorySembast(packageName: packageName);
+      }
     }
+    return prefsAsyncFactory;
+  } else {
+    return prefsAsyncFactoryFlutter;
   }
-  return prefsFactory;
 }
