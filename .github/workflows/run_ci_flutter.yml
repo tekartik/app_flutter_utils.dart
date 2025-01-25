@@ -1,4 +1,4 @@
-name: Run CI
+name: Run CI Flutter
 on:
   push:
   workflow_dispatch:
