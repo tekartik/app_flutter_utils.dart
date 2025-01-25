@@ -5,12 +5,14 @@ String _toHex(int value) {
   return value.toRadixString(16).padLeft(2, '0');
 }
 
+/// Flutter extension for color compatibility
 extension HexColor on Color {
   /// String is in the format 'aabbcc' or 'ffaabbcc' with an optional leading '#'.
   static Color fromHex(String hexString) {
     return fromHexOrNull(hexString)!;
   }
 
+  /// String is in the format 'aabbcc' or 'ffaabbcc' with an optional leading '#'.
   static Color? fromHexOrNull(String? hexString) {
     final buffer = StringBuffer();
     if (hexString == null) {
