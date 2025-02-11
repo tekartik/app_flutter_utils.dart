@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_widget/app_widget.dart';
 import 'package:tekartik_app_flutter_widget/delayed_display.dart';
+import 'package:tekartik_app_flutter_widget/view/all_widget_for_theming.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
@@ -33,6 +34,27 @@ void defineMenu() {
     item('CenteredProgress dark', () async {
       await navigator.push<void>(MaterialPageRoute(builder: (context) {
         return centeredProgressScreen(themeData: ThemeData.dark());
+      }));
+    });
+    Widget allWidgetForThemingScreen({ThemeData? themeData}) {
+      return Theme(
+          data: themeData ?? ThemeData.light(),
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('App Widget'),
+            ),
+            body: const SingleChildScrollView(child: AllWidgetForTheming()),
+          ));
+    }
+
+    item('AllWidgetForTheming', () async {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
+        return allWidgetForThemingScreen();
+      }));
+    });
+    item('AllWidgetForTheming dark', () async {
+      await navigator.push<void>(MaterialPageRoute(builder: (context) {
+        return allWidgetForThemingScreen(themeData: ThemeData.dark());
       }));
     });
     Widget smallIconsScreen({ThemeData? themeData}) {
