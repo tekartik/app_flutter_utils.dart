@@ -70,5 +70,10 @@ void menuMinuUi() {
       value = result;
       write('result: $result');
     });
+    item('selectString', () async {
+      var result = await muiSelectString(buildContext!, list: ['Some items']);
+      //value = result;
+      write('result: $result');
+    });
   });
 }

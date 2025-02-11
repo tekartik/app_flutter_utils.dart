@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
+import 'package:tekartik_app_navigator_flutter/route_aware.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 
 void defineNavigatorMenu() {
@@ -85,6 +86,7 @@ final contentNavigatorDef =
     ContentNavigatorDef(defs: [pageStartDef, page1Def, page2Def]);
 void runAppWithNavigator() {
   runApp(ContentNavigator(
+      observers: [routeAwareObserver],
       def: contentNavigatorDef,
       child: Builder(builder: (context) {
         var cn = ContentNavigator.of(context);
