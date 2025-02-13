@@ -13,7 +13,7 @@ dependencies:
       url: https://github.com/tekartik/app_flutter_utils.dart
       ref: dart3a
       path: app_roboto
-      version: '>=0.1.0'
+    version: '>=0.1.0'
 ```
 ## Getting Started
 
