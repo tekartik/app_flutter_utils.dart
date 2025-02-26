@@ -22,11 +22,11 @@ class NoAnimationTransitionDelegate extends TransitionDelegate<void> {
     }
     for (final exitingPageRoute in locationToExitingPageRoute.values) {
       if (exitingPageRoute.isWaitingForExitingDecision) {
-        exitingPageRoute.markForRemove();
+        exitingPageRoute.markForComplete();
         final pagelessRoutes = pageRouteToPagelessRoutes![exitingPageRoute];
         if (pagelessRoutes != null) {
           for (final pagelessRoute in pagelessRoutes) {
-            pagelessRoute.markForRemove();
+            pagelessRoute.markForComplete();
           }
         }
       }

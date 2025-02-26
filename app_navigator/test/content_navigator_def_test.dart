@@ -12,11 +12,17 @@ class StartContentPath extends ContentPathBase {
 void main() {
   var startDef = ContentPageDef(
       path: StartContentPath(), screenBuilder: (_) => Container());
-
+  var otherStartDef = ContentPageDef(
+      path: StartContentPath(), screenBuilder: (_) => Container());
   group('ContentNavigatorDef', () {
     test('find', () {
       var def = ContentNavigatorDef(defs: [startDef]);
+      expect(startDef, isNot(otherStartDef));
+
       expect(def.findPageDef(StartContentPath()), startDef);
+
+      def = ContentNavigatorDef(defs: [startDef]..overrideAll([otherStartDef]));
+      expect(def.findPageDef(StartContentPath()), otherStartDef);
     });
   });
 }

@@ -6,7 +6,8 @@ export 'src/content_navigator.dart'
         ContentNavigatorDef,
         contentNavigatorDebug,
         contentNavigatorUseOnPopPage;
-export 'src/content_page.dart' show ContentPageDef, ContentScreenBuilder;
+export 'src/content_page.dart'
+    show ContentPageDef, ContentPageDefListExt, ContentScreenBuilder;
 export 'src/content_path.dart'
     show
         ContentPath,

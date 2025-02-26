@@ -79,3 +79,27 @@ class _ContentPageDef implements ContentPageDef {
   @override
   String toString() => 'def:$path';
 }
+
+/// List extension
+extension ContentPageDefListExt on List<ContentPageDef> {
+  /// Find a page definition
+  ContentPageDef? findContentPageDef(ContentPath contentPath) {
+    return firstWhereOrNull((element) => element.path.matchesPath(contentPath));
+  }
+
+  /// Override an existing route
+  void override(ContentPageDef contentPageDef) {
+    var existing = findContentPageDef(contentPageDef.path);
+    if (existing != null) {
+      remove(existing);
+    }
+    add(contentPageDef);
+  }
+
+  /// Override all matching existing routes
+  void overrideAll(List<ContentPageDef> contentPageDefs) {
+    for (var contentPageDef in contentPageDefs) {
+      override(contentPageDef);
+    }
+  }
+}

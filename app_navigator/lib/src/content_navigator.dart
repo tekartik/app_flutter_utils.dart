@@ -419,12 +419,7 @@ class ContentNavigatorDef {
   /// Find a page definition
   ContentPageDef? findPageDef(ContentPath? path) {
     if (path != null) {
-      // TODO optimize in a map by parts
-      for (var def in defs) {
-        if (def.path.matchesPath(path)) {
-          return def;
-        }
-      }
+      return defs.findContentPageDef(path);
     }
     return null;
   }
