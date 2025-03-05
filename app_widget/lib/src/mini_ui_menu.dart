@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_common_utils/common_utils_import.dart';
 
@@ -29,9 +30,9 @@ Future<T?> showMuiMenu<T>(
   return castAsOrNull<T>(result);
 }
 
-void muiItem(String name, void Function() body) {
+void muiItem(String name, void Function() body, {@doNotSubmit bool? solo}) {
   assert(_context != null, 'muiItem must be called in a muiMenu context');
-  _context!.items.add(MuiItem(name, body));
+  _context!.items.add(MuiItem(name, body, solo: solo ?? false));
 }
 
 MuiScreenWidget muiScreenWidget(String name, void Function() body) {
@@ -65,11 +66,16 @@ MuiMenuContext muiMenu(String name, void Function() body) {
   }
 }
 
+/// Signature of callbacks that have no arguments and return no data.
+typedef MuiFutureOrVoidCallback = FutureOr<void> Function();
+
+/// Simple item
 class MuiItem {
   final String name;
-  final VoidCallback callback;
+  final MuiFutureOrVoidCallback callback;
+  final bool solo;
 
-  MuiItem(this.name, this.callback);
+  MuiItem(this.name, this.callback, {this.solo = false});
 }
 
 class MuiScreenWidget extends StatefulWidget {
@@ -85,6 +91,27 @@ class MuiScreenWidget extends StatefulWidget {
 }
 
 class _MuiScreenWidgetState extends State<MuiScreenWidget> {
+  @override
+  void initState() {
+    /// Auto start solo item if any
+    sleep(0).then((_) async {
+      for (var item in widget.items) {
+        if (item.solo) {
+          if (kDebugMode) {
+            print('running solo ${item.name}');
+          }
+          if (mounted) {
+            _muiBuildContext = context;
+            await item.callback();
+          }
+        }
+      }
+    });
+
+    /// Handle solo
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
