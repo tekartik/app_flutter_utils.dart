@@ -30,4 +30,9 @@ dependencies:
       url: https://github.com/tekartik/ci.dart
       ref: dart3a
       path: ci
+  tekartik_prj_tktools:
+    git:
+      url: https://github.com/tekartikprj/tktools.git
+      ref: dart3a
+      path: packages/prj_tktools
 resolution: workspace
