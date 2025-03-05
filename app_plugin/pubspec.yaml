@@ -41,6 +41,7 @@ flutter:
   plugin:
     androidPackage: com.tekartik.tekartik_app_flutter_plugin
     pluginClass: TekartikAppFlutterPlugin
+resolution: workspace
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

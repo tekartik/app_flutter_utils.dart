@@ -30,3 +30,4 @@ dependencies:
       url: https://github.com/tekartik/ci.dart
       ref: dart3a
       path: ci
+resolution: workspace

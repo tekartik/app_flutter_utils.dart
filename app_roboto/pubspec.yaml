@@ -15,3 +15,4 @@ dev_dependencies:
       ref: dart3a
       path: packages/lints
     version: '>=0.1.0'
+resolution: workspace

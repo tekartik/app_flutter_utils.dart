@@ -37,20 +37,12 @@ dev_dependencies:
     git:
       url: https://github.com/tekartik/common_utils.dart
       ref: dart3a
-dependency_overrides:
-  tekartik_app_flutter_common_utils:
-    path: ../app_common
-  tekartik_app_rx_bloc_flutter:
-    path: ../app_rx_bloc
-  tekartik_app_flutter_bloc:
-    path: ../app_bloc
-  tekartik_app_rx_utils:
-    path: ../app_rx_utils
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+resolution: workspace
 
   # To add assets to your package, add an assets section, like this:
   # assets:

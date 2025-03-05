@@ -49,20 +49,10 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
 
-dependency_overrides:
-  tekartik_app_flutter_idb:
-    path: ../../app_idb
-  tekartik_app_platform:
-    path: ../../app_platform
-  tekartik_app_flutter_widget:
-    path: ../../app_widget
-  tekartik_app_flutter_sqflite:
-    path: ../../app_sqflite
-  tekartik_app_flutter_common_utils:
-    path: ../../app_common
 
 flutter:
   uses-material-design: true
+resolution: workspace
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

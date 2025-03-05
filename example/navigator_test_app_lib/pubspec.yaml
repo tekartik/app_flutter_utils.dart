@@ -37,12 +37,8 @@ dev_dependencies:
     sdk: flutter
 
 
-dependency_overrides:
-  tekartik_app_flutter_widget:
-    path: ../../app_widget
-  tekartik_app_navigator_flutter:
-    path: ../../app_navigator
 flutter:
+resolution: workspace
 
   # To add assets to your package, add an assets section, like this:
   # assets:

@@ -1,12 +1,8 @@
 # See https://www.dartlang.org/guides/libraries/private-files
 
 # Files and directories created by pub
-.dart_tool/
 .packages
 .pub/
-build/
-# If you're building an application, you may want to check-in your pubspec.lock
-pubspec.lock
 
 # Directory created by dartdoc
 # If you don't generate documentation locally you can remove this line.
@@ -21,8 +17,12 @@ doc/api/
 *.iml
 .vscode/
 
-# local
+# Local files
 .local/
 
-# Flutter common
-.flutter-plugins-dependencies
+# Dart
+build/
+pubspec_overrides.yaml
+.dart_tool/
+pubspec.lock
+.flutter-*

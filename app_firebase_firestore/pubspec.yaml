@@ -36,7 +36,5 @@ dev_dependencies:
       ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
+resolution: workspace
 
-dependency_overrides:
-  tekartik_app_flutter_firebase:
-    path: ../app_firebase

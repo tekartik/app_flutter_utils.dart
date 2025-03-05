@@ -37,12 +37,8 @@ dev_dependencies:
     sdk: flutter
 
 
-dependency_overrides:
-  tekartik_app_platform:
-    path: ../../app_platform
-  tekartik_app_flutter_common_utils:
-    path: ../../app_common
 flutter:
+resolution: workspace
 
   # To add assets to your package, add an assets section, like this:
   # assets:

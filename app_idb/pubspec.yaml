@@ -33,9 +33,6 @@ dev_dependencies:
     version: '>=0.1.0'
 
   sqflite_common_ffi: ">=2.3.4"
-dependency_overrides:
-  tekartik_app_flutter_sqflite:
-    path: ../app_sqflite
 
 
 
@@ -44,6 +41,7 @@ dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:
+resolution: workspace
 
   # To add assets to your package, add an assets section, like this:
   # assets:

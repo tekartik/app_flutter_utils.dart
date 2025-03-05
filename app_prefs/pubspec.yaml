@@ -52,15 +52,13 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
 
-dependency_overrides:
-  tekartik_app_platform:
-    path: ../app_platform
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+resolution: workspace
 
   # To add assets to your package, add an assets section, like this:
   # assets:

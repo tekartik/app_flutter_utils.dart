@@ -82,6 +82,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+resolution: workspace
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -114,20 +115,3 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-dependency_overrides:
-  tekartik_app_flutter_plugin:
-    path: ../app_plugin
-  tekartik_app_flutter_idb:
-    path: ../app_idb
-  tekartik_app_flutter_sqflite:
-    path: ../app_sqflite
-  tekartik_app_flutter_fs:
-    path: ../app_fs
-  tekartik_app_flutter_firebase:
-    path: ../app_firebase
-  tekartik_app_flutter_firebase_firestore:
-    path: ../app_firebase_firestore
-  tekartik_app_flutter_firebase_auth:
-    path: ../app_firebase_auth
-  tekartik_app_roboto:
-    path: ../app_roboto

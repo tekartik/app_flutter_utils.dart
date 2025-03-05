@@ -74,33 +74,6 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
   process_run: ">=1.2.1+1"
-dependency_overrides:
-  tekartik_app_prefs:
-    path: ../../app_prefs
-  tekartik_app_platform:
-    path: ../../app_platform
-  tekartik_app_flutter_idb:
-    path: ../../app_idb
-  tekartik_app_flutter_sqflite:
-    path: ../../app_sqflite
-  tekartik_app_flutter_sembast:
-    path: ../../app_sembast
-  tekartik_app_flutter_widget:
-    path: ../../app_widget
-  tekartik_app_flutter_fs:
-    path: ../../app_fs
-  tekartik_app_roboto:
-    path: ../../app_roboto
-  tekartik_app_flutter_plugin:
-    path: ../../app_plugin
-  tekartik_app_flutter_common_utils:
-    path: ../../app_common
-  tekartik_app_flutter_common_web_utils:
-    path: ../../app_common_web
-  tekartik_app_navigator_flutter:
-    path: ../../app_navigator
-  tekartik_app_image_flutter:
-    path: ../../app_image
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -111,6 +84,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+resolution: workspace
 
   # To add assets to your application, add an assets section, like this:
   # assets:

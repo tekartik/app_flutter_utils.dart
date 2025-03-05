@@ -42,13 +42,9 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
 
-dependency_overrides:
-  tekartik_app_flutter_sqflite:
-    path: ../../app_sqflite
-  tekartik_app_platform:
-    path: ../../app_platform
 
 flutter:
+resolution: workspace
 
   # To add assets to your package, add an assets section, like this:
   # assets:

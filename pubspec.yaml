@@ -1,0 +1,42 @@
+name: _
+publish_to: none
+environment:
+  sdk: ^3.6.0
+workspace:
+  - app_bloc
+  - app_common
+  - app_common_web
+  - app_emit_builder
+  - app_firebase
+  - app_firebase_auth
+  - app_firebase_firestore
+  - app_firebase_storage
+  - app_fs
+  - app_idb
+  - app_image
+  - app_intl
+  - app_lints
+  - app_navigator
+  - app_platform
+  - app_plugin
+  - app_prefs
+  - app_roboto
+  - app_rx_bloc
+  - app_rx_utils
+  - app_sembast
+  - app_sqflite
+  - app_widget
+  - example/app_plugin_test_app_lib
+  - example/common_test_app_lib
+  - example/common_web_test_app_lib
+  - example/fs_test_app_lib
+  - example/idb_test_app_lib
+  - example/image_test_app_lib
+  - example/navigator_test_app_lib
+  - example/prefs_test_app_lib
+  - example/sembast_test_app_lib
+  - example/sqflite_test_app_lib
+  - example/test_app
+  - example/widget_test_app_lib
+  - repo_support
+  - test_app
