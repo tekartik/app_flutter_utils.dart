@@ -27,8 +27,9 @@ class DialogButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-              color: isPrimary ? Colors.white : Colors.white,
-              fontWeight: FontWeight.bold),
+              // color: isPrimary ? Colors.white : Colors.white,
+              //fontSize: isPrimary ? 16 : 12,
+              fontWeight: isPrimary ? FontWeight.w900 : FontWeight.bold),
         ),
       ),
     );
