@@ -70,6 +70,7 @@ Future<Object?> _push({required WidgetBuilder builder}) async {
 
 void menuCvUi() {
   menu('Cv ui', () {
+    debugCvUi = true;
     enter(() {
       cvAddConstructors([_MyModel.new, _MySubModel.new, _MySubSubModel.new]);
     });
@@ -117,25 +118,28 @@ void menuCvUi() {
         await muiSnack(_buildContext, 'result: $result');
       }
     });
-    item('CvUiModelEdit', () async {
-      var result = await _push(builder: (_) {
-        return Scaffold(
-            appBar: AppBar(title: const Text('Cv UI ModelEdit')),
-            body: ListView(children: [
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CvUiModelEdit(
-                    controller: CvUiModelEditController(
-                        model: _MyModel()
-                          ..fillModel(
-                              CvFillOptions(valueStart: 0, collectionSize: 3))
-                          ..dummy.v = _Dummy()),
-                  )),
-            ]));
-      });
-      if (_buildContext.mounted) {
-        await muiSnack(_buildContext, 'result: $result');
-      }
-    });
+    item(
+      'CvUiModelEdit',
+      () async {
+        var result = await _push(builder: (_) {
+          return Scaffold(
+              appBar: AppBar(title: const Text('Cv UI ModelEdit')),
+              body: ListView(children: [
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CvUiModelEdit(
+                      controller: CvUiModelEditController(
+                          model: _MyModel()
+                            ..fillModel(
+                                CvFillOptions(valueStart: 0, collectionSize: 3))
+                            ..dummy.v = _Dummy()),
+                    )),
+              ]));
+        });
+        if (_buildContext.mounted) {
+          await muiSnack(_buildContext, 'result: $result');
+        }
+      },
+    );
   });
 }

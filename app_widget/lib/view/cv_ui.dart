@@ -6,6 +6,8 @@ import 'package:tekartik_app_flutter_widget/src/confirm_dialog.dart';
 
 import '../src/cv_ui_impl.dart';
 
+var debugCvUi = false;
+
 class CvUiFieldLabel extends StatelessWidget {
   final String name;
 
@@ -347,6 +349,18 @@ class _CvUiWidgetWithChildState extends State<CvUiWidgetWithChild> {
   }
 }
 
+class CvUiModelValueEdit extends StatelessWidget {
+  final CvModel model;
+  final CvUiValueRef ref;
+
+  const CvUiModelValueEdit({super.key, required this.model, required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    return CvUiModelValue(model: model);
+  }
+}
+
 class CvUiModelValue extends StatelessWidget {
   final CvModel model;
 
@@ -487,29 +501,51 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
     if (kDebugMode) {
       print('edit $ref');
     }
-    if (ref is CvUiFieldValueRef) {
-      // var parentRef =          CvUiValueRef(pathParts: paths.sublist(0, paths.length - 1));
-      var field = model.fieldAtPath(paths);
-      // print('edit field ${field}');
-      if (field is CvField) {
-        var fieldType = field.type;
-        if (field.type.isBasicType) {
-          var result = await editText(context,
-              title: 'Edit ${field.name}', value: field.value?.toString());
-          if (result?.type == CvUiEditResultType.delete) {
-            field.clear();
-          } else if (result?.type == CvUiEditResultType.nullify) {
-            field.setValue(null, presentIfNull: true);
-          } else if (result?.type == CvUiEditResultType.ok) {
-            var value = basicTypeCastType(fieldType, result?.value);
-            field.setValue(value);
+    if (paths.isEmpty) {
+      return false;
+    }
+    var tmv = model.cvTreeValueAtPath(CvTreePath(paths));
+    // print('result $tmv');
+
+    var value = model.valueAtPath(paths);
+
+    var fieldType = tmv.type;
+    //var field = tmv.field;
+    if (fieldType?.isBasicType ?? false) {
+      var result =
+          await editText(context, title: 'Edit', value: value?.toString());
+      if (result?.type == CvUiEditResultType.delete) {
+        if (paths.length == 1) {
+          model.field(paths.first as String)?.clear();
+        } else {
+          // Get parent
+          var tmvParent =
+              model.cvTreeValueAtPath(CvTreePath(paths.take(paths.length - 1)));
+
+          var last = paths.last;
+          var parentValue = tmvParent.value;
+          if (last is int) {
+            if (parentValue is List) {
+              parentValue.removeAt(last);
+            }
+          } else if (last is String) {
+            if (parentValue is CvModel) {
+              parentValue.field(last)!.clear();
+            }
+            if (parentValue is Map) {
+              parentValue.remove(last);
+            }
           }
-          triggerRedraw?.call();
-          return true;
         }
+        //tmv.clear();
+      } else if (result?.type == CvUiEditResultType.nullify) {
+        tmv.setValue(null, presentIfNull: true);
+      } else if (result?.type == CvUiEditResultType.ok) {
+        var value = basicTypeCastType(fieldType!, result?.value);
+        tmv.setValue(value);
       }
-    } else if (ref is CvUiListItemValueRef) {
-      // print('edit list item');
+      triggerRedraw?.call();
+      return true;
     }
     return false;
   }
