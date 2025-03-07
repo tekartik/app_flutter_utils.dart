@@ -1,12 +1,16 @@
 import 'package:cv/cv.dart';
 import 'package:cv/utils/value_utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_widget/src/confirm_dialog.dart';
 
 import '../src/cv_ui_impl.dart';
 
 var debugCvUi = false;
+
+void _log(Object? message) {
+  // ignore: avoid_print
+  print(message);
+}
 
 class CvUiFieldLabel extends StatelessWidget {
   final String name;
@@ -108,15 +112,23 @@ Widget _column({required List<Widget> children}) {
   );
 }
 
-class _ListChildren extends StatelessWidget {
+class _ListChildren extends StatefulWidget {
   final List<Widget> children;
 
   const _ListChildren({required this.children});
 
   @override
+  State<_ListChildren> createState() => _ListChildrenState();
+}
+
+class _ListChildrenState extends State<_ListChildren> {
+  @override
   Widget build(BuildContext context) {
-    return _column(
-      children: children.indexed.map((entry) {
+    var controller = CvUiModelViewProviderImpl.of(context);
+    var editController =
+        controller is CvUiModelEditControllerImpl ? controller : null;
+    return _column(children: [
+      ...widget.children.indexed.map((entry) {
         return CvUiListItemWithChild(
             index: entry.$1, indented: true, child: entry.$2);
 
@@ -130,8 +142,22 @@ class _ListChildren extends StatelessWidget {
             child,
           ],
         );*/
-      }).toList(),
-    );
+      }),
+      if (editController != null)
+        IconButton(
+          iconSize: 16,
+          padding: EdgeInsets.zero,
+          icon: const Icon(
+            Icons.add,
+          ),
+          onPressed: () async {
+            var result = await editController.add(context, widget);
+            if (result) {
+              setState(() {});
+            }
+          },
+        ),
+    ]);
   }
 }
 
@@ -483,7 +509,7 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
   @override
   String toString() => 'CvUiModelEditController()';
 
-  Future<bool> edit(BuildContext context, Widget widget) async {
+  CvModelTreeValue _widgetTreePath(BuildContext context, Widget widget) {
     var paths = <Object>[];
     context.visitAncestorElements((visitor) {
       var widget = visitor.widget;
@@ -496,33 +522,75 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
       }
       return true;
     });
-    var model = this.model;
-    var ref = CvUiValueRef(pathParts: paths);
-    if (kDebugMode) {
-      print('edit $ref');
-    }
-    if (paths.isEmpty) {
-      return false;
-    }
     var tmv = model.cvTreeValueAtPath(CvTreePath(paths));
+    if (debugCvUi) {
+      _log('tmv $tmv');
+    }
+    return tmv;
+  }
+
+  Future<bool> add(BuildContext context, Widget widget) async {
+    var tmv = _widgetTreePath(context, widget);
+
+    var type = tmv.listItemType;
+    // print('type $type');
+    //var field = tmv.field;
+    //var parts = tmv.treePath.parts;
+    if (type?.isBasicType ?? false) {
+      var result = await editText(
+        context,
+        title: 'Add',
+      );
+      if (result?.type == CvUiEditResultType.delete) {
+      } else if (result?.type == CvUiEditResultType.nullify) {
+      } else if (result?.type == CvUiEditResultType.ok) {
+        var value = basicTypeCastType(type!, result?.value);
+        // Get parent
+        //var tmvParent =
+        //    model.cvTreeValueAtPath(CvTreePath(parts.take(parts.length - 1)));
+
+        var parentValue = tmv.value;
+
+        if (parentValue is List) {
+          parentValue.add(value);
+        }
+
+        /*
+          if (parentValue is CvModel) {
+            parentValue.field(last)!.clear();
+          }
+          if (parentValue is Map) {
+            parentValue.remove(last);
+          }*/
+      }
+      triggerRedraw?.call();
+      return true;
+    }
+    return false;
+  }
+
+  // print('result $tmv');
+  Future<bool> edit(BuildContext context, Widget widget) async {
+    var tmv = _widgetTreePath(context, widget);
     // print('result $tmv');
 
-    var value = model.valueAtPath(paths);
+    var value = tmv.value;
 
-    var fieldType = tmv.type;
+    var type = tmv.type;
     //var field = tmv.field;
-    if (fieldType?.isBasicType ?? false) {
+    var parts = tmv.treePath.parts;
+    if (type.isBasicType) {
       var result =
           await editText(context, title: 'Edit', value: value?.toString());
       if (result?.type == CvUiEditResultType.delete) {
-        if (paths.length == 1) {
-          model.field(paths.first as String)?.clear();
+        if (parts.length == 1) {
+          model.field(parts.first as String)?.clear();
         } else {
           // Get parent
           var tmvParent =
-              model.cvTreeValueAtPath(CvTreePath(paths.take(paths.length - 1)));
+              model.cvTreeValueAtPath(CvTreePath(parts.take(parts.length - 1)));
 
-          var last = paths.last;
+          var last = parts.last;
           var parentValue = tmvParent.value;
           if (last is int) {
             if (parentValue is List) {
@@ -541,7 +609,7 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
       } else if (result?.type == CvUiEditResultType.nullify) {
         tmv.setValue(null, presentIfNull: true);
       } else if (result?.type == CvUiEditResultType.ok) {
-        var value = basicTypeCastType(fieldType!, result?.value);
+        var value = basicTypeCastType(type, result?.value);
         tmv.setValue(value);
       }
       triggerRedraw?.call();

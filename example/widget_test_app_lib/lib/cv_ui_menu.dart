@@ -18,7 +18,7 @@ class _MyModel extends CvModelBase {
   final mapModel = CvModelField<CvMapModel>('mapModel');
   final sub = CvModelField<_MySubModel>('sub');
   final stringList = CvListField<String>('stringList');
-  final intList = CvListField<String>('intList');
+  final intList = CvListField<int>('intList');
   final subList = CvModelListField<_MySubModel>('subList');
   final modelMap = CvModelMapField<_MySubModel>('modelMap');
   final dummy = CvField<_Dummy>('dummy');
@@ -118,28 +118,26 @@ void menuCvUi() {
         await muiSnack(_buildContext, 'result: $result');
       }
     });
-    item(
-      'CvUiModelEdit',
-      () async {
-        var result = await _push(builder: (_) {
-          return Scaffold(
-              appBar: AppBar(title: const Text('Cv UI ModelEdit')),
-              body: ListView(children: [
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CvUiModelEdit(
-                      controller: CvUiModelEditController(
-                          model: _MyModel()
-                            ..fillModel(
-                                CvFillOptions(valueStart: 0, collectionSize: 3))
-                            ..dummy.v = _Dummy()),
-                    )),
-              ]));
-        });
-        if (_buildContext.mounted) {
-          await muiSnack(_buildContext, 'result: $result');
-        }
-      },
-    );
+    item('CvUiModelEdit', () async {
+      var model = _MyModel()
+        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+        ..dummy.v = _Dummy();
+      //model = _MyModel()..intList.v = model.intList.v;
+      model = _MyModel()..subList.v = model.subList.v;
+      var result = await _push(builder: (_) {
+        return Scaffold(
+            appBar: AppBar(title: const Text('Cv UI ModelEdit')),
+            body: ListView(children: [
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CvUiModelEdit(
+                    controller: CvUiModelEditController(model: model),
+                  )),
+            ]));
+      });
+      if (_buildContext.mounted) {
+        await muiSnack(_buildContext, 'result: $result');
+      }
+    });
   });
 }
