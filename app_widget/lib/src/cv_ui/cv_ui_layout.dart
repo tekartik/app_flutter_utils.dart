@@ -12,12 +12,17 @@ class CvUiListChildrenPrv extends StatefulWidget {
   State<CvUiListChildrenPrv> createState() => _CvUiListChildrenPrvState();
 }
 
+extension on State {
+  CvUiModelEditControllerImpl? editController(BuildContext context) {
+    var editController = CvUiModelEditProviderImpl.of(context);
+    return editController;
+  }
+}
+
 class _CvUiListChildrenPrvState extends State<CvUiListChildrenPrv> {
   @override
   Widget build(BuildContext context) {
-    var controller = CvUiModelViewProviderImpl.of(context);
-    var editController =
-        controller is CvUiModelEditControllerImpl ? controller : null;
+    var editController = this.editController(context);
     return cvUiColumnPrv(children: [
       ...widget.children.indexed.map((entry) {
         return CvUiListItemWithChild(
@@ -52,7 +57,7 @@ class _CvUiListChildrenPrvState extends State<CvUiListChildrenPrv> {
   }
 }
 
-class CvUiMapChildrenPrv extends StatelessWidget {
+class CvUiMapChildrenPrv extends StatefulWidget {
   final Map<String, Widget> children;
   final bool? indented;
 
@@ -60,20 +65,39 @@ class CvUiMapChildrenPrv extends StatelessWidget {
       {super.key, required this.children, required this.indented});
 
   @override
+  State<CvUiMapChildrenPrv> createState() => _CvUiMapChildrenPrvState();
+}
+
+class _CvUiMapChildrenPrvState extends State<CvUiMapChildrenPrv> {
+  @override
   Widget build(BuildContext context) {
+    var editController = this.editController(context);
     return cvUiColumnPrv(
-      children: children
-          .map((key, value) {
-            return MapEntry(
-                key,
-                CvUiFieldWithChild(
-                  name: key,
-                  indented: indented,
-                  child: value,
-                ));
-          })
-          .values
-          .toList(),
+      children: [
+        ...widget.children.map((key, value) {
+          return MapEntry(
+              key,
+              CvUiFieldWithChild(
+                name: key,
+                indented: widget.indented,
+                child: value,
+              ));
+        }).values,
+        if (editController != null)
+          IconButton(
+            iconSize: 16,
+            padding: EdgeInsets.zero,
+            icon: const Icon(
+              Icons.add,
+            ),
+            onPressed: () async {
+              var result = await editController.add(context, widget);
+              if (result) {
+                setState(() {});
+              }
+            },
+          ),
+      ],
     );
   }
 }

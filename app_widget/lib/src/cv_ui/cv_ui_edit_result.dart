@@ -1,8 +1,13 @@
-enum CvUiEditResultType { cancel, ok, nullify, delete }
+enum CvUiEditResultType { cancel, ok, nullify, delete, create }
 
-class CvUiEditTextResult {
-  final CvUiEditResultType type;
+class CvUiEditTextResult extends CvUiEditResult {
   final String? value;
 
-  CvUiEditTextResult({required this.type, this.value});
+  CvUiEditTextResult({required super.type, this.value});
+}
+
+class CvUiEditResult {
+  final CvUiEditResultType type;
+
+  CvUiEditResult({required this.type});
 }

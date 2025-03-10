@@ -2,7 +2,6 @@ import 'package:cv/cv.dart';
 import 'package:cv/utils/value_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_widget/src/confirm_dialog.dart';
-
 import 'package:tekartik_app_flutter_widget/view/cv_ui.dart';
 
 import 'cv_ui_edit_result.dart';
@@ -154,8 +153,15 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
       }
       triggerRedraw?.call();
       return true;
+    } else {
+      // List item?
+      var child = tmv.listCreateItem<Object>();
+      var existing = tmv.value! as List;
+      existing.add(child);
+      tmv.setValue(existing);
+      triggerRedraw?.call();
+      return true;
     }
-    return false;
   }
 
   // print('result $tmv');
@@ -203,8 +209,64 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
       }
       triggerRedraw?.call();
       return true;
+    } else {
+      var result = await _editCreateDeleteOrNullify(context, title: 'Edit');
+      if (result?.type == CvUiEditResultType.delete) {
+        if (parts.length == 1) {
+          model.field(parts.first as String)?.clear();
+        } else {
+          // Get parent
+          var tmvParent =
+              model.cvTreeValueAtPath(CvTreePath(parts.take(parts.length - 1)));
+
+          var last = parts.last;
+          var parentValue = tmvParent.value;
+          if (last is int) {
+            if (parentValue is List) {
+              parentValue.removeAt(last);
+            }
+          } else if (last is String) {
+            if (parentValue is CvModel) {
+              parentValue.field(last)!.clear();
+            }
+            if (parentValue is Map) {
+              parentValue.remove(last);
+            }
+          }
+        }
+        //tmv.clear();
+      } else if (result?.type == CvUiEditResultType.nullify) {
+        tmv.setValue(null, presentIfNull: true);
+      } else if (result?.type == CvUiEditResultType.create) {
+        if (parts.length == 1) {
+          var parentField = model.field(parts.first as String);
+          if (parentField is CvListField) {
+            var value = parentField.createList();
+            tmv.setValue(value);
+          } else if (parentField is CvModelField) {
+            var value = parentField.create({});
+            tmv.setValue(value);
+          } else {
+            if (debugCvUi) {
+              _log('invalid parent $parentField');
+            }
+          }
+        }
+        /*
+          var value = listItemType.createValue();
+          var parentValue = tmv.value;
+          if (parentValue is List) {
+            parentValue.add(value);
+          }*/
+      } else {
+        if (debugCvUi) {
+          _log('Invalid result $result');
+        }
+        return false;
+      }
+      triggerRedraw?.call();
+      return true;
     }
-    return false;
   }
 
   /// Show a dialog to get a string
@@ -247,29 +309,93 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
                 },
                 text: 'OK',
               ),
-              DialogButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                text: 'CANCEL',
-              ),
-              DialogButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pop(CvUiEditTextResult(type: CvUiEditResultType.delete));
-                },
-                text: 'DELETE',
-              ),
-              DialogButton(
-                onPressed: () {
-                  Navigator.of(context).pop(
-                      CvUiEditTextResult(type: CvUiEditResultType.nullify));
-                },
-                text: 'NULLIFY',
-              )
+              const _DeleteButton(),
+              const _NullifyButton(),
+              const _CancelButton(),
             ],
           );
         });
+  }
+
+  /// Show a dialog to get a string
+  ///
+  /// returns null on cancel
+  Future<CvUiEditResult?> _editCreateDeleteOrNullify(
+    BuildContext context, {
+    String? title,
+  }) async {
+    return await showDialog<CvUiEditResult>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: (title != null) ? Text(title) : null,
+            actions: <Widget>[
+              DialogButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(CvUiEditResult(type: CvUiEditResultType.create));
+                },
+                text: 'CREATE',
+              ),
+              const _DeleteButton(),
+              const _NullifyButton(),
+              const _CancelButton(),
+            ],
+          );
+        });
+  }
+}
+
+class _NullifyButton extends StatelessWidget {
+  const _NullifyButton({
+    // ignore: unused_element_parameter
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DialogButton(
+      onPressed: () {
+        Navigator.of(context)
+            .pop(CvUiEditTextResult(type: CvUiEditResultType.nullify));
+      },
+      text: 'NULLIFY',
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({
+    // ignore: unused_element_parameter
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DialogButton(
+      onPressed: () {
+        Navigator.of(context)
+            .pop(CvUiEditTextResult(type: CvUiEditResultType.delete));
+      },
+      text: 'DELETE',
+    );
+  }
+}
+
+class _CancelButton extends StatelessWidget {
+  const _CancelButton({
+    // ignore: unused_element_parameter
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DialogButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      text: 'CANCEL',
+    );
   }
 }
 

@@ -127,11 +127,16 @@ class CvUiModelListValue extends StatelessWidget {
   }
 }
 
-class CvUiModelValue extends StatelessWidget {
+class CvUiModelValue extends StatefulWidget {
   final CvModel model;
 
   const CvUiModelValue({super.key, required this.model});
 
+  @override
+  State<CvUiModelValue> createState() => _CvUiModelValueState();
+}
+
+class _CvUiModelValueState extends State<CvUiModelValue> {
   @override
   Widget build(BuildContext context) {
     Widget buildField(CvField field) {
@@ -180,7 +185,7 @@ class CvUiModelValue extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (var field in model.fields) buildField(field),
+        for (var field in widget.model.fields) buildField(field),
       ],
     );
   }
