@@ -89,11 +89,16 @@ extension ContentPageDefListExt on List<ContentPageDef> {
 
   /// Override an existing route
   void override(ContentPageDef contentPageDef) {
-    var existing = findContentPageDef(contentPageDef.path);
+    var path = contentPageDef.path;
+    var existing = findContentPageDef(path);
     if (existing != null) {
       remove(existing);
     }
-    add(contentPageDef);
+    if (path == rootContentPath) {
+      insert(0, contentPageDef);
+    } else {
+      add(contentPageDef);
+    }
   }
 
   /// Override all matching existing routes
