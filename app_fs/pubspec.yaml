@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  fs_shim: ">=2.3.3+1"
+  fs_shim: ">=2.4.0-1"
   path_provider:
   process_run: ">=1.2.1+1"
   path: ">=1.9.0"
