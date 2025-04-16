@@ -63,16 +63,18 @@ flutter:
           weight: 700
     - family: RobotoCondensed
       fonts:
-        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Thin.ttf
-          weight: 100
+        # missing
+        # - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Thin.ttf
+        #  weight: 100
         - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Light.ttf
           weight: 300
         - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf
           weight: 400
-        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Medium.ttf
-          weight: 500
-        - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Bold.ttf
-          weight: 700
+        # missing
+        # - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Medium.ttf
+        #   weight: 500
+        # - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Bold.ttf
+        #   weight: 700
         - asset: packages/tekartik_app_roboto/fonts/RobotoCondensed/RobotoCondensed-Black.ttf
           weight: 900
 ```

@@ -6,12 +6,16 @@ import 'dart:io';
 import 'package:fs_shim/utils/io/copy.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
-import 'package:tekartik_build_utils/flutter/flutter.dart';
+import 'package:tekartik_platform_io/util/github_util.dart';
 import 'package:tekartik_prj_tktools/dtk/dtk_prj.dart';
 import 'package:test/test.dart';
 
+final _runningOnGithub = platformIo.runningOnGithub;
 var topDir = '..';
 void main() {
+  test('gen_test', () {
+    print('skipped if "$_runningOnGithub" (running on github)');
+  });
   group(
     'min_app',
     () {
@@ -28,6 +32,8 @@ void main() {
           'common_web_test_app_lib',
           'app_plugin_test_app_lib',
           'navigator_test_app_lib',
+          'sembast_test_app_lib',
+          'roboto_test_app_lib',
           'image_test_app_lib',
           'test_app',
         ]) {
@@ -42,15 +48,13 @@ void main() {
         await prj.addAllProjectsToWorkspace(
             keepExistingWorkspaceResolution: true);
         //await fsGenerate(dir: dirName, src: src);
-        var context = await flutterContext;
-        if (context.supportsWeb!) {
-          await Shell(workingDirectory: dirName).run('''
+
+        await Shell(workingDirectory: dirName).run('''
               flutter build web
               ''');
-        }
       });
     },
-    skip: true, //!isFlutterSupported,
+    skip: _runningOnGithub, //!isFlutterSupported,
     // Allow 10 mn for web build (sdk download)
     timeout: const Timeout(Duration(minutes: 10)),
   );

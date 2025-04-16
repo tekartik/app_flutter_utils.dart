@@ -3,6 +3,7 @@ import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_plugin_test_app_lib/main.dart' as app_plugin;
+import 'package:tekartik_app_roboto_test_app_lib/main.dart' as roboto;
 import 'package:tekartik_common_test_app_lib/main.dart' as common;
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/common_utils_import.dart';
@@ -35,6 +36,7 @@ void main() {
     common.defineMenu();
     common_web.defineMenu();
     defineNavigatorMenu();
+    roboto.defineRobotoMenu();
     menu('platform', () {
       item('context', () {
         write(jsonPretty(platformContext.toMap())); // ignore: avoid_print
