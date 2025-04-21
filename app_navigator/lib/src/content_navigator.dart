@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 import 'package:tekartik_app_navigator_flutter/route_aware.dart' as route_aware;
+import 'package:tekartik_app_navigator_flutter/src/navigator_helper.dart';
 import 'package:tekartik_app_navigator_flutter/src/route_aware.dart';
 
 import 'import.dart';
@@ -508,6 +509,13 @@ class ContentNavigator extends StatefulWidget {
   /// Do not trigger onResume()...WIP
   static void transientPopUntilPath(BuildContext context, ContentPath path) {
     ContentNavigator.of(context).transientPopUntilPath(context, path);
+  }
+
+  /// Push a new route using navigator
+  static Future<T?> pushBuilder<T>(BuildContext context,
+      {required WidgetBuilder builder, bool? noAnimation}) async {
+    return await Navigator.of(context)
+        .pushBuilder<T>(builder: builder, noAnimation: noAnimation);
   }
 }
 
