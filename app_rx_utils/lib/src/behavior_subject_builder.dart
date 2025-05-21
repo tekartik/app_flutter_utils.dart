@@ -5,8 +5,11 @@ class BehaviorSubjectBuilder<T> extends StatelessWidget {
   final BehaviorSubject<T> subject;
   final AsyncWidgetBuilder<T> builder;
 
-  const BehaviorSubjectBuilder(
-      {super.key, required this.subject, required this.builder});
+  const BehaviorSubjectBuilder({
+    super.key,
+    required this.subject,
+    required this.builder,
+  });
 
   @override
   Widget build(BuildContext context) {

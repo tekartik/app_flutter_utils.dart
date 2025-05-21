@@ -13,7 +13,6 @@ class RouteAwareManager {
       RouteObserver<ModalRoute<void>>();
 
   @protected
-
   /// Pop lock
   final _popLock = Lock();
 
@@ -112,20 +111,22 @@ mixin RouteAwareMixin<T extends StatefulWidget> on State<T>
       var needOnResume = true;
       var path = (widget as RouteAwareWithPath).contentPath;
 
-      routeAwareManager.popLock.synchronized(() {
-        // Do it after
-        for (var poppedPath in routeAwareManager.popPaths) {
-          if (path.matchesString(poppedPath)) {
-            // print('didPopNext no resume ${path.toPathString()}');
-            needOnResume = false;
-            break;
-          }
-        }
-      }).then((_) {
-        if (needOnResume) {
-          _onResumeIfPaused();
-        }
-      });
+      routeAwareManager.popLock
+          .synchronized(() {
+            // Do it after
+            for (var poppedPath in routeAwareManager.popPaths) {
+              if (path.matchesString(poppedPath)) {
+                // print('didPopNext no resume ${path.toPathString()}');
+                needOnResume = false;
+                break;
+              }
+            }
+          })
+          .then((_) {
+            if (needOnResume) {
+              _onResumeIfPaused();
+            }
+          });
     } else {
       _onResumeIfPaused();
     }

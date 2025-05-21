@@ -16,9 +16,10 @@ void _log(String message) {
 /// A content page definition
 abstract class ContentPageDef {
   /// Create a content page definition
-  factory ContentPageDef(
-      {required ContentPath path,
-      required ContentScreenBuilder screenBuilder}) {
+  factory ContentPageDef({
+    required ContentPath path,
+    required ContentScreenBuilder screenBuilder,
+  }) {
     return _ContentPageDef(path: path, screenBuilder: screenBuilder);
   }
 
@@ -54,25 +55,27 @@ class _ContentPageDef implements ContentPageDef {
       var pageContentPath = routePath.path;
       var name = pageContentPath.toPathString();
       return MaterialPage(
-          name: name,
-          arguments: routePath.arguments,
-          key: ValueKey(name),
-          child: Builder(
-            builder: (context) {
-              cnBloc = ContentNavigator.of(context);
-              return screenBuilder!(routePath);
-            },
-          ),
-          onPopInvoked: contentNavigatorUseOnPopPage
-              ? (didPop, result) {}
-              : (didPop, result) {
+        name: name,
+        arguments: routePath.arguments,
+        key: ValueKey(name),
+        child: Builder(
+          builder: (context) {
+            cnBloc = ContentNavigator.of(context);
+            return screenBuilder!(routePath);
+          },
+        ),
+        onPopInvoked:
+            contentNavigatorUseOnPopPage
+                ? (didPop, result) {}
+                : (didPop, result) {
                   if (contentNavigatorDebug) {
                     _log('onPopInvoked($routePath, didPop: $didPop, $result');
                   }
                   if (didPop) {
                     cnBloc.onPopInvoked(pageContentPath, result);
                   }
-                });
+                },
+      );
     };
   }
 

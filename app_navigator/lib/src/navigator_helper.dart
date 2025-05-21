@@ -6,8 +6,10 @@ import 'package:tekartik_app_navigator_flutter/page_route.dart';
 /// Navigator helper extension
 extension TekartikNavigatorStateHelperExt on NavigatorState {
   /// Pop until a path is matched. Returns true if found.
-  Future<T?> pushBuilder<T>(
-      {required WidgetBuilder builder, bool? noAnimation}) async {
+  Future<T?> pushBuilder<T>({
+    required WidgetBuilder builder,
+    bool? noAnimation,
+  }) async {
     if (noAnimation == true) {
       return await push(NoAnimationMaterialPageRoute<T>(builder: builder));
     }
@@ -16,9 +18,7 @@ extension TekartikNavigatorStateHelperExt on NavigatorState {
       case TargetPlatform.macOS:
         return await push(CupertinoPageRoute<T>(builder: builder));
       default:
-        return await push(MaterialPageRoute<T>(
-          builder: builder,
-        ));
+        return await push(MaterialPageRoute<T>(builder: builder));
     }
   }
 }

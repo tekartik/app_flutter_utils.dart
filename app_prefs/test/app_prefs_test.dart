@@ -39,13 +39,13 @@ void main() async {
       var prefsFactory = getPrefsFactory();
       var prefs = await prefsFactory.openPreferences('my_shared_prefs');
 
-// Once you have a [Prefs] object ready, use it. You can keep it open.
+      // Once you have a [Prefs] object ready, use it. You can keep it open.
       prefs.setInt('value', 26);
       var title = prefs.getString('title');
 
       {
-// For Windows/Linux support you can add package name to find a shared
-// location on the file system
+        // For Windows/Linux support you can add package name to find a shared
+        // location on the file system
         var prefsFactory = getPrefsFactory(packageName: 'my.package.name');
 
         expect(prefsFactory, isNotNull);

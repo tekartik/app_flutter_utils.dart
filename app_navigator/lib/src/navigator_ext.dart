@@ -8,7 +8,8 @@ extension TekartikNavigatorStateExt on NavigatorState {
     var found = false;
     popUntil((route) {
       // print('popUntil($path) checking ${route.settings.name}');
-      var matches = route.settings.name != null &&
+      var matches =
+          route.settings.name != null &&
           path.matchesString(route.settings.name!);
       found = found || matches;
       return matches;
@@ -24,7 +25,8 @@ extension TekartikNavigatorStatePrvExt on NavigatorState {
     var found = false;
     popUntil((route) {
       // print('popUntil($path) checking $route');
-      var matches = route.settings.name != null &&
+      var matches =
+          route.settings.name != null &&
           path.matchesString(route.settings.name!);
       found = found || matches;
       return matches;

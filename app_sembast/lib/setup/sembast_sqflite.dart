@@ -7,5 +7,6 @@ export 'package:sembast/sembast.dart';
 /// Sembast sqflite based database factory.
 ///
 /// Supports iOS/Android/MacOS for now.
-final databaseFactorySqflite =
-    getDatabaseFactorySqflite(sqflite.databaseFactory);
+final databaseFactorySqflite = getDatabaseFactorySqflite(
+  sqflite.databaseFactory,
+);

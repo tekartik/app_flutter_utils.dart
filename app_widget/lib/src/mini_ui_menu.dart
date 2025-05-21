@@ -15,18 +15,26 @@ _MuiMenuContext? _context;
 BuildContext? _muiBuildContext;
 
 BuildContext get muiBuildContext {
-  assert(_muiBuildContext != null,
-      'muiBuildContext must be called in a muiMenu context');
+  assert(
+    _muiBuildContext != null,
+    'muiBuildContext must be called in a muiMenu context',
+  );
   return _muiBuildContext!;
 }
 
 Future<T?> showMuiMenu<T>(
-    BuildContext context, String name, void Function() body) async {
+  BuildContext context,
+  String name,
+  void Function() body,
+) async {
   var muiMenuContext = muiMenu(name, body) as _MuiMenuContext;
-  var result =
-      await Navigator.of(context).push<Object?>(MaterialPageRoute(builder: (_) {
-    return MuiScreenWidget(name: name, items: muiMenuContext.items);
-  }));
+  var result = await Navigator.of(context).push<Object?>(
+    MaterialPageRoute(
+      builder: (_) {
+        return MuiScreenWidget(name: name, items: muiMenuContext.items);
+      },
+    ),
+  );
   return castAsOrNull<T>(result);
 }
 
@@ -42,10 +50,7 @@ MuiScreenWidget muiScreenWidget(String name, void Function() body) {
 
 MuiBodyWidget muiBodyWidget(void Function() body, {bool? shrinkWrap}) {
   var muiMenuContext = muiMenu('body', body) as _MuiMenuContext;
-  return MuiBodyWidget(
-    items: muiMenuContext.items,
-    shinkWrap: true,
-  );
+  return MuiBodyWidget(items: muiMenuContext.items, shinkWrap: true);
 }
 
 MuiMenuContext muiMenu(String name, void Function() body) {
@@ -83,8 +88,12 @@ class MuiScreenWidget extends StatefulWidget {
   final String name;
   final List<MuiItem> items;
 
-  const MuiScreenWidget(
-      {super.key, required this.items, required this.name, this.context});
+  const MuiScreenWidget({
+    super.key,
+    required this.items,
+    required this.name,
+    this.context,
+  });
 
   @override
   State<MuiScreenWidget> createState() => _MuiScreenWidgetState();
@@ -115,8 +124,9 @@ class _MuiScreenWidgetState extends State<MuiScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.name)),
-        body: ListView(children: [
+      appBar: AppBar(title: Text(widget.name)),
+      body: ListView(
+        children: [
           for (var item in widget.items)
             ListTile(
               title: Text(item.name),
@@ -124,8 +134,10 @@ class _MuiScreenWidgetState extends State<MuiScreenWidget> {
                 _muiBuildContext = context;
                 item.callback();
               },
-            )
-        ]));
+            ),
+        ],
+      ),
+    );
   }
 }
 
@@ -136,8 +148,12 @@ class MuiBodyWidget extends StatefulWidget {
 
   final List<MuiItem> items;
 
-  const MuiBodyWidget(
-      {super.key, required this.items, this.context, this.shinkWrap});
+  const MuiBodyWidget({
+    super.key,
+    required this.items,
+    this.context,
+    this.shinkWrap,
+  });
 
   @override
   State<MuiBodyWidget> createState() => _MuiBodyWidgetState();
@@ -156,7 +172,7 @@ class _MuiBodyWidgetState extends State<MuiBodyWidget> {
               _muiBuildContext = context;
               item.callback();
             },
-          )
+          ),
       ],
     );
   }

@@ -18,11 +18,16 @@ class _ContentPageInStack {
   final TransitionDelegate? transitionDelegate;
   final ContentPathRouteSettings rs;
   final ContentPageDef? def;
-  final completer = Completer<
-      Object?>(); // Not async we need the return value in the next sequence to allow popping again
+  final completer =
+      Completer<
+        Object?
+      >(); // Not async we need the return value in the next sequence to allow popping again
 
-  _ContentPageInStack(
-      {required this.def, required this.rs, this.transitionDelegate});
+  _ContentPageInStack({
+    required this.def,
+    required this.rs,
+    this.transitionDelegate,
+  });
 
   void dispose() {
     if (!completer.isCompleted) {
@@ -35,8 +40,10 @@ class _ContentPageInStack {
     // ignore: deprecated_member_use_from_same_package, deprecated_member_use
     var page = def!.builder(rs);
     // Name and arguments must match
-    assert(page.name == rs.path.toPathString(),
-        'name of page must match the content path');
+    assert(
+      page.name == rs.path.toPathString(),
+      'name of page must match the content path',
+    );
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
     return page;
@@ -57,9 +64,10 @@ class ContentNavigatorBloc extends BaseBloc {
   TransitionDelegate transitionDelegate;
 
   /// Route aware manager
-  ContentNavigatorBloc(
-      {this.contentNavigator,
-      this.transitionDelegate = const DefaultTransitionDelegate()}) {
+  ContentNavigatorBloc({
+    this.contentNavigator,
+    this.transitionDelegate = const DefaultTransitionDelegate(),
+  }) {
     /// Check here in debug
     if (isDebug) {
       contentNavigator?.def._check();
@@ -72,8 +80,9 @@ class ContentNavigatorBloc extends BaseBloc {
 
   /// Convenient router config for MaterialApp.router
   RouterConfig<ContentPath> get routerConfig => RouterConfig(
-      routerDelegate: routerDelegate,
-      routeInformationParser: routeInformationParser);
+    routerDelegate: routerDelegate,
+    routeInformationParser: routeInformationParser,
+  );
 
   /// RouteInformationParser for MaterialApp.router
   ContentRouteInformationParser get routeInformationParser =>
@@ -81,13 +90,15 @@ class ContentNavigatorBloc extends BaseBloc {
 
   final _stack = <_ContentPageInStack>[];
 
-  late final RouteAwareManager? _routeAwareManager = (contentNavigator
-              ?.observers
-              ?.where((element) => element == route_aware.routeAwareObserver)
-              .isNotEmpty ??
-          false)
-      ? routeAwareManager
-      : null;
+  late final RouteAwareManager? _routeAwareManager =
+      (contentNavigator?.observers
+                  ?.where(
+                    (element) => element == route_aware.routeAwareObserver,
+                  )
+                  .isNotEmpty ??
+              false)
+          ? routeAwareManager
+          : null;
 
   /// Custom transition if any
   @protected
@@ -100,7 +111,9 @@ class ContentNavigatorBloc extends BaseBloc {
       // Create a root if needed
       var pageDef = contentNavigator!.def.defs.first;
       var item = _ContentPageInStack(
-          def: pageDef, rs: ContentPathRouteSettings(pageDef.path));
+        def: pageDef,
+        rs: ContentPathRouteSettings(pageDef.path),
+      );
       _stack.add(item);
     }
     // devPrint(_stack);
@@ -132,8 +145,10 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   // TODO @alex remove call to notify listener
-  Future<T> _push<T>(ContentPathRouteSettings rs,
-      {TransitionDelegate? transitionDelegate}) async {
+  Future<T> _push<T>(
+    ContentPathRouteSettings rs, {
+    TransitionDelegate? transitionDelegate,
+  }) async {
     // devPrint('Changed $routePath');
 
     var pageDef = contentNavigator!.def.findPageDef(rs.path);
@@ -152,7 +167,10 @@ class ContentNavigatorBloc extends BaseBloc {
       }
     }
     var item = _ContentPageInStack(
-        def: pageDef, rs: rs, transitionDelegate: transitionDelegate);
+      def: pageDef,
+      rs: rs,
+      transitionDelegate: transitionDelegate,
+    );
     _stack.add(item);
     _notifyNavigatorChanges();
     // TODO handled future completion
@@ -222,8 +240,10 @@ class ContentNavigatorBloc extends BaseBloc {
   }
 
   void _popUntilPathOrPush(BuildContext context, ContentPath path) {
-    var found =
-        _popUntilPath(context, path); // print('popUntil($path) found $found');
+    var found = _popUntilPath(
+      context,
+      path,
+    ); // print('popUntil($path) found $found');
     if (!found) {
       pushPath<void>(path);
     }
@@ -232,8 +252,11 @@ class ContentNavigatorBloc extends BaseBloc {
   /// Returns true if fount
   ///
   /// if handleRoot is true, the root is handled as well as excluded from onResume
-  bool _popUntilPath(BuildContext context, ContentPath path,
-      {bool? handleRoot}) {
+  bool _popUntilPath(
+    BuildContext context,
+    ContentPath path, {
+    bool? handleRoot,
+  }) {
     var found = false;
 
     Navigator.of(context).popUntil((route) {
@@ -262,8 +285,10 @@ class ContentNavigatorBloc extends BaseBloc {
   // Use ContentNavigator.push instead
   // @protected
   /// Push a new route, with an optional transitionDelegate
-  Future<T?> push<T>(ContentPathRouteSettings rs,
-      {TransitionDelegate? transitionDelegate}) async {
+  Future<T?> push<T>(
+    ContentPathRouteSettings rs, {
+    TransitionDelegate? transitionDelegate,
+  }) async {
     if (contentNavigatorDebug) {
       _log('Push $rs');
     }
@@ -316,7 +341,6 @@ class ContentNavigatorBloc extends BaseBloc {
       _stack.isEmpty ? 'ContentNavigator(empty)' : 'CN(${_stack.last.rs.path})';
 
   @protected
-
   /// Transient pop item
   void transientPopItem(int index, Object? result) {
     var item = _stack[index];
@@ -355,8 +379,9 @@ class ContentNavigatorBloc extends BaseBloc {
     var absPath = path.toPathString();
 
     // devPrint('looking for $absPath in $_stack');
-    var index =
-        lastIndexWhere((routePath) => routePath.path.toPathString() == absPath);
+    var index = lastIndexWhere(
+      (routePath) => routePath.path.toPathString() == absPath,
+    );
     if (index != -1) {
       // print('found and reuse $index');
       transientPopUntil(index);
@@ -382,15 +407,20 @@ class ContentNavigatorBloc extends BaseBloc {
 /// Bloc provider extension
 extension ContentNavigatorBlocExt on ContentNavigatorBloc {
   /// Push a path.
-  Future<T?> pushPath<T>(ContentPath path,
-      {Object? arguments, TransitionDelegate? transitionDelegate}) {
+  Future<T?> pushPath<T>(
+    ContentPath path, {
+    Object? arguments,
+    TransitionDelegate? transitionDelegate,
+  }) {
     if (kDebugMode) {
       if (!path.isValid()) {
         throw ArgumentError('Invalid path', path.toString());
       }
     }
-    return push<T>(path.routeSettings(arguments),
-        transitionDelegate: transitionDelegate);
+    return push<T>(
+      path.routeSettings(arguments),
+      transitionDelegate: transitionDelegate,
+    );
   }
 }
 
@@ -410,8 +440,10 @@ class ContentNavigatorDef {
     for (var def in defs) {
       var path = def.path;
       for (var existing in defSet) {
-        assert(!path.matchesPath(existing),
-            'ContentNavigator page definition $def already exists ($existing)');
+        assert(
+          !path.matchesPath(existing),
+          'ContentNavigator page definition $def already exists ($existing)',
+        );
       }
       defSet.add(path);
     }
@@ -445,48 +477,71 @@ class ContentNavigator extends StatefulWidget {
       BlocProvider.of<ContentNavigatorBloc>(context);
 
   /// Content navigator
-  const ContentNavigator(
-      {super.key, required this.def, this.child, this.observers});
+  const ContentNavigator({
+    super.key,
+    required this.def,
+    this.child,
+    this.observers,
+  });
 
   @override
   State<ContentNavigator> createState() => _ContentNavigatorState();
 
   /// Push a path setting.
-  static Future<T?> push<T>(BuildContext context, ContentPathRouteSettings rs,
-      {TransitionDelegate? transitionDelegate}) async {
-    return await ContentNavigator.of(context)
-        .push<T>(rs, transitionDelegate: transitionDelegate);
+  static Future<T?> push<T>(
+    BuildContext context,
+    ContentPathRouteSettings rs, {
+    TransitionDelegate? transitionDelegate,
+  }) async {
+    return await ContentNavigator.of(
+      context,
+    ).push<T>(rs, transitionDelegate: transitionDelegate);
   }
 
   /// Push a replacement path setting.
   static Future<T?> pushReplacement<T>(
-      BuildContext context, ContentPathRouteSettings rs,
-      {
-      /// current pop result
-      Object? result,
-      TransitionDelegate? transitionDelegate}) {
+    BuildContext context,
+    ContentPathRouteSettings rs, {
+
+    /// current pop result
+    Object? result,
+    TransitionDelegate? transitionDelegate,
+  }) {
     var cn = ContentNavigator.of(context);
     cn.transientPop(context, result);
     return cn.push<T>(rs, transitionDelegate: transitionDelegate);
   }
 
   /// Push a path.
-  static Future<T?> pushPath<T>(BuildContext context, ContentPath contentPath,
-      {Object? arguments, TransitionDelegate? transitionDelegate}) {
-    return push(context, contentPath.routeSettings(arguments),
-        transitionDelegate: transitionDelegate);
+  static Future<T?> pushPath<T>(
+    BuildContext context,
+    ContentPath contentPath, {
+    Object? arguments,
+    TransitionDelegate? transitionDelegate,
+  }) {
+    return push(
+      context,
+      contentPath.routeSettings(arguments),
+      transitionDelegate: transitionDelegate,
+    );
   }
 
   /// Push a replacement path.
   static Future<T?> pushReplacementPath<T>(
-      BuildContext context, ContentPath contentPath,
-      {Object? arguments,
+    BuildContext context,
+    ContentPath contentPath, {
+    Object? arguments,
 
-      /// Current pop result
-      Object? result,
-      TransitionDelegate? transitionDelegate}) {
-    return pushReplacement(context, contentPath.routeSettings(arguments),
-        result: result, transitionDelegate: transitionDelegate);
+    /// Current pop result
+    Object? result,
+    TransitionDelegate? transitionDelegate,
+  }) {
+    return pushReplacement(
+      context,
+      contentPath.routeSettings(arguments),
+      result: result,
+      transitionDelegate: transitionDelegate,
+    );
   }
 
   /// Do not trigger onResume()...WIP
@@ -512,10 +567,14 @@ class ContentNavigator extends StatefulWidget {
   }
 
   /// Push a new route using navigator
-  static Future<T?> pushBuilder<T>(BuildContext context,
-      {required WidgetBuilder builder, bool? noAnimation}) async {
-    return await Navigator.of(context)
-        .pushBuilder<T>(builder: builder, noAnimation: noAnimation);
+  static Future<T?> pushBuilder<T>(
+    BuildContext context, {
+    required WidgetBuilder builder,
+    bool? noAnimation,
+  }) async {
+    return await Navigator.of(
+      context,
+    ).pushBuilder<T>(builder: builder, noAnimation: noAnimation);
   }
 }
 
@@ -585,7 +644,8 @@ class _ContentNavigatorState extends State<ContentNavigator> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        blocBuilder: () => ContentNavigatorBloc(contentNavigator: widget),
-        child: widget.child!);
+      blocBuilder: () => ContentNavigatorBloc(contentNavigator: widget),
+      child: widget.child!,
+    );
   }
 }

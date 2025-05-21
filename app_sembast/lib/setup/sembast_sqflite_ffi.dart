@@ -7,5 +7,6 @@ export 'package:sembast/sembast.dart';
 /// Sembast sqflite ffi based database factory.
 ///
 /// Supports Windows/Linux/MacOS for now.
-final databaseFactorySqfliteFfi =
-    getDatabaseFactorySqflite(sqflite_ffi.databaseFactoryFfi);
+final databaseFactorySqfliteFfi = getDatabaseFactorySqflite(
+  sqflite_ffi.databaseFactoryFfi,
+);

@@ -21,7 +21,10 @@ class CvUiFieldWithChild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CvUiWidgetWithChild(
-        widget: CvUiFieldLabel(name: name), indented: indented, child: child);
+      widget: CvUiFieldLabel(name: name),
+      indented: indented,
+      child: child,
+    );
   }
 }
 
@@ -40,9 +43,10 @@ class CvUiListItemWithChild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CvUiWidgetWithChild(
-        widget: CvUiListItemLabel(index: index),
-        indented: indented,
-        child: child);
+      widget: CvUiListItemLabel(index: index),
+      indented: indented,
+      child: child,
+    );
   }
 }
 
@@ -78,9 +82,13 @@ class _CvUiWidgetWithChildState extends State<CvUiWidgetWithChild> {
     var editController =
         controller is CvUiModelEditControllerImpl ? controller : null;
     var indented = widget.indented ?? false;
-    var childWidget = indented
-        ? Padding(padding: const EdgeInsets.only(left: 16), child: widget.child)
-        : widget.child;
+    var childWidget =
+        indented
+            ? Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: widget.child,
+            )
+            : widget.child;
 
     var mainWidget = widget.widget;
     var expanded = true;
@@ -100,15 +108,17 @@ class _CvUiWidgetWithChildState extends State<CvUiWidgetWithChild> {
             Icon(
               expanded ? Icons.arrow_drop_down : Icons.arrow_right,
               size: 16,
-            )
+            ),
           ],
         ),
       );
     }
-    var view = cvUiColumnPrv(children: [
-      mainWidget,
-      if ((childWidget != null) && expanded) childWidget
-    ]);
+    var view = cvUiColumnPrv(
+      children: [
+        mainWidget,
+        if ((childWidget != null) && expanded) childWidget,
+      ],
+    );
     if (editController != null && childWidget != null) {
       // && !indented) {
       view = Row(
@@ -117,9 +127,7 @@ class _CvUiWidgetWithChildState extends State<CvUiWidgetWithChild> {
           IconButton(
             iconSize: 8,
             padding: EdgeInsets.zero,
-            icon: const Icon(
-              Icons.edit,
-            ),
+            icon: const Icon(Icons.edit),
             onPressed: () {
               _edit();
               //      editController.editField(widget);

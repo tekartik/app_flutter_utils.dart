@@ -11,12 +11,15 @@ void main() {
       test('open', () async {
         var factory = newIdbFactoryMemory();
         Future<Database> open() async {
-          var db =
-              await factory.open('test.db', version: 1, onUpgradeNeeded: (e) {
-            if (e.oldVersion < 1) {
-              e.database.createObjectStore('simple');
-            }
-          });
+          var db = await factory.open(
+            'test.db',
+            version: 1,
+            onUpgradeNeeded: (e) {
+              if (e.oldVersion < 1) {
+                e.database.createObjectStore('simple');
+              }
+            },
+          );
           return db;
         }
 

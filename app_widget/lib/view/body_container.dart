@@ -7,11 +7,6 @@ class BodyContainer extends StatelessWidget {
   const BodyContainer({super.key, this.child, this.width = 840});
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: width,
-        child: child,
-      ),
-    );
+    return Center(child: SizedBox(width: width, child: child));
   }
 }

@@ -7,12 +7,14 @@ void menuWillPopScopeCompat() {
   menu('will_pop_scope_compat', () {
     item('simple', () async {
       var result = await navigator.push<Object?>(
-          MaterialPageRoute(builder: (_) => const SimpleScreen()));
+        MaterialPageRoute(builder: (_) => const SimpleScreen()),
+      );
       write('result: $result');
     });
     item('simple override', () async {
       var result = await navigator.push<Object?>(
-          MaterialPageRoute(builder: (_) => const SimpleOverrideScreen()));
+        MaterialPageRoute(builder: (_) => const SimpleOverrideScreen()),
+      );
       write('result: $result');
     });
   });
@@ -24,18 +26,19 @@ class SimpleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScopeCompat(
-        onWillPop: () async {
-          var result = await muiConfirm(context, message: 'Confirm exit?');
-          return result;
-        },
-        child: muiScreenWidget('Test WillPopScopeCompat', () {
-          muiItem('Pop null', () {
-            Navigator.of(context).pop();
-          });
-          muiItem('Pop Some Text', () {
-            Navigator.of(context).pop('Some Text');
-          });
-        }));
+      onWillPop: () async {
+        var result = await muiConfirm(context, message: 'Confirm exit?');
+        return result;
+      },
+      child: muiScreenWidget('Test WillPopScopeCompat', () {
+        muiItem('Pop null', () {
+          Navigator.of(context).pop();
+        });
+        muiItem('Pop Some Text', () {
+          Navigator.of(context).pop('Some Text');
+        });
+      }),
+    );
   }
 }
 
@@ -45,24 +48,27 @@ class SimpleOverrideScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScopeCompat(
-        onWillPop: () async {
-          var result = await muiConfirm(context,
-              message: 'Exit ? or pop Some Text (no)');
-          if (result) {
-            return true;
-          }
-          if (context.mounted) {
-            Navigator.of(context).pop('Some Text');
-          }
-          return false;
-        },
-        child: muiScreenWidget('Test WillPopScopeCompat', () {
-          muiItem('Pop null', () {
-            Navigator.of(context).pop();
-          });
-          muiItem('Pop Some Text', () {
-            Navigator.of(context).pop('Some Text');
-          });
-        }));
+      onWillPop: () async {
+        var result = await muiConfirm(
+          context,
+          message: 'Exit ? or pop Some Text (no)',
+        );
+        if (result) {
+          return true;
+        }
+        if (context.mounted) {
+          Navigator.of(context).pop('Some Text');
+        }
+        return false;
+      },
+      child: muiScreenWidget('Test WillPopScopeCompat', () {
+        muiItem('Pop null', () {
+          Navigator.of(context).pop();
+        });
+        muiItem('Pop Some Text', () {
+          Navigator.of(context).pop('Some Text');
+        });
+      }),
+    );
   }
 }

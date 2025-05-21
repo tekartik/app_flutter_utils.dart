@@ -10,23 +10,28 @@ void main() {
       var crip = ContentRouteInformationParser(bloc);
       expect(crip.restoreRouteInformation(rootContentPath).uri.toString(), '/');
       expect(
-          crip
-              .restoreRouteInformation(ContentPath([ContentPathPart('test')]))
-              .uri
-              .toString(),
-          '/test');
+        crip
+            .restoreRouteInformation(ContentPath([ContentPathPart('test')]))
+            .uri
+            .toString(),
+        '/test',
+      );
     });
     test('parse', () {
       var bloc = ContentNavigatorBloc();
       var crip = ContentRouteInformationParser(bloc);
       expect(
-          crip.parseAnyRouteInformationSync(
-              RouteInformation(uri: Uri.parse('/'))),
-          rootContentPath);
+        crip.parseAnyRouteInformationSync(
+          RouteInformation(uri: Uri.parse('/')),
+        ),
+        rootContentPath,
+      );
       expect(
-          crip.parseAnyRouteInformationSync(
-              RouteInformation(uri: Uri.parse('/test'))),
-          ContentPath([ContentPathPart('test')]));
+        crip.parseAnyRouteInformationSync(
+          RouteInformation(uri: Uri.parse('/test')),
+        ),
+        ContentPath([ContentPathPart('test')]),
+      );
     });
   });
 }

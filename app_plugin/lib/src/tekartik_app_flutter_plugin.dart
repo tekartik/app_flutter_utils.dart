@@ -5,8 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:tekartik_common_utils/env_utils.dart';
 
 class TekartikAppFlutterPlugin {
-  static const MethodChannel _channel =
-      MethodChannel('tekartik_app_flutter_plugin');
+  static const MethodChannel _channel = MethodChannel(
+    'tekartik_app_flutter_plugin',
+  );
 
   static Future<String?> get platformVersion async {
     final version = await _channel.invokeMethod<String>('getPlatformVersion');

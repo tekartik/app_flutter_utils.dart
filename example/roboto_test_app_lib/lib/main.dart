@@ -6,13 +6,12 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
 Widget robotoScreen({ThemeData? themeData}) {
   return Theme(
-      data: themeData ?? ThemeData.light(),
-      child: Builder(builder: (context) {
+    data: themeData ?? ThemeData.light(),
+    child: Builder(
+      builder: (context) {
         var textTheme = themeData?.textTheme ?? TextTheme.of(context);
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Generator'),
-          ),
+          appBar: AppBar(title: const Text('Generator')),
           body: ListView(
             children: [
               Padding(
@@ -22,14 +21,13 @@ Widget robotoScreen({ThemeData? themeData}) {
             ],
           ),
         );
-      }));
+      },
+    ),
+  );
 }
 
 class AllTypography extends StatelessWidget {
-  const AllTypography({
-    super.key,
-    required this.textTheme,
-  });
+  const AllTypography({super.key, required this.textTheme});
 
   final TextTheme textTheme;
 
@@ -60,10 +58,7 @@ class AllTypography extends StatelessWidget {
         Text('Label Medium', style: textTheme.labelMedium),
         Text('Label Small', style: textTheme.labelSmall),
         const Text('0123456789'),
-        const Text(
-          '0123456789',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        const Text('0123456789', style: TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -72,32 +67,53 @@ class AllTypography extends StatelessWidget {
 void defineRobotoMenu() {
   menu('roboto', () {
     item('Default', () async {
-      await navigator.push<void>(MaterialPageRoute(builder: (context) {
-        return robotoScreen();
-      }));
+      await navigator.push<void>(
+        MaterialPageRoute(
+          builder: (context) {
+            return robotoScreen();
+          },
+        ),
+      );
     });
     item('Roboto', () async {
-      await navigator.push<void>(MaterialPageRoute(builder: (context) {
-        var themeData = ThemeData(
-            brightness: Brightness.light, fontFamily: robotoFontFamily);
-        return robotoScreen(themeData: themeData);
-      }));
+      await navigator.push<void>(
+        MaterialPageRoute(
+          builder: (context) {
+            var themeData = ThemeData(
+              brightness: Brightness.light,
+              fontFamily: robotoFontFamily,
+            );
+            return robotoScreen(themeData: themeData);
+          },
+        ),
+      );
     });
     item('Roboto Condensed', () async {
-      await navigator.push<void>(MaterialPageRoute(builder: (context) {
-        var themeData = ThemeData(
-            brightness: Brightness.light,
-            fontFamily: robotoCondensedFontFamily);
-        return robotoScreen(themeData: themeData);
-      }));
+      await navigator.push<void>(
+        MaterialPageRoute(
+          builder: (context) {
+            var themeData = ThemeData(
+              brightness: Brightness.light,
+              fontFamily: robotoCondensedFontFamily,
+            );
+            return robotoScreen(themeData: themeData);
+          },
+        ),
+      );
     });
     item('Roboto Mono', () async {
-      await navigator.push<void>(MaterialPageRoute(builder: (context) {
-        var themeData = ThemeData(
-            brightness: Brightness.light, fontFamily: robotoMonoFontFamily);
+      await navigator.push<void>(
+        MaterialPageRoute(
+          builder: (context) {
+            var themeData = ThemeData(
+              brightness: Brightness.light,
+              fontFamily: robotoMonoFontFamily,
+            );
 
-        return robotoScreen(themeData: themeData);
-      }));
+            return robotoScreen(themeData: themeData);
+          },
+        ),
+      );
     });
   });
 }

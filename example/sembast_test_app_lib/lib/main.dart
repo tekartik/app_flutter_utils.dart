@@ -5,8 +5,9 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
 void defineMenu() {
   menu('sembast', () {
-    var sembastFactory =
-        getDatabaseFactory(packageName: 'app_sembast_test_app.tekartik.com');
+    var sembastFactory = getDatabaseFactory(
+      packageName: 'app_sembast_test_app.tekartik.com',
+    );
     var dbName = 'open_toggle_sembast.db';
     item('delete database', () async {
       await sembastFactory.deleteDatabase(dbName);

@@ -16,14 +16,13 @@ class SmallProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = IconTheme.of(context).size!;
     return SizedBox(
-        width: size,
-        height: size,
-        child: Padding(
-          padding: EdgeInsets.all(size / 6),
-          child: const CircularProgressIndicator(
-            strokeWidth: 2,
-          ),
-        ));
+      width: size,
+      height: size,
+      child: Padding(
+        padding: EdgeInsets.all(size / 6),
+        child: const CircularProgressIndicator(strokeWidth: 2),
+      ),
+    );
   }
 }
 
@@ -35,9 +34,10 @@ class SmallConnectivityError extends StatelessWidget {
     var theme = Theme.of(context);
     return Icon(
       Icons.cloud_off,
-      color: theme.brightness == Brightness.light
-          ? Colors.grey[300]
-          : Colors.grey[700],
+      color:
+          theme.brightness == Brightness.light
+              ? Colors.grey[300]
+              : Colors.grey[700],
     );
   }
 }

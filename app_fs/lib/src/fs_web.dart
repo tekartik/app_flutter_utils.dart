@@ -8,7 +8,8 @@ FileSystem? _fs;
 FileSystem get fs => _fs ??= newFileSystemIdb(idbFactoryNative);
 
 /// Package name ignored for indexed_db, we are already in a sandbox
-Future<Directory> getApplicationDocumentsDirectory(
-    {String? packageName}) async {
+Future<Directory> getApplicationDocumentsDirectory({
+  String? packageName,
+}) async {
   return getFsApplicationDocumentsDirectory(fs);
 }

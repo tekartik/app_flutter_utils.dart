@@ -55,11 +55,15 @@ void main() {
       path = ContentPath.fromString('/test/*');
       expect(path.fields, [ContentPathField('test', null)]);
       path = ContentPath.fromString('/test/1/sub');
-      expect(
-          path.fields, [ContentPathField('test', '1'), ContentPathPart('sub')]);
+      expect(path.fields, [
+        ContentPathField('test', '1'),
+        ContentPathPart('sub'),
+      ]);
       path = ContentPath.fromString('test/1/sub/2');
-      expect(path.fields,
-          [ContentPathField('test', '1'), ContentPathField('sub', '2')]);
+      expect(path.fields, [
+        ContentPathField('test', '1'),
+        ContentPathField('sub', '2'),
+      ]);
 
       // set status
       path = ContentPath.fromString('test');
@@ -78,9 +82,10 @@ void main() {
       expect(rt('/test/'), '/test');
       expect(rt('test/1/sub/2'), '/test/1/sub/2');
 
-      var object = SchoolStudentPath()
-        ..student.value = '124'
-        ..school.value = 'the_school';
+      var object =
+          SchoolStudentPath()
+            ..student.value = '124'
+            ..school.value = 'the_school';
       expect(object.toPathString(), '/school/the_school/student/124');
 
       object = SchoolStudentPath();
@@ -131,32 +136,46 @@ void main() {
       expect(simple1.matchesPath(simple2), isTrue);
       */
       expect(
-          ContentPath.fromString('test/*/sub/*')
-              .matchesPath(ContentPath.fromString('test/34/sub/28')),
-          isTrue);
+        ContentPath.fromString(
+          'test/*/sub/*',
+        ).matchesPath(ContentPath.fromString('test/34/sub/28')),
+        isTrue,
+      );
       expect(
-          ContentPath.fromString('test/1/sub/2')
-              .matchesPath(ContentPath.fromString('test/34/dub/28')),
-          isFalse);
+        ContentPath.fromString(
+          'test/1/sub/2',
+        ).matchesPath(ContentPath.fromString('test/34/dub/28')),
+        isFalse,
+      );
       expect(
-          ContentPath.fromString('test/1')
-              .matchesPath(ContentPath.fromString('test')),
-          isFalse);
+        ContentPath.fromString(
+          'test/1',
+        ).matchesPath(ContentPath.fromString('test')),
+        isFalse,
+      );
       expect(
-          ContentPath.fromString('/test/1')
-              .matchesPath(ContentPath.fromString('test/1')),
-          isTrue);
+        ContentPath.fromString(
+          '/test/1',
+        ).matchesPath(ContentPath.fromString('test/1')),
+        isTrue,
+      );
       expect(
-          ContentPath.fromString('test/1')
-              .matchesPath(ContentPath.fromString('/test/1')),
-          isTrue);
+        ContentPath.fromString(
+          'test/1',
+        ).matchesPath(ContentPath.fromString('/test/1')),
+        isTrue,
+      );
       expect(
-          ContentPath.fromString('test/1')
-              .matchesPath(ContentPath.fromString('test/2')),
-          isFalse);
+        ContentPath.fromString(
+          'test/1',
+        ).matchesPath(ContentPath.fromString('test/2')),
+        isFalse,
+      );
 
-      expect(ContentPath.fromString('').matchesPath(ContentPath.fromString('')),
-          isTrue);
+      expect(
+        ContentPath.fromString('').matchesPath(ContentPath.fromString('')),
+        isTrue,
+      );
     });
 
     test('startsWith', () {
@@ -166,24 +185,33 @@ void main() {
       expect(BasePath().startsWith(BasePath()), isTrue);
     });
     test('fromPath', () {
-      var object = SchoolStudentPath()
-        ..fromPath(ContentPath.fromString('school/the_school/student/124'));
+      var object =
+          SchoolStudentPath()
+            ..fromPath(ContentPath.fromString('school/the_school/student/124'));
       expect(object.toPathString(), '/school/the_school/student/124');
-      expect(object.toString(),
-          'SchoolStudentPath(/school/the_school/student/124)');
+      expect(
+        object.toString(),
+        'SchoolStudentPath(/school/the_school/student/124)',
+      );
 
-      object = SchoolStudentPath()
-        ..fromPath(ContentPath.fromString('/school/the_school/student/124'));
+      object =
+          SchoolStudentPath()..fromPath(
+            ContentPath.fromString('/school/the_school/student/124'),
+          );
       expect(object.toPathString(), '/school/the_school/student/124');
-      expect(object.toString(),
-          'SchoolStudentPath(/school/the_school/student/124)');
+      expect(
+        object.toString(),
+        'SchoolStudentPath(/school/the_school/student/124)',
+      );
 
-      object = SchoolStudentPath()
-        ..fromPath(ContentPath.fromString('school/the_school/student'));
+      object =
+          SchoolStudentPath()
+            ..fromPath(ContentPath.fromString('school/the_school/student'));
       expect(object.toPathString(), '/school/the_school/student');
 
-      var boxCp = BoxAddObservationContentPath()
-        ..fromPath(ContentPath.fromString('/category/my_cat/action'));
+      var boxCp =
+          BoxAddObservationContentPath()
+            ..fromPath(ContentPath.fromString('/category/my_cat/action'));
       expect(boxCp.categoryId.value, 'my_cat');
       expect(boxCp.action.value, '');
       expect(boxCp.toPathString(), '/category/my_cat/action');

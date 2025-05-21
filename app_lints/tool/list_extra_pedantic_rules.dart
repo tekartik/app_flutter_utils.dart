@@ -53,14 +53,17 @@ Future<void> main() async {
       Uri.parse(dotPackagesMap['flutter_lints']!).toFilePath();
   var lintsLibPath = Uri.parse(dotPackagesMap['lints']!).toFilePath();
 
-  var tekartikLintsRules =
-      await getRules(join(tekartikLintsLibPath, 'recommended.yaml'));
+  var tekartikLintsRules = await getRules(
+    join(tekartikLintsLibPath, 'recommended.yaml'),
+  );
   await _writeRules('common_utils', tekartikLintsRules);
-  var pedanticRules =
-      await getRules(join(pedanticLibPath, 'analysis_options.1.11.0.yaml'));
+  var pedanticRules = await getRules(
+    join(pedanticLibPath, 'analysis_options.1.11.0.yaml'),
+  );
   await _writeRules('pedantic', pedanticRules);
-  var flutterLintsRules =
-      await getRules(join(flutterLintsLibPath, 'flutter.yaml'));
+  var flutterLintsRules = await getRules(
+    join(flutterLintsLibPath, 'flutter.yaml'),
+  );
   await _writeRules('flutter_lints', flutterLintsRules);
   var lintsRules = await getRules(join(lintsLibPath, 'recommended.yaml'));
 
@@ -79,11 +82,12 @@ Future<void> main() async {
   diffRules.removeWhere((element) => flutterLintsRules.contains(element));
   await _writeRules('pedantic_over_lints', diffRules);
 
-  var all = <String>{}
-    ..addAll(tekartikLintsRules)
-    ..addAll(pedanticRules)
-    ..addAll(flutterLintsRules)
-    ..addAll(lintsRules);
+  var all =
+      <String>{}
+        ..addAll(tekartikLintsRules)
+        ..addAll(pedanticRules)
+        ..addAll(flutterLintsRules)
+        ..addAll(lintsRules);
   diffRules = List<String>.from(all)..sort();
   diffRules.removeWhere((element) => flutterLintsRules.contains(element));
   diffRules.removeWhere((element) => lintsRules.contains(element));

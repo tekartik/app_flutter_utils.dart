@@ -34,7 +34,8 @@ IdbFactory newIdbFactorySembast({String? packageName, String? dataPath}) {
 
 IdbFactory newIdbFactorySqflite({String? packageName}) {
   return getIdbFactorySqflite(
-      sqflite.getDatabaseFactory(packageName: packageName));
+    sqflite.getDatabaseFactory(packageName: packageName),
+  );
 }
 
 /// Use sqflite_ffi on linux and windows

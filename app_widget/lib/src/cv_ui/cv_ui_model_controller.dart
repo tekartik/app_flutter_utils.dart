@@ -125,10 +125,7 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
     //var field = tmv.field;
     //var parts = tmv.treePath.parts;
     if (type?.isBasicType ?? false) {
-      var result = await editText(
-        context,
-        title: 'Add',
-      );
+      var result = await editText(context, title: 'Add');
       if (result?.type == CvUiEditResultType.delete) {
       } else if (result?.type == CvUiEditResultType.nullify) {
       } else if (result?.type == CvUiEditResultType.ok) {
@@ -175,15 +172,19 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
     //var field = tmv.field;
     var parts = tmv.treePath.parts;
     if (type.isBasicType) {
-      var result =
-          await editText(context, title: 'Edit', value: value?.toString());
+      var result = await editText(
+        context,
+        title: 'Edit',
+        value: value?.toString(),
+      );
       if (result?.type == CvUiEditResultType.delete) {
         if (parts.length == 1) {
           model.field(parts.first as String)?.clear();
         } else {
           // Get parent
-          var tmvParent =
-              model.cvTreeValueAtPath(CvTreePath(parts.take(parts.length - 1)));
+          var tmvParent = model.cvTreeValueAtPath(
+            CvTreePath(parts.take(parts.length - 1)),
+          );
 
           var last = parts.last;
           var parentValue = tmvParent.value;
@@ -216,8 +217,9 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
           model.field(parts.first as String)?.clear();
         } else {
           // Get parent
-          var tmvParent =
-              model.cvTreeValueAtPath(CvTreePath(parts.take(parts.length - 1)));
+          var tmvParent = model.cvTreeValueAtPath(
+            CvTreePath(parts.take(parts.length - 1)),
+          );
 
           var last = parts.last;
           var parentValue = tmvParent.value;
@@ -272,49 +274,56 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
   /// Show a dialog to get a string
   ///
   /// returns null on cancel
-  Future<CvUiEditTextResult?> editText(BuildContext context,
-      {
-      /// initial value
-      String? value,
-      String? title,
-      FormFieldValidator<String>? validator,
-      String? hint}) async {
+  Future<CvUiEditTextResult?> editText(
+    BuildContext context, {
+
+    /// initial value
+    String? value,
+    String? title,
+    FormFieldValidator<String>? validator,
+    String? hint,
+  }) async {
     _textFieldController.dispose();
     _textFieldController = TextEditingController(text: value);
     return await showDialog<CvUiEditTextResult>(
-        context: context,
-        builder: (context) {
-          final formKey = GlobalKey<FormState>();
-          return AlertDialog(
-            title: (title != null) ? Text(title) : null,
-            content: Form(
-              key: formKey,
-              child: TextFormField(
-                controller: _textFieldController,
-                decoration: InputDecoration(hintText: hint),
-                validator: validator,
-              ),
+      context: context,
+      builder: (context) {
+        final formKey = GlobalKey<FormState>();
+        return AlertDialog(
+          title: (title != null) ? Text(title) : null,
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: hint),
+              validator: validator,
             ),
-            actions: <Widget>[
-              DialogButton(
-                onPressed: () {
-                  () async {
-                    formKey.currentState!.save();
-                    if (formKey.currentState!.validate()) {
-                      var text = _textFieldController.text;
-                      Navigator.of(context).pop(CvUiEditTextResult(
-                          type: CvUiEditResultType.ok, value: text));
-                    }
-                  }();
-                },
-                text: 'OK',
-              ),
-              const _DeleteButton(),
-              const _NullifyButton(),
-              const _CancelButton(),
-            ],
-          );
-        });
+          ),
+          actions: <Widget>[
+            DialogButton(
+              onPressed: () {
+                () async {
+                  formKey.currentState!.save();
+                  if (formKey.currentState!.validate()) {
+                    var text = _textFieldController.text;
+                    Navigator.of(context).pop(
+                      CvUiEditTextResult(
+                        type: CvUiEditResultType.ok,
+                        value: text,
+                      ),
+                    );
+                  }
+                }();
+              },
+              text: 'OK',
+            ),
+            const _DeleteButton(),
+            const _NullifyButton(),
+            const _CancelButton(),
+          ],
+        );
+      },
+    );
   }
 
   /// Show a dialog to get a string
@@ -325,24 +334,26 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
     String? title,
   }) async {
     return await showDialog<CvUiEditResult>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: (title != null) ? Text(title) : null,
-            actions: <Widget>[
-              DialogButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pop(CvUiEditResult(type: CvUiEditResultType.create));
-                },
-                text: 'CREATE',
-              ),
-              const _DeleteButton(),
-              const _NullifyButton(),
-              const _CancelButton(),
-            ],
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: (title != null) ? Text(title) : null,
+          actions: <Widget>[
+            DialogButton(
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).pop(CvUiEditResult(type: CvUiEditResultType.create));
+              },
+              text: 'CREATE',
+            ),
+            const _DeleteButton(),
+            const _NullifyButton(),
+            const _CancelButton(),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -356,8 +367,9 @@ class _NullifyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DialogButton(
       onPressed: () {
-        Navigator.of(context)
-            .pop(CvUiEditTextResult(type: CvUiEditResultType.nullify));
+        Navigator.of(
+          context,
+        ).pop(CvUiEditTextResult(type: CvUiEditResultType.nullify));
       },
       text: 'NULLIFY',
     );
@@ -374,8 +386,9 @@ class _DeleteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DialogButton(
       onPressed: () {
-        Navigator.of(context)
-            .pop(CvUiEditTextResult(type: CvUiEditResultType.delete));
+        Navigator.of(
+          context,
+        ).pop(CvUiEditTextResult(type: CvUiEditResultType.delete));
       },
       text: 'DELETE',
     );

@@ -14,14 +14,14 @@ void main() {
     makeNullable(TestDefaultBinaryMessengerBinding.instance)!
         .defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-      return true;
-    });
+          return true;
+        });
   });
 
   tearDown(() {
-    makeNullable(TestDefaultBinaryMessengerBinding.instance)!
-        .defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, null);
+    makeNullable(
+      TestDefaultBinaryMessengerBinding.instance,
+    )!.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
   });
 
   test('getPlatformVersion', () async {

@@ -5,14 +5,17 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 
 Directory? _dir;
 
-Future<Directory> get dirAsync async => _dir ??= await () async {
+Future<Directory> get dirAsync async =>
+    _dir ??= await () async {
       return await fs.getApplicationDocumentsDirectory(
-          packageName: 'test1.tekartik.com');
+        packageName: 'test1.tekartik.com',
+      );
     }();
 
 File? _file;
 
-Future<File> get fileAsync async => _file ??= await () async {
+Future<File> get fileAsync async =>
+    _file ??= await () async {
       return fs.file(fs.path.join((await dirAsync).path, 'file.txt'));
     }();
 
@@ -21,7 +24,8 @@ void defineMenu() {
     //devPrint('MAIN_');
     item('app doc dir', () async {
       var dir = await fs.getApplicationDocumentsDirectory(
-          packageName: 'test1.tekartik.com');
+        packageName: 'test1.tekartik.com',
+      );
       write('dir: $dir');
       await dir.list(recursive: true).listen((event) {
         write('file: ${event.path}');

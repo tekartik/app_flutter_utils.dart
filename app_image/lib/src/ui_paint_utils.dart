@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 final uiImageHighQualityPaint = newImageHighQualityPaint();
 
 /// New each time
-ui.Paint newImageHighQualityPaint() => ui.Paint()
-  ..filterQuality = ui.FilterQuality.high
-  ..isAntiAlias = true;
+ui.Paint newImageHighQualityPaint() =>
+    ui.Paint()
+      ..filterQuality = ui.FilterQuality.high
+      ..isAntiAlias = true;

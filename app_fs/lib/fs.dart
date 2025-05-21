@@ -31,8 +31,9 @@ extension AppFileSystem on FileSystem {
   /// On the web, it is the data root directory
   ///
   /// [packageName] only used on linux and windows for now
-  Future<Directory> getApplicationDocumentsDirectory(
-      {String? packageName}) async {
+  Future<Directory> getApplicationDocumentsDirectory({
+    String? packageName,
+  }) async {
     if (this == fs) {
       return src.getApplicationDocumentsDirectory(packageName: packageName);
     }

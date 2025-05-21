@@ -4,13 +4,13 @@ import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 
 void main() {
   testWidgets('MuiScreenWidget', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-        home: muiScreenWidget(
-      'title',
-      () {
-        muiItem('item', () {});
-      },
-    )));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: muiScreenWidget('title', () {
+          muiItem('item', () {});
+        }),
+      ),
+    );
 
     expect(find.text('title'), findsOneWidget);
     expect(find.text('item'), findsOneWidget);

@@ -4,8 +4,9 @@ import 'package:tekartik_test_menu_flutter/test.dart';
 
 void defineMenu() {
   menu('prefs', () {
-    var prefsFactory =
-        getPrefsFactory(packageName: 'app_prefs_test_app.tekartik.com');
+    var prefsFactory = getPrefsFactory(
+      packageName: 'app_prefs_test_app.tekartik.com',
+    );
     var prefsName = 'open_toggle_prefs';
     item('delete prefs', () async {
       await prefsFactory.deletePreferences(prefsName);

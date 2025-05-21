@@ -11,7 +11,8 @@ class ContentRouteInformationParser
 
   @override
   Future<ContentPath> parseRouteInformation(
-      RouteInformation routeInformation) async {
+    RouteInformation routeInformation,
+  ) async {
     return parseRouteInformationSync(routeInformation);
   }
 

@@ -16,15 +16,17 @@ class ContentPathField {
     if (value == _wildcard) {
       value = null;
     } else if (value != null && _value != value) {
-      assert(_value == null,
-          '$name field value $_value cannot be changed to $value. It can only be set once');
+      assert(
+        _value == null,
+        '$name field value $_value cannot be changed to $value. It can only be set once',
+      );
     }
     _value = value;
   }
 
   /// Create a field with a name and an optional value
   ContentPathField(this.name, [String? value])
-      : _value = value == _wildcard ? null : value {
+    : _value = value == _wildcard ? null : value {
     assert(name.isNotEmpty, 'name cannot be empty');
   }
 

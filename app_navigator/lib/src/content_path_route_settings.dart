@@ -26,10 +26,8 @@ class ContentPathRouteSettings {
 /// Helper for push
 extension ContentPathRouteSettingsExt on ContentPathRouteSettings {
   /// To raw representation.
-  RouteSettings toRaw() => RouteSettings(
-        name: path.toPathString(),
-        arguments: arguments,
-      );
+  RouteSettings toRaw() =>
+      RouteSettings(name: path.toPathString(), arguments: arguments);
 }
 
 /// Helper for push

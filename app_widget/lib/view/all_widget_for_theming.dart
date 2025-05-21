@@ -13,7 +13,6 @@ class AllWidgetForTheming extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         /// Samples of all widgets available (cupertino and materials) to easily test theming
-
         Text('Display Large', style: textTheme.displayLarge),
         Text('Display Medium', style: textTheme.displayMedium),
         Text('Display Small', style: textTheme.displaySmall),
@@ -31,24 +30,17 @@ class AllWidgetForTheming extends StatelessWidget {
         BusyIndicator(busy: BehaviorSubject.seeded(true)),
         const CenteredProgress(),
         const Card(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Card'),
-          ),
+          child: Padding(padding: EdgeInsets.all(8.0), child: Text('Card')),
         ),
         ElevatedButton(onPressed: () {}, child: const Text('ElevatedButton')),
         const ElevatedButton(
-            onPressed: null, child: Text('ElevatedButton disabled')),
+          onPressed: null,
+          child: Text('ElevatedButton disabled'),
+        ),
         TextButton(onPressed: () {}, child: const Text('TextButton')),
         const TextButton(onPressed: null, child: Text('TextButton disabled')),
-        FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.person),
-        ),
-        const FloatingActionButton(
-          onPressed: null,
-          child: Icon(Icons.person),
-        ),
+        FloatingActionButton(onPressed: () {}, child: const Icon(Icons.person)),
+        const FloatingActionButton(onPressed: null, child: Icon(Icons.person)),
         Checkbox(value: true, onChanged: (bool? value) {}),
         Checkbox(value: false, onChanged: (bool? value) {}),
         Switch(value: true, onChanged: (bool value) {}),
@@ -58,16 +50,11 @@ class AllWidgetForTheming extends StatelessWidget {
         const LinearProgressIndicator(),
         const Icon(Icons.star),
         const IconButton(icon: Icon(Icons.star), onPressed: null),
-        const ListTile(
-          leading: Icon(Icons.list),
-          title: Text('ListTile'),
-        ),
+        const ListTile(leading: Icon(Icons.list), title: Text('ListTile')),
         const Divider(),
         const Tooltip(message: 'Tooltip', child: Text('Hover over me')),
         const SizedBox(height: 20),
-        AppBar(
-          title: const Text('App bar'),
-        ),
+        AppBar(title: const Text('App bar')),
         BottomAppBar(
           child: Row(
             children: [
@@ -80,12 +67,7 @@ class AllWidgetForTheming extends StatelessWidget {
         AlertDialog(
           title: const Text('AlertDialog'),
           content: const Text('This is an alert dialog'),
-          actions: [
-            TextButton(
-              onPressed: () {},
-              child: const Text('OK'),
-            ),
-          ],
+          actions: [TextButton(onPressed: () {}, child: const Text('OK'))],
         ),
       ],
     );

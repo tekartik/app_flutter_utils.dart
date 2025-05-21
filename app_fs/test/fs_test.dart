@@ -9,10 +9,11 @@ void main() {
     });
     test('getApplicationDocumentsDirectory()', () async {
       expect(
-          (await fsMemory.getApplicationDocumentsDirectory(
-                  packageName: 'test.tekartik.com'))
-              .path,
-          '${context.separator}data');
+        (await fsMemory.getApplicationDocumentsDirectory(
+          packageName: 'test.tekartik.com',
+        )).path,
+        '${context.separator}data',
+      );
     });
     /*
     group('simple', () {

@@ -3,8 +3,10 @@ import 'package:path/path.dart';
 import 'package:tekartik_app_intl/intl.dart';
 
 /// Load localization map from an asset
-Future<Map<String, String>> loadLocalizationMap(TextLocale textLocale,
-    {String? package}) async {
+Future<Map<String, String>> loadLocalizationMap(
+  TextLocale textLocale, {
+  String? package,
+}) async {
   // Load the language JSON file from the "lang" folder
 
   var path = url.join('assets', 'i18n', '${textLocale.name}.json');

@@ -18,7 +18,7 @@ class CvUiModelView extends StatefulWidget {
 class _CvUiModelViewState extends State<CvUiModelView> {
   late final CvUiModelViewControllerImpl controller =
       (widget.controller as CvUiModelViewControllerImpl?) ??
-          CvUiModelViewControllerImpl();
+      CvUiModelViewControllerImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class CvUiModelEdit extends StatefulWidget {
 class _CvUiEditState extends State<CvUiModelEdit> {
   late final CvUiModelEditControllerImpl controller =
       (widget.controller as CvUiModelEditControllerImpl?) ??
-          CvUiModelEditControllerImpl(model: CvMapModel());
+      CvUiModelEditControllerImpl(model: CvMapModel());
   @override
   void initState() {
     controller.triggerRedraw = () {

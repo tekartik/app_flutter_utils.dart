@@ -17,7 +17,9 @@ class TestValueStream extends _BaseWidget {
       stream: subject,
       builder: (_, snapshot) {
         return Directionality(
-            textDirection: TextDirection.ltr, child: Text(snapshot.data ?? ''));
+          textDirection: TextDirection.ltr,
+          child: Text(snapshot.data ?? ''),
+        );
       },
     );
   }
@@ -32,7 +34,9 @@ class TestBehaviorSubject extends _BaseWidget {
       subject: subject,
       builder: (_, snapshot) {
         return Directionality(
-            textDirection: TextDirection.ltr, child: Text(snapshot.data ?? ''));
+          textDirection: TextDirection.ltr,
+          child: Text(snapshot.data ?? ''),
+        );
       },
     );
   }

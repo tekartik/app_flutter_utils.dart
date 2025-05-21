@@ -11,8 +11,11 @@ class FutureOrBuilder<T> extends StatelessWidget {
   final AsyncWidgetBuilder<T> builder;
 
   /// FutureOr Builder.
-  const FutureOrBuilder(
-      {super.key, required this.futureOr, required this.builder});
+  const FutureOrBuilder({
+    super.key,
+    required this.futureOr,
+    required this.builder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,11 @@ class FutureOrBuilder<T> extends StatelessWidget {
       return FutureBuilder<T>(future: futureOr as Future<T>, builder: builder);
     }
     return Builder(
-        builder: (context) => builder(context,
-            AsyncSnapshot.withData(ConnectionState.done, futureOr as T)));
+      builder:
+          (context) => builder(
+            context,
+            AsyncSnapshot.withData(ConnectionState.done, futureOr as T),
+          ),
+    );
   }
 }

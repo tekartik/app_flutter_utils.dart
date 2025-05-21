@@ -24,19 +24,19 @@ class _MyModel extends CvModelBase {
   final dummy = CvField<_Dummy>('dummy');
   @override
   CvFields get fields => [
-        name,
-        description,
-        age,
-        ratio,
-        enabled,
-        sub,
-        mapModel,
-        intList,
-        stringList,
-        subList,
-        mapModel,
-        dummy,
-      ];
+    name,
+    description,
+    age,
+    ratio,
+    enabled,
+    sub,
+    mapModel,
+    intList,
+    stringList,
+    subList,
+    mapModel,
+    dummy,
+  ];
 }
 
 class _MySubModel extends CvModelBase {
@@ -64,8 +64,9 @@ class CvUiStringEditResult {
 
 BuildContext get _buildContext => castAsNullable(buildContext)!;
 Future<Object?> _push({required WidgetBuilder builder}) async {
-  return await Navigator.of(_buildContext)
-      .push<Object?>(MaterialPageRoute<Object?>(builder: builder));
+  return await Navigator.of(
+    _buildContext,
+  ).push<Object?>(MaterialPageRoute<Object?>(builder: builder));
 }
 
 void menuCvUi() {
@@ -76,61 +77,84 @@ void menuCvUi() {
     });
     item('CvUiValue', () async {
       //cvAddConstructors([_MyModel.new, _MySubModel.new, _MySubSubModel.new]);
-      var result = await _push(builder: (_) {
-        return Scaffold(
+      var result = await _push(
+        builder: (_) {
+          return Scaffold(
             appBar: AppBar(title: const Text('Cv UI Value')),
-            body: ListView(children: [
-              const CvUiTextValue(text: 'Hello'),
-              CvUiStringFieldValue(
-                field: CvField<String>('someOtherKey', 'someValue'),
-              ),
-              CvUiStringFieldValue(field: CvField<String>('someKey')),
-              CvUiModelValue(
-                  model: _MyModel()
-                    ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-                    ..dummy.v = _Dummy()),
-              const Text('only 1 field'),
-              CvUiModelValue(model: _MyModel()..name.v = 'My name'),
-              const CvUiTextValue(text: 'Hello'),
-              const CvUiListValue(list: [1, 2, 3, 4]),
-            ]));
-      });
+            body: ListView(
+              children: [
+                const CvUiTextValue(text: 'Hello'),
+                CvUiStringFieldValue(
+                  field: CvField<String>('someOtherKey', 'someValue'),
+                ),
+                CvUiStringFieldValue(field: CvField<String>('someKey')),
+                CvUiModelValue(
+                  model:
+                      _MyModel()
+                        ..fillModel(
+                          CvFillOptions(valueStart: 0, collectionSize: 3),
+                        )
+                        ..dummy.v = _Dummy(),
+                ),
+                const Text('only 1 field'),
+                CvUiModelValue(model: _MyModel()..name.v = 'My name'),
+                const CvUiTextValue(text: 'Hello'),
+                const CvUiListValue(list: [1, 2, 3, 4]),
+              ],
+            ),
+          );
+        },
+      );
       if (muiBuildContext.mounted) {
         await muiSnack(muiBuildContext, 'result: $result');
       }
     });
     item('CvUiModelView', () async {
-      var result = await _push(builder: (_) {
-        return Scaffold(
+      var result = await _push(
+        builder: (_) {
+          return Scaffold(
             appBar: AppBar(title: const Text('Cv UI ModelView')),
-            body: ListView(children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CvUiModelView(
-                    model: _MyModel()
-                      ..fillModel(
-                          CvFillOptions(valueStart: 0, collectionSize: 3))
-                      ..dummy.v = _Dummy()),
-              ),
-            ]));
-      });
+            body: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CvUiModelView(
+                    model:
+                        _MyModel()
+                          ..fillModel(
+                            CvFillOptions(valueStart: 0, collectionSize: 3),
+                          )
+                          ..dummy.v = _Dummy(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
       if (_buildContext.mounted) {
         await muiSnack(_buildContext, 'result: $result');
       }
     });
 
     Future<void> edit(CvModel model) async {
-      var result = await _push(builder: (_) {
-        return Scaffold(
+      var result = await _push(
+        builder: (_) {
+          return Scaffold(
             appBar: AppBar(title: const Text('Cv UI ModelEdit')),
-            body: ListView(children: [
-              Padding(
+            body: ListView(
+              children: [
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CvUiModelEdit(
                     controller: CvUiModelEditController(model: model),
-                  )),
-            ]));
-      });
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
       if (_buildContext.mounted) {
         await muiSnack(_buildContext, 'result: $result');
       }
@@ -138,31 +162,39 @@ void menuCvUi() {
 
     _MyModel? lastModel;
     item('CvUiModelEdit last', () async {
-      var model = lastModel ??= (_MyModel()
-        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-        ..dummy.v = _Dummy());
+      var model =
+          lastModel ??=
+              (_MyModel()
+                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+                ..dummy.v = _Dummy());
       await edit(model);
     });
 
     item('CvUiModelEdit all', () async {
-      var model = lastModel = _MyModel()
-        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-        ..dummy.v = _Dummy();
+      var model =
+          lastModel =
+              _MyModel()
+                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+                ..dummy.v = _Dummy();
       await edit(model);
     });
 
     item('CvUiModelEdit intList', () async {
-      var model = lastModel = (_MyModel()
-        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-        ..dummy.v = _Dummy());
+      var model =
+          lastModel =
+              (_MyModel()
+                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+                ..dummy.v = _Dummy());
       model = _MyModel()..intList.v = model.intList.v;
       await edit(model);
     });
 
     item('CvUiModelEdit subList', () async {
-      var model = lastModel = (_MyModel()
-        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-        ..dummy.v = _Dummy());
+      var model =
+          lastModel =
+              (_MyModel()
+                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+                ..dummy.v = _Dummy());
       model = _MyModel()..subList.v = model.subList.v;
       await edit(model);
     });

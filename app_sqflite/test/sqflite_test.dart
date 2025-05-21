@@ -15,17 +15,20 @@ void main() {
   });
 
   test('doc', () async {
-    var db = await databaseFactory.openDatabase('test.db',
-        options: OpenDatabaseOptions(
-            version: 1,
-            onCreate: (db, version) async {
-              await db.execute('''
+    var db = await databaseFactory.openDatabase(
+      'test.db',
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (db, version) async {
+          await db.execute('''
     CREATE TABLE Pref (
       id TEXT PRIMARY KEY,
       value INTEGER NOT NULL
     )
               ''');
-            }));
+        },
+      ),
+    );
     await db.close();
   });
 

@@ -18,8 +18,11 @@ PrefsFactory? _defaultPrefsFactory;
 PrefsAsyncFactory? _defaultPrefsAsyncFactory;
 
 PrefsFactory newPrefsFactorySembast(String? packageName) {
-  var dataPath =
-      join(userAppDataPath, packageName ?? 'com.tekartik.app_prefs', 'prefs');
+  var dataPath = join(
+    userAppDataPath,
+    packageName ?? 'com.tekartik.app_prefs',
+    'prefs',
+  );
   try {
     Directory(dirname(dataPath)).createSync(recursive: true);
   } catch (_) {}
@@ -28,8 +31,11 @@ PrefsFactory newPrefsFactorySembast(String? packageName) {
 
 /// Sembast prefs factory
 PrefsAsyncFactory newPrefsAsyncFactorySembast({String? packageName}) {
-  var dataPath =
-      join(userAppDataPath, packageName ?? 'com.tekartik.app_prefs', 'prefs');
+  var dataPath = join(
+    userAppDataPath,
+    packageName ?? 'com.tekartik.app_prefs',
+    'prefs',
+  );
   try {
     Directory(dirname(dataPath)).createSync(recursive: true);
   } catch (_) {}
@@ -61,11 +67,15 @@ PrefsAsyncFactory getPrefsAsyncFactory({String? packageName}) {
     var prefsFactory = _prefsAsyncFactoryMap[packageName];
     if (prefsFactory == null) {
       if (packageName == null) {
-        prefsFactory = _defaultPrefsAsyncFactory ??=
-            newPrefsAsyncFactorySembast(packageName: packageName);
+        prefsFactory =
+            _defaultPrefsAsyncFactory ??= newPrefsAsyncFactorySembast(
+              packageName: packageName,
+            );
       } else {
-        _prefsAsyncFactoryMap[packageName] = prefsFactory =
-            newPrefsAsyncFactorySembast(packageName: packageName);
+        _prefsAsyncFactoryMap[packageName] =
+            prefsFactory = newPrefsAsyncFactorySembast(
+              packageName: packageName,
+            );
       }
     }
     return prefsAsyncFactory;

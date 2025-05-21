@@ -12,10 +12,16 @@ var noValue = no(value);
 
 void main() {
   Future<void> setupValue(WidgetTester tester, FutureOr<String> value) async {
-    await tester.pumpWidget(FutureOrBuilder<String>(
+    await tester.pumpWidget(
+      FutureOrBuilder<String>(
         futureOr: value,
-        builder: (context, snapshot) =>
-            Text(snapshot.data ?? noValue, textDirection: TextDirection.ltr)));
+        builder:
+            (context, snapshot) => Text(
+              snapshot.data ?? noValue,
+              textDirection: TextDirection.ltr,
+            ),
+      ),
+    );
   }
 
   group('FutureOrBuilder', () {
@@ -39,10 +45,11 @@ void main() {
         }
 
         return MaterialApp(
-            home: FutureOrBuilder<String>(
-                futureOr: loadData(),
-                builder: (context, snapshot) =>
-                    Text(snapshot.data ?? 'no data')));
+          home: FutureOrBuilder<String>(
+            futureOr: loadData(),
+            builder: (context, snapshot) => Text(snapshot.data ?? 'no data'),
+          ),
+        );
       }
 
       await tester.pumpWidget(getMaterialApp());
@@ -73,9 +80,12 @@ void main() {
     });
 
     testWidgets('future 2', (WidgetTester tester) async {
-      await setupValue(tester, Future.sync(() {
-        return value;
-      }));
+      await setupValue(
+        tester,
+        Future.sync(() {
+          return value;
+        }),
+      );
       expect(find.text(noValue), findsOneWidget);
       expect(find.text(value), findsNothing);
       await tester.pump();
@@ -84,9 +94,12 @@ void main() {
     });
 
     testWidgets('future 3', (WidgetTester tester) async {
-      await setupValue(tester, Future.sync(() async {
-        return value;
-      }));
+      await setupValue(
+        tester,
+        Future.sync(() async {
+          return value;
+        }),
+      );
       expect(find.text(noValue), findsOneWidget);
       expect(find.text(value), findsNothing);
       await tester.pump();
@@ -95,10 +108,13 @@ void main() {
     });
 
     testWidgets('delayed 500', (WidgetTester tester) async {
-      await setupValue(tester, Future.sync(() async {
-        await sleep(500);
-        return value;
-      }));
+      await setupValue(
+        tester,
+        Future.sync(() async {
+          await sleep(500);
+          return value;
+        }),
+      );
       expect(find.text(noValue), findsOneWidget);
       expect(find.text(value), findsNothing);
       await tester.pump();

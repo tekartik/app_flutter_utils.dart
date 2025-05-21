@@ -14,17 +14,17 @@ void main() {
     makeNullable(TestDefaultBinaryMessengerBinding.instance)!
         .defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-      if (methodCall.method == 'isMonkeyRunning') {
-        return true;
-      }
-      return null;
-    });
+          if (methodCall.method == 'isMonkeyRunning') {
+            return true;
+          }
+          return null;
+        });
   });
 
   tearDown(() {
-    makeNullable(TestDefaultBinaryMessengerBinding.instance)!
-        .defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, null);
+    makeNullable(
+      TestDefaultBinaryMessengerBinding.instance,
+    )!.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
   });
 
   test('getPlatformVersion', () async {

@@ -11,18 +11,21 @@ class TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: BlocProvider(
-      blocBuilder: () => TestBloc(),
-      child: Scaffold(
-        body: ListView(
-          children: [
-            Builder(builder: (context) {
-              return Text(BlocProvider.of<TestBloc>(context).value);
-            })
-          ],
+      home: BlocProvider(
+        blocBuilder: () => TestBloc(),
+        child: Scaffold(
+          body: ListView(
+            children: [
+              Builder(
+                builder: (context) {
+                  return Text(BlocProvider.of<TestBloc>(context).value);
+                },
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
 

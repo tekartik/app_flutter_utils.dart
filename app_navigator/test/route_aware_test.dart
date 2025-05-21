@@ -3,15 +3,17 @@ import 'package:tekartik_app_navigator_flutter/route_aware.dart';
 import 'package:tekartik_app_navigator_flutter/src/import.dart';
 
 var homePageDef = ContentPageDef(
-    screenBuilder: (_) {
-      return const HomeScreen();
-    },
-    path: rootContentPath);
+  screenBuilder: (_) {
+    return const HomeScreen();
+  },
+  path: rootContentPath,
+);
 ContentPageDef namedPageDef(String name) => ContentPageDef(
-    screenBuilder: (_) {
-      return TestNamedScreen(name: name);
-    },
-    path: ContentPath.fromString('named/$name'));
+  screenBuilder: (_) {
+    return TestNamedScreen(name: name);
+  },
+  path: ContentPath.fromString('named/$name'),
+);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -79,15 +81,11 @@ class HomeScreenState extends RouteAwareState<HomeScreen> {
   }
 }
 
-final contentNavigatorDef = ContentNavigatorDef(defs: [
-  homePageDef,
-  namedPageDef('a'),
-]);
+final contentNavigatorDef = ContentNavigatorDef(
+  defs: [homePageDef, namedPageDef('a')],
+);
 
-enum TestEventType {
-  resume,
-  pause,
-}
+enum TestEventType { resume, pause }
 
 class TestEvent {
   final String name;
@@ -125,10 +123,11 @@ void main() {
   setUp(() async {
     testEventController = StreamController.broadcast();
     cn = ContentNavigator(
-        // Needed for onResume/onPause
-        observers: [routeAwareObserver],
-        def: contentNavigatorDef,
-        child: Builder(builder: (context) {
+      // Needed for onResume/onPause
+      observers: [routeAwareObserver],
+      def: contentNavigatorDef,
+      child: Builder(
+        builder: (context) {
           var cn = ContentNavigator.of(context);
           return MaterialApp.router(
             title: 'Stable app',
@@ -137,7 +136,9 @@ void main() {
             routeInformationParser: cn.routeInformationParser,
             // routeInformationProvider: _platformRouteInformationProvider, // if uncomment we always start on the initial route
           );
-        }));
+        },
+      ),
+    );
   });
   tearDown(() {
     testEventController.close();
@@ -157,13 +158,19 @@ void main() {
       expect(await future, [TestEvent(TestEventType.resume, 'home')]);
       var context = homeScreenState.context;
       future = testEventStream.take(2).toList();
-      Navigator.of(context).push<void>(MaterialPageRoute(builder: (_) {
-        return const TestNamedScreen(name: 'pushed');
-      })).unawait();
+      Navigator.of(context)
+          .push<void>(
+            MaterialPageRoute(
+              builder: (_) {
+                return const TestNamedScreen(name: 'pushed');
+              },
+            ),
+          )
+          .unawait();
       await tester.pumpWidget(cn);
       expect(await future, [
         TestEvent(TestEventType.pause, 'home'),
-        TestEvent(TestEventType.resume, 'pushed')
+        TestEvent(TestEventType.resume, 'pushed'),
       ]);
 
       future = testEventStream.take(2).toList();
@@ -172,7 +179,7 @@ void main() {
 
       expect(await future, [
         TestEvent(TestEventType.resume, 'home'),
-        TestEvent(TestEventType.pause, 'pushed')
+        TestEvent(TestEventType.pause, 'pushed'),
       ]);
     });
   });

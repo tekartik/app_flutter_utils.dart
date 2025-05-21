@@ -25,8 +25,9 @@ abstract class BusyScreenState<T extends StatefulWidget> implements State<T> {
 mixin AutoDisposedBusyScreenStateMixin<T extends StatefulWidget> on State<T>
     implements BusyScreenState<T>, AutoDispose {
   @override
-  late final _busySubject =
-      audiAddBehaviorSubject(BehaviorSubject<bool>.seeded(false));
+  late final _busySubject = audiAddBehaviorSubject(
+    BehaviorSubject<bool>.seeded(false),
+  );
 }
 
 /// Busy screen state mixin

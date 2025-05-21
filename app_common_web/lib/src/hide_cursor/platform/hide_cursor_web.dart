@@ -51,8 +51,10 @@ class _FlutterCursorWeb {
           }
         }
         if (style?.contains(previousCursorStyle) ?? false) {
-          styleAttribute?.value =
-              style!.replaceAll(previousCursorStyle, cursorStyle);
+          styleAttribute?.value = style!.replaceAll(
+            previousCursorStyle,
+            cursorStyle,
+          );
         } else {
           styleAttribute?.value =
               '$cursorStyle${style == null ? '' : ' $style'}';

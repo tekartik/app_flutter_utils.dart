@@ -15,8 +15,9 @@ void main() {
   sqflite_ffi.sqfliteFfiInit();
   for (var factory in [
     newIdbFactorySembast(
-        dataPath: join('.dart_tool', 'app_idb_test_databases')),
-    newIdbFactorySqflite()
+      dataPath: join('.dart_tool', 'app_idb_test_databases'),
+    ),
+    newIdbFactorySqflite(),
   ]) {
     //var factory = newIdbFactorySqflite(); // databaseFactoryFfiNoIsolate;
     group('simple idb sqflite idb factory', () {
@@ -39,11 +40,14 @@ void main() {
       Future<void> testAll(IdbFactory factory, {int count = 100000}) async {
         var dbName = 'app_idb_test1.db';
         await factory.deleteDatabase(dbName);
-        var db = await factory.open('app_idb_test1.db', version: 1,
-            onUpgradeNeeded: (vce) {
-          var db = vce.database;
-          db.createObjectStore(objectStoreName, autoIncrement: true);
-        });
+        var db = await factory.open(
+          'app_idb_test1.db',
+          version: 1,
+          onUpgradeNeeded: (vce) {
+            var db = vce.database;
+            db.createObjectStore(objectStoreName, autoIncrement: true);
+          },
+        );
         await testInsert(db, count: count);
         await testQuery(db, count: count);
         db.close();

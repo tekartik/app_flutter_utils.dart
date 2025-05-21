@@ -5,15 +5,17 @@ import 'package:tekartik_app_navigator_flutter/src/import.dart';
 import 'route_aware_test.dart';
 
 var homePageDef = ContentPageDef(
-    screenBuilder: (_) {
-      return HomeScreen();
-    },
-    path: rootContentPath);
+  screenBuilder: (_) {
+    return HomeScreen();
+  },
+  path: rootContentPath,
+);
 ContentPageDef namedPageDef(String name) => ContentPageDef(
-    screenBuilder: (_) {
-      return TestNamedScreen(name: name);
-    },
-    path: ContentPath.fromString('named/$name'));
+  screenBuilder: (_) {
+    return TestNamedScreen(name: name);
+  },
+  path: ContentPath.fromString('named/$name'),
+);
 
 class HomeScreen extends TestNamedScreen {
   HomeScreen({super.key}) : super(name: '/');
@@ -25,7 +27,7 @@ class HomeScreen extends TestNamedScreen {
 class TestNamedScreen extends RouteAwareStatefulWidget {
   final String name;
   TestNamedScreen({super.key, required this.name})
-      : super(contentPath: ContentPath.fromString(name));
+    : super(contentPath: ContentPath.fromString(name));
 
   @override
   RouteAwareState<TestNamedScreen> createState() => _TestNamedScreenState();
@@ -94,10 +96,9 @@ late State homeScreenState;
 
 class HomeScreenState extends _TestNamedScreenState<HomeScreen> {}
 
-final contentNavigatorDef = ContentNavigatorDef(defs: [
-  homePageDef,
-  namedPageDef('a'),
-]);
+final contentNavigatorDef = ContentNavigatorDef(
+  defs: [homePageDef, namedPageDef('a')],
+);
 
 Stream<TestEvent> get testEventStream => testEventController.stream;
 late StreamController<TestEvent> testEventController;
@@ -107,10 +108,11 @@ void main() {
   setUp(() async {
     testEventController = StreamController.broadcast();
     cn = ContentNavigator(
-        // Needed for onResume/onPause
-        observers: [routeAwareObserver],
-        def: contentNavigatorDef,
-        child: Builder(builder: (context) {
+      // Needed for onResume/onPause
+      observers: [routeAwareObserver],
+      def: contentNavigatorDef,
+      child: Builder(
+        builder: (context) {
           var cn = ContentNavigator.of(context);
           return MaterialApp.router(
             title: 'Stable app',
@@ -119,7 +121,9 @@ void main() {
             routeInformationParser: cn.routeInformationParser,
             // routeInformationProvider: _platformRouteInformationProvider, // if uncomment we always start on the initial route
           );
-        }));
+        },
+      ),
+    );
   });
   tearDown(() {
     testEventController.close();
@@ -131,7 +135,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 200));
       expect(await future, [
         TestEvent(TestEventType.resume, '/'),
-        TestEvent(TestEventType.resume, '/ 0')
+        TestEvent(TestEventType.resume, '/ 0'),
       ]);
 
       //await expectLater(stream, emits([]));
@@ -140,9 +144,15 @@ void main() {
       var future = testEventStream.take(5).toList();
       await tester.pumpWidget(cn);
       var context = homeScreenState.context;
-      Navigator.of(context).push<void>(MaterialPageRoute(builder: (_) {
-        return TestNamedScreen(name: 'pushed');
-      })).unawait();
+      Navigator.of(context)
+          .push<void>(
+            MaterialPageRoute(
+              builder: (_) {
+                return TestNamedScreen(name: 'pushed');
+              },
+            ),
+          )
+          .unawait();
       await tester.pumpWidget(cn);
       await tester.pumpAndSettle(const Duration(milliseconds: 200));
       expect(await future, [
@@ -178,9 +188,15 @@ void main() {
     Future<BuildContext> initAndPushHomeThenPushed(WidgetTester tester) async {
       var context = await initAndPushHome(tester);
       final handler = TestEventHandler(tester, cn, 3);
-      Navigator.of(context).push<void>(MaterialPageRoute(builder: (_) {
-        return TestNamedScreen(name: 'pushed');
-      })).unawait();
+      Navigator.of(context)
+          .push<void>(
+            MaterialPageRoute(
+              builder: (_) {
+                return TestNamedScreen(name: 'pushed');
+              },
+            ),
+          )
+          .unawait();
       expect(await handler.pumpAndGetEvents(), [
         TestEvent(TestEventType.pause, '/'),
         TestEvent(TestEventType.resume, 'pushed'),
@@ -194,9 +210,15 @@ void main() {
 
       var handler = TestEventHandler(tester, cn, 5);
       Navigator.of(context).pop();
-      Navigator.of(context).push<void>(MaterialPageRoute(builder: (_) {
-        return TestNamedScreen(name: 'pushed');
-      })).unawait();
+      Navigator.of(context)
+          .push<void>(
+            MaterialPageRoute(
+              builder: (_) {
+                return TestNamedScreen(name: 'pushed');
+              },
+            ),
+          )
+          .unawait();
 
       expect(await handler.pumpAndGetEvents(), [
         TestEvent(TestEventType.pause, 'pushed'),
@@ -211,9 +233,15 @@ void main() {
       var context = await initAndPushHomeThenPushed(tester);
       var handler = TestEventHandler(tester, cn, 3);
       ContentNavigator.transientPop(context);
-      Navigator.of(context).push<void>(MaterialPageRoute(builder: (_) {
-        return TestNamedScreen(name: 'pushed');
-      })).unawait();
+      Navigator.of(context)
+          .push<void>(
+            MaterialPageRoute(
+              builder: (_) {
+                return TestNamedScreen(name: 'pushed');
+              },
+            ),
+          )
+          .unawait();
 
       expect(await handler.pumpAndGetEvents(), [
         TestEvent(TestEventType.pause, 'pushed'),
@@ -226,14 +254,19 @@ void main() {
       var context = await initAndPushHomeThenPushed(tester);
       var handler = TestEventHandler(tester, cn, 3);
       ContentNavigator.transientPopUntilPath(
-          context, ContentPath.fromString('/'));
+        context,
+        ContentPath.fromString('/'),
+      );
 
       Navigator.of(context)
-          .push<void>(MaterialPageRoute(
+          .push<void>(
+            MaterialPageRoute(
               builder: (_) {
                 return TestNamedScreen(name: 'pushed');
               },
-              settings: const RouteSettings(name: 'pushed')))
+              settings: const RouteSettings(name: 'pushed'),
+            ),
+          )
           .unawait();
       expect(await handler.pumpAndGetEvents(), [
         TestEvent(TestEventType.pause, 'pushed'),

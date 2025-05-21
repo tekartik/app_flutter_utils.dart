@@ -6,8 +6,6 @@ Future<void> muiSnack(BuildContext context, String message) async {
   if (context.mounted) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text(message),
-      ));
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 }

@@ -9,26 +9,28 @@ class WithHeaderFooterListView extends StatelessWidget {
   final Widget? footer;
   final IndexedWidgetBuilder? separatorBuilder;
   final bool shrinkWrap;
-  const WithHeaderFooterListView.separated(
-      {super.key,
-      required this.itemBuilder,
-      required this.itemCount,
-      this.padding,
-      this.header,
-      this.footer,
-      required this.separatorBuilder,
-      this.shrinkWrap = false});
+  const WithHeaderFooterListView.separated({
+    super.key,
+    required this.itemBuilder,
+    required this.itemCount,
+    this.padding,
+    this.header,
+    this.footer,
+    required this.separatorBuilder,
+    this.shrinkWrap = false,
+  });
 
-  const WithHeaderFooterListView.builder(
-      {super.key,
-      required this.itemBuilder,
-      required this.itemCount,
-      this.padding,
-      this.header,
-      // Should be null
-      this.separatorBuilder,
-      this.footer,
-      this.shrinkWrap = false});
+  const WithHeaderFooterListView.builder({
+    super.key,
+    required this.itemBuilder,
+    required this.itemCount,
+    this.padding,
+    this.header,
+    // Should be null
+    this.separatorBuilder,
+    this.footer,
+    this.shrinkWrap = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,12 @@ class WithHeaderFooterListView extends StatelessWidget {
         itemCount + (header != null ? 1 : 0) + (footer != null ? 1 : 0);
     if (separatorBuilder != null) {
       return ListView.separated(
-          shrinkWrap: shrinkWrap,
-          padding: padding,
-          itemBuilder: wrappedItemBuilder,
-          separatorBuilder: separatorBuilder!,
-          itemCount: wrappedItemCount);
+        shrinkWrap: shrinkWrap,
+        padding: padding,
+        itemBuilder: wrappedItemBuilder,
+        separatorBuilder: separatorBuilder!,
+        itemCount: wrappedItemCount,
+      );
     }
 
     return ListView.builder(

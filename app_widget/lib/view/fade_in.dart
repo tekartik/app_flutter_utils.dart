@@ -27,10 +27,7 @@ class FadeIn extends StatefulWidget {
   State<FadeIn> createState() => _FadeInState();
 }
 
-enum FadeInAction {
-  fadeIn,
-  fadeOut,
-}
+enum FadeInAction { fadeIn, fadeOut }
 
 /// Fade-in controller which dispatches fade-in/fade-out actions
 class FadeInController {
@@ -64,10 +61,7 @@ class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
 
     _setupCurve();
 
@@ -81,10 +75,7 @@ class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
   void _setupCurve() {
     final curve = CurvedAnimation(parent: _controller, curve: widget.curve);
 
-    Tween(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(curve);
+    Tween(begin: 0.0, end: 1.0).animate(curve);
   }
 
   void _listen() {
@@ -134,10 +125,7 @@ class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _controller,
-      child: widget.child,
-    );
+    return FadeTransition(opacity: _controller, child: widget.child);
   }
 
   /// Fades-in child

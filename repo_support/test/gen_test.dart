@@ -37,8 +37,10 @@ void main() {
           'image_test_app_lib',
           'test_app',
         ]) {
-          await copyDirectory(Directory(join(topDir, 'example', dir)),
-              Directory(join(dstDir, dir)));
+          await copyDirectory(
+            Directory(join(topDir, 'example', dir)),
+            Directory(join(dstDir, dir)),
+          );
         }
         var dirName = join(dstDir, 'test_app');
         //var src = join(topDir, 'example', 'test_app');
@@ -46,7 +48,8 @@ void main() {
         var prj = DtkProject(dstDir);
         await prj.createWorkspaceRootProject();
         await prj.addAllProjectsToWorkspace(
-            keepExistingWorkspaceResolution: true);
+          keepExistingWorkspaceResolution: true,
+        );
         //await fsGenerate(dir: dirName, src: src);
 
         await Shell(workingDirectory: dirName).run('''

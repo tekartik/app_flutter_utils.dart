@@ -9,8 +9,11 @@ class EmitFutureOrBuilder<T> extends StatefulWidget {
   final EmitFutureOr<T> futureOr;
   final AsyncWidgetBuilder<T> builder;
 
-  const EmitFutureOrBuilder(
-      {super.key, required this.futureOr, required this.builder});
+  const EmitFutureOrBuilder({
+    super.key,
+    required this.futureOr,
+    required this.builder,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -27,16 +30,23 @@ class _EmitFutureOrBuilderState<T> extends State<EmitFutureOrBuilder<T>> {
     var value = widget.futureOr.toFutureOr();
     if (value is Future) {
       var completer = Completer<T>.sync();
-      subscription = widget.futureOr.listen((value) {
-        completer.complete(value);
-      }, onError: (Object error) {
-        completer.completeError(error);
-      });
+      subscription = widget.futureOr.listen(
+        (value) {
+          completer.complete(value);
+        },
+        onError: (Object error) {
+          completer.completeError(error);
+        },
+      );
       return FutureBuilder<T>(
-          future: completer.future, builder: widget.builder);
+        future: completer.future,
+        builder: widget.builder,
+      );
     } else {
       return widget.builder(
-          context, AsyncSnapshot<T>.withData(ConnectionState.done, value));
+        context,
+        AsyncSnapshot<T>.withData(ConnectionState.done, value),
+      );
     }
   }
 

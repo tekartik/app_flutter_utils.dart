@@ -5,7 +5,8 @@ import 'package:tekartik_app_rx_bloc_flutter/app_rx_bloc.dart';
 extension AutoDisposeValueNotifierExtension on AutoDispose {
   /// Add a TextEditingController to the auto dispose list
   TextEditingController audiAddTextEditingController(
-      TextEditingController controller) {
+    TextEditingController controller,
+  ) {
     return audiAdd(controller, controller.dispose);
   }
 

@@ -7,10 +7,7 @@ class CvUiFieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      name,
-      style: TextTheme.of(context).labelSmall,
-    );
+    return Text(name, style: TextTheme.of(context).labelSmall);
   }
 }
 
@@ -23,8 +20,9 @@ class CvUiListItemLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       'item $index',
-      style: TextTheme.of(context).labelSmall
-        ?..copyWith(fontStyle: FontStyle.italic),
+      style:
+          TextTheme.of(context).labelSmall
+            ?..copyWith(fontStyle: FontStyle.italic),
     );
   }
 }

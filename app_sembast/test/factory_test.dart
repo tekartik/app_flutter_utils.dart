@@ -6,7 +6,8 @@ import 'package:tekartik_app_flutter_sqflite/sqflite.dart'
 Future main() async {
   sqfliteWindowsFfiInit();
   var factory = getDatabaseFactory(
-      packageName: 'tekartik_app_sembast_flutter_test.tekartik.com');
+    packageName: 'tekartik_app_sembast_flutter_test.tekartik.com',
+  );
 
   group('sembast', () {
     test('factory', () async {

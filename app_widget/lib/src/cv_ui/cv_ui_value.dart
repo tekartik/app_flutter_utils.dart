@@ -10,8 +10,10 @@ class CvUiUnsetValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('unset',
-        style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey));
+    return const Text(
+      'unset',
+      style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+    );
   }
 }
 
@@ -48,7 +50,8 @@ class CvUiBasicTypeFieldValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CvUiStringFieldValue(
-        field: CvField<String>(field.name, field.value?.toString()));
+      field: CvField<String>(field.name, field.value?.toString()),
+    );
   }
 }
 
@@ -61,9 +64,10 @@ class CvUiStringFieldValue extends StatelessWidget {
   Widget build(BuildContext context) {
     return CvUiFieldWithChild(
       name: field.name,
-      child: field.hasValue
-          ? CvUiTextValue(text: field.value)
-          : const CvUiUnsetValue(),
+      child:
+          field.hasValue
+              ? CvUiTextValue(text: field.value)
+              : const CvUiUnsetValue(),
     );
   }
 }
@@ -81,9 +85,11 @@ class CvUiListValue extends StatelessWidget {
       return const CvUiNullValue();
     }
     return CvUiListChildrenPrv(
-        children: list.map((item) {
-      return CvUiTextValue(text: item.toString());
-    }).toList());
+      children:
+          list.map((item) {
+            return CvUiTextValue(text: item.toString());
+          }).toList(),
+    );
   }
 }
 
@@ -101,10 +107,11 @@ class CvUiModelMapValue extends StatelessWidget {
       return const CvUiNullValue();
     }
     return CvUiMapChildrenPrv(
-        indented: true,
-        children: map.map((key, model) {
-          return MapEntry(key, CvUiModelValue(model: model));
-        }));
+      indented: true,
+      children: map.map((key, model) {
+        return MapEntry(key, CvUiModelValue(model: model));
+      }),
+    );
   }
 }
 
@@ -121,9 +128,11 @@ class CvUiModelListValue extends StatelessWidget {
       return const CvUiNullValue();
     }
     return CvUiListChildrenPrv(
-        children: list.map((item) {
-      return CvUiModelValue(model: item);
-    }).toList());
+      children:
+          list.map((item) {
+            return CvUiModelValue(model: item);
+          }).toList(),
+    );
   }
 }
 
@@ -142,37 +151,43 @@ class _CvUiModelValueState extends State<CvUiModelValue> {
     Widget buildField(CvField field) {
       if (!field.hasValue) {
         return CvUiFieldWithChild(
-            name: field.name, child: const CvUiUnsetValue());
+          name: field.name,
+          child: const CvUiUnsetValue(),
+        );
       }
       var value = field.value;
       if (value == null) {
         return CvUiFieldWithChild(
-            name: field.name, child: const CvUiNullValue());
+          name: field.name,
+          child: const CvUiNullValue(),
+        );
       } else if (field.type.isBasicType) {
         return CvUiBasicTypeFieldValue(field: field);
       } else if (field is CvModelField) {
         return CvUiFieldWithChild(
-            indented: true,
-            name: field.name,
-            child: CvUiModelValue(model: field.value!));
+          indented: true,
+          name: field.name,
+          child: CvUiModelValue(model: field.value!),
+        );
       } else if (field is CvModelListField) {
         return CvUiFieldWithChild(
-            indented: true,
-            name: field.name,
-            child: CvUiModelListValue(
-              list: field.value,
-            ));
+          indented: true,
+          name: field.name,
+          child: CvUiModelListValue(list: field.value),
+        );
       } else if (field is CvListField) {
         return CvUiFieldWithChild(
-            indented: true,
-            name: field.name,
-            child: CvUiListValue(list: field.value));
+          indented: true,
+          name: field.name,
+          child: CvUiListValue(list: field.value),
+        );
       } else if (field is CvModelMapField) {
         var value = field.value;
         return CvUiFieldWithChild(
-            indented: true,
-            name: field.name,
-            child: CvUiModelMapValue(map: value));
+          indented: true,
+          name: field.name,
+          child: CvUiModelMapValue(map: value),
+        );
       }
       return Text(
         'Unsupported type ${field.type}',
@@ -184,9 +199,7 @@ class _CvUiModelValueState extends State<CvUiModelValue> {
       spacing: 4,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var field in widget.model.fields) buildField(field),
-      ],
+      children: [for (var field in widget.model.fields) buildField(field)],
     );
   }
 }

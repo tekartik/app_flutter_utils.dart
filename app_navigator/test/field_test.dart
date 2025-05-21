@@ -8,37 +8,57 @@ void main() {
       expect(ContentPathField('name'), ContentPathField('name', null));
       expect(ContentPathField('name', '1'), ContentPathField('name', '1'));
       expect(
-          ContentPathField('name', '1'), isNot(ContentPathField('name', '2')));
+        ContentPathField('name', '1'),
+        isNot(ContentPathField('name', '2')),
+      );
       expect(ContentPathField('name'), isNot(ContentPathField('name2')));
       expect(ContentPathField('name'), isNot(ContentPathField('name', '1')));
     });
 
     test('fromField', () {
-      expect(ContentPathField('name')..value = 'value',
-          ContentPathField('name', 'value'));
+      expect(
+        ContentPathField('name')..value = 'value',
+        ContentPathField('name', 'value'),
+      );
     });
 
     test('matchesField', () {
-      expect(ContentPathField('test').matchesField(ContentPathField('test')),
-          isTrue);
       expect(
-          ContentPathField('test')
-              .matchesField(ContentPathField('test', 'value')),
-          isTrue);
+        ContentPathField('test').matchesField(ContentPathField('test')),
+        isTrue,
+      );
       expect(
-          ContentPathField('test', 'value')
-              .matchesField(ContentPathField('test', 'value')),
-          isTrue);
+        ContentPathField(
+          'test',
+        ).matchesField(ContentPathField('test', 'value')),
+        isTrue,
+      );
       expect(
-          ContentPathField('test', 'value')
-              .matchesField(ContentPathField('test', 'other_value')),
-          isFalse);
-      expect(ContentPathField('test').matchesField(ContentPathField('other')),
-          isFalse);
-      expect(ContentPathPart('test').matchesField(ContentPathField('test')),
-          isFalse);
-      expect(ContentPathPart('test').matchesField(ContentPathPart('test')),
-          isTrue);
+        ContentPathField(
+          'test',
+          'value',
+        ).matchesField(ContentPathField('test', 'value')),
+        isTrue,
+      );
+      expect(
+        ContentPathField(
+          'test',
+          'value',
+        ).matchesField(ContentPathField('test', 'other_value')),
+        isFalse,
+      );
+      expect(
+        ContentPathField('test').matchesField(ContentPathField('other')),
+        isFalse,
+      );
+      expect(
+        ContentPathPart('test').matchesField(ContentPathField('test')),
+        isFalse,
+      );
+      expect(
+        ContentPathPart('test').matchesField(ContentPathPart('test')),
+        isTrue,
+      );
     });
 
     test('noValue', () {
