@@ -5,7 +5,7 @@ import 'package:tekartik_app_rx_utils/app_rx_utils.dart';
 void main() {
   test('subject builder', () async {
     var subject = BehaviorSubject<bool>();
-    BehaviorSubjectBuilder(subject: subject, builder: (_, __) => Container());
+    BehaviorSubjectBuilder(subject: subject, builder: (_, _) => Container());
 
     await subject.close();
   });
@@ -25,7 +25,7 @@ void main() {
   test('value_stream builder', () async {
     var subject = BehaviorSubject<bool>();
     ValueStream<bool> valueStream = subject;
-    ValueStreamBuilder(stream: valueStream, builder: (_, __) => Container());
+    ValueStreamBuilder(stream: valueStream, builder: (_, _) => Container());
 
     await subject.close();
   });

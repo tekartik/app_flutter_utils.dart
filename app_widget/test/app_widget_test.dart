@@ -8,7 +8,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: WithHeaderFooterListView.builder(
-            itemBuilder: (_, __) => Container(),
+            itemBuilder: (_, _) => Container(),
             itemCount: 0,
             header: const Text('1'),
             footer: const Text('2'),
