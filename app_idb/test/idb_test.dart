@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:idb_shim/idb_client_memory.dart';
 import 'package:tekartik_app_flutter_idb/idb.dart';
 
 void main() {
