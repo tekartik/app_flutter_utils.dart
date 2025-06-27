@@ -79,16 +79,13 @@ class _CvUiWidgetWithChildState extends State<CvUiWidgetWithChild> {
   @override
   Widget build(BuildContext context) {
     var controller = CvUiModelViewProviderImpl.of(context);
-    var editController =
-        controller is CvUiModelEditControllerImpl ? controller : null;
+    var editController = controller is CvUiModelEditControllerImpl
+        ? controller
+        : null;
     var indented = widget.indented ?? false;
-    var childWidget =
-        indented
-            ? Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: widget.child,
-            )
-            : widget.child;
+    var childWidget = indented
+        ? Padding(padding: const EdgeInsets.only(left: 16), child: widget.child)
+        : widget.child;
 
     var mainWidget = widget.widget;
     var expanded = true;
