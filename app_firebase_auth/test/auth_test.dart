@@ -9,9 +9,6 @@ void main() {
       try {
         authService;
       } catch (_) {}
-      try {
-        googleAuthProvider;
-      } catch (_) {}
     });
   });
 }

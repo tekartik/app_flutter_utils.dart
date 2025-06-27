@@ -8,6 +8,3 @@ export 'package:tekartik_firebase_auth/auth.dart';
 
 /// Firebase application authService.
 AuthService get authService => src.authService;
-
-/// Google auth provider.
-AuthProvider get googleAuthProvider => src.googleAuthProvider;
