@@ -21,8 +21,8 @@ String? buildDatabasesPath(String? packageName) {
 
 DatabaseFactory get _defaultDatabaseFactory =>
     (Platform.isLinux || Platform.isWindows)
-        ? databaseFactoryFfi
-        : sqflite.databaseFactory;
+    ? databaseFactoryFfi
+    : sqflite.databaseFactory;
 
 /// All but Linux/Windows
 DatabaseFactory get databaseFactory => _defaultDatabaseFactory;

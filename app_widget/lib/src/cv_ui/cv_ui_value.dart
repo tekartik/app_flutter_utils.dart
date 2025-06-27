@@ -64,10 +64,9 @@ class CvUiStringFieldValue extends StatelessWidget {
   Widget build(BuildContext context) {
     return CvUiFieldWithChild(
       name: field.name,
-      child:
-          field.hasValue
-              ? CvUiTextValue(text: field.value)
-              : const CvUiUnsetValue(),
+      child: field.hasValue
+          ? CvUiTextValue(text: field.value)
+          : const CvUiUnsetValue(),
     );
   }
 }
@@ -85,10 +84,9 @@ class CvUiListValue extends StatelessWidget {
       return const CvUiNullValue();
     }
     return CvUiListChildrenPrv(
-      children:
-          list.map((item) {
-            return CvUiTextValue(text: item.toString());
-          }).toList(),
+      children: list.map((item) {
+        return CvUiTextValue(text: item.toString());
+      }).toList(),
     );
   }
 }
@@ -128,10 +126,9 @@ class CvUiModelListValue extends StatelessWidget {
       return const CvUiNullValue();
     }
     return CvUiListChildrenPrv(
-      children:
-          list.map((item) {
-            return CvUiModelValue(model: item);
-          }).toList(),
+      children: list.map((item) {
+        return CvUiModelValue(model: item);
+      }).toList(),
     );
   }
 }

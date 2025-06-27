@@ -92,13 +92,11 @@ class ContentNavigatorBloc extends BaseBloc {
 
   late final RouteAwareManager? _routeAwareManager =
       (contentNavigator?.observers
-                  ?.where(
-                    (element) => element == route_aware.routeAwareObserver,
-                  )
-                  .isNotEmpty ??
-              false)
-          ? routeAwareManager
-          : null;
+              ?.where((element) => element == route_aware.routeAwareObserver)
+              .isNotEmpty ??
+          false)
+      ? routeAwareManager
+      : null;
 
   /// Custom transition if any
   @protected

@@ -23,11 +23,10 @@ class FutureOrBuilder<T> extends StatelessWidget {
       return FutureBuilder<T>(future: futureOr as Future<T>, builder: builder);
     }
     return Builder(
-      builder:
-          (context) => builder(
-            context,
-            AsyncSnapshot.withData(ConnectionState.done, futureOr as T),
-          ),
+      builder: (context) => builder(
+        context,
+        AsyncSnapshot.withData(ConnectionState.done, futureOr as T),
+      ),
     );
   }
 }

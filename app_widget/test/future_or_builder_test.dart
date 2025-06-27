@@ -15,11 +15,8 @@ void main() {
     await tester.pumpWidget(
       FutureOrBuilder<String>(
         futureOr: value,
-        builder:
-            (context, snapshot) => Text(
-              snapshot.data ?? noValue,
-              textDirection: TextDirection.ltr,
-            ),
+        builder: (context, snapshot) =>
+            Text(snapshot.data ?? noValue, textDirection: TextDirection.ltr),
       ),
     );
   }

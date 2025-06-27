@@ -41,18 +41,16 @@ Future<ui.Image> newUiImagePlaceholder({
   height = (height ?? 1).boundedMin(1);
   var recorder = ui.PictureRecorder();
   var canvas = ui.Canvas(recorder);
-  var paint =
-      newImageHighQualityPaint()
-        ..color = color
-        ..strokeWidth = 8
-        ..style = PaintingStyle.stroke;
+  var paint = newImageHighQualityPaint()
+    ..color = color
+    ..strokeWidth = 8
+    ..style = PaintingStyle.stroke;
   var rect = ui.Size(width.toDouble(), height.toDouble()).rect;
   canvas.drawRect(rect, paint);
-  paint =
-      newImageHighQualityPaint()
-        ..color = color
-        ..strokeWidth = 4
-        ..style = PaintingStyle.stroke;
+  paint = newImageHighQualityPaint()
+    ..color = color
+    ..strokeWidth = 4
+    ..style = PaintingStyle.stroke;
   canvas.drawLine(rect.topLeft, rect.bottomRight, paint);
   canvas.drawLine(rect.topRight, rect.bottomLeft, paint);
 

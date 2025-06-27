@@ -64,17 +64,16 @@ class _ContentPageDef implements ContentPageDef {
             return screenBuilder!(routePath);
           },
         ),
-        onPopInvoked:
-            contentNavigatorUseOnPopPage
-                ? (didPop, result) {}
-                : (didPop, result) {
-                  if (contentNavigatorDebug) {
-                    _log('onPopInvoked($routePath, didPop: $didPop, $result');
-                  }
-                  if (didPop) {
-                    cnBloc.onPopInvoked(pageContentPath, result);
-                  }
-                },
+        onPopInvoked: contentNavigatorUseOnPopPage
+            ? (didPop, result) {}
+            : (didPop, result) {
+                if (contentNavigatorDebug) {
+                  _log('onPopInvoked($routePath, didPop: $didPop, $result');
+                }
+                if (didPop) {
+                  cnBloc.onPopInvoked(pageContentPath, result);
+                }
+              },
       );
     };
   }

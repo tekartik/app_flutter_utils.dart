@@ -21,8 +21,8 @@ bool get _inFlutterTest => Platform.environment['FLUTTER_TEST'] == 'true';
 
 DatabaseFactory get _defaultDatabaseFactory =>
     (Platform.isLinux || Platform.isWindows || _inFlutterTest)
-        ? databaseFactoryFfi
-        : sqflite.databaseFactory;
+    ? databaseFactoryFfi
+    : sqflite.databaseFactory;
 
 /// All but Linux/Windows
 DatabaseFactory get databaseFactory => _defaultDatabaseFactory;

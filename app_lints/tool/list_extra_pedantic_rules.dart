@@ -46,11 +46,13 @@ Future<void> _writeRules(String name, List<String> rules) async {
 Future<void> main() async {
   var dotPackagesMap = await getDotPackagesMap('.');
 
-  var tekartikLintsLibPath =
-      Uri.parse(dotPackagesMap['tekartik_lints']!).toFilePath();
+  var tekartikLintsLibPath = Uri.parse(
+    dotPackagesMap['tekartik_lints']!,
+  ).toFilePath();
   var pedanticLibPath = Uri.parse(dotPackagesMap['pedantic']!).toFilePath();
-  var flutterLintsLibPath =
-      Uri.parse(dotPackagesMap['flutter_lints']!).toFilePath();
+  var flutterLintsLibPath = Uri.parse(
+    dotPackagesMap['flutter_lints']!,
+  ).toFilePath();
   var lintsLibPath = Uri.parse(dotPackagesMap['lints']!).toFilePath();
 
   var tekartikLintsRules = await getRules(
@@ -82,12 +84,11 @@ Future<void> main() async {
   diffRules.removeWhere((element) => flutterLintsRules.contains(element));
   await _writeRules('pedantic_over_lints', diffRules);
 
-  var all =
-      <String>{}
-        ..addAll(tekartikLintsRules)
-        ..addAll(pedanticRules)
-        ..addAll(flutterLintsRules)
-        ..addAll(lintsRules);
+  var all = <String>{}
+    ..addAll(tekartikLintsRules)
+    ..addAll(pedanticRules)
+    ..addAll(flutterLintsRules)
+    ..addAll(lintsRules);
   diffRules = List<String>.from(all)..sort();
   diffRules.removeWhere((element) => flutterLintsRules.contains(element));
   diffRules.removeWhere((element) => lintsRules.contains(element));

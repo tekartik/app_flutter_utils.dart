@@ -34,10 +34,9 @@ class SmallConnectivityError extends StatelessWidget {
     var theme = Theme.of(context);
     return Icon(
       Icons.cloud_off,
-      color:
-          theme.brightness == Brightness.light
-              ? Colors.grey[300]
-              : Colors.grey[700],
+      color: theme.brightness == Brightness.light
+          ? Colors.grey[300]
+          : Colors.grey[700],
     );
   }
 }

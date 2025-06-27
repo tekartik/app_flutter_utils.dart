@@ -14,9 +14,8 @@ void main() {
     var subject = BehaviorSubject<bool>();
     BehaviorSubjectBuilder(
       subject: subject,
-      builder:
-          (_, snapshot) =>
-              Switch(value: snapshot.data ?? false, onChanged: (_) {}),
+      builder: (_, snapshot) =>
+          Switch(value: snapshot.data ?? false, onChanged: (_) {}),
     );
 
     await subject.close();
@@ -34,9 +33,8 @@ void main() {
     var subject = BehaviorSubject<bool>();
     ValueStreamBuilder(
       stream: subject,
-      builder:
-          (_, snapshot) =>
-              Switch(value: snapshot.data ?? false, onChanged: (_) {}),
+      builder: (_, snapshot) =>
+          Switch(value: snapshot.data ?? false, onChanged: (_) {}),
     );
 
     await subject.close();

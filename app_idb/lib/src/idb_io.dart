@@ -46,8 +46,9 @@ IdbFactory getIdbFactory({String? packageName}) {
       idbFactory = _prefsFactoryMap[packageName];
     }
     if (idbFactory == null) {
-      _prefsFactoryMap[packageName] =
-          idbFactory = newIdbFactorySqflite(packageName: packageName);
+      _prefsFactoryMap[packageName] = idbFactory = newIdbFactorySqflite(
+        packageName: packageName,
+      );
     }
     return idbFactory;
   } else {

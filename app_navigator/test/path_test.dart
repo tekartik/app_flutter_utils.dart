@@ -82,10 +82,9 @@ void main() {
       expect(rt('/test/'), '/test');
       expect(rt('test/1/sub/2'), '/test/1/sub/2');
 
-      var object =
-          SchoolStudentPath()
-            ..student.value = '124'
-            ..school.value = 'the_school';
+      var object = SchoolStudentPath()
+        ..student.value = '124'
+        ..school.value = 'the_school';
       expect(object.toPathString(), '/school/the_school/student/124');
 
       object = SchoolStudentPath();
@@ -185,33 +184,28 @@ void main() {
       expect(BasePath().startsWith(BasePath()), isTrue);
     });
     test('fromPath', () {
-      var object =
-          SchoolStudentPath()
-            ..fromPath(ContentPath.fromString('school/the_school/student/124'));
+      var object = SchoolStudentPath()
+        ..fromPath(ContentPath.fromString('school/the_school/student/124'));
       expect(object.toPathString(), '/school/the_school/student/124');
       expect(
         object.toString(),
         'SchoolStudentPath(/school/the_school/student/124)',
       );
 
-      object =
-          SchoolStudentPath()..fromPath(
-            ContentPath.fromString('/school/the_school/student/124'),
-          );
+      object = SchoolStudentPath()
+        ..fromPath(ContentPath.fromString('/school/the_school/student/124'));
       expect(object.toPathString(), '/school/the_school/student/124');
       expect(
         object.toString(),
         'SchoolStudentPath(/school/the_school/student/124)',
       );
 
-      object =
-          SchoolStudentPath()
-            ..fromPath(ContentPath.fromString('school/the_school/student'));
+      object = SchoolStudentPath()
+        ..fromPath(ContentPath.fromString('school/the_school/student'));
       expect(object.toPathString(), '/school/the_school/student');
 
-      var boxCp =
-          BoxAddObservationContentPath()
-            ..fromPath(ContentPath.fromString('/category/my_cat/action'));
+      var boxCp = BoxAddObservationContentPath()
+        ..fromPath(ContentPath.fromString('/category/my_cat/action'));
       expect(boxCp.categoryId.value, 'my_cat');
       expect(boxCp.action.value, '');
       expect(boxCp.toPathString(), '/category/my_cat/action');

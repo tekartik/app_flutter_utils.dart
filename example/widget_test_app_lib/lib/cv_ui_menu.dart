@@ -89,12 +89,9 @@ void menuCvUi() {
                 ),
                 CvUiStringFieldValue(field: CvField<String>('someKey')),
                 CvUiModelValue(
-                  model:
-                      _MyModel()
-                        ..fillModel(
-                          CvFillOptions(valueStart: 0, collectionSize: 3),
-                        )
-                        ..dummy.v = _Dummy(),
+                  model: _MyModel()
+                    ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+                    ..dummy.v = _Dummy(),
                 ),
                 const Text('only 1 field'),
                 CvUiModelValue(model: _MyModel()..name.v = 'My name'),
@@ -119,12 +116,11 @@ void menuCvUi() {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CvUiModelView(
-                    model:
-                        _MyModel()
-                          ..fillModel(
-                            CvFillOptions(valueStart: 0, collectionSize: 3),
-                          )
-                          ..dummy.v = _Dummy(),
+                    model: _MyModel()
+                      ..fillModel(
+                        CvFillOptions(valueStart: 0, collectionSize: 3),
+                      )
+                      ..dummy.v = _Dummy(),
                   ),
                 ),
               ],
@@ -162,39 +158,31 @@ void menuCvUi() {
 
     _MyModel? lastModel;
     item('CvUiModelEdit last', () async {
-      var model =
-          lastModel ??=
-              (_MyModel()
-                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-                ..dummy.v = _Dummy());
+      var model = lastModel ??= (_MyModel()
+        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+        ..dummy.v = _Dummy());
       await edit(model);
     });
 
     item('CvUiModelEdit all', () async {
-      var model =
-          lastModel =
-              _MyModel()
-                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-                ..dummy.v = _Dummy();
+      var model = lastModel = _MyModel()
+        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+        ..dummy.v = _Dummy();
       await edit(model);
     });
 
     item('CvUiModelEdit intList', () async {
-      var model =
-          lastModel =
-              (_MyModel()
-                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-                ..dummy.v = _Dummy());
+      var model = lastModel = (_MyModel()
+        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+        ..dummy.v = _Dummy());
       model = _MyModel()..intList.v = model.intList.v;
       await edit(model);
     });
 
     item('CvUiModelEdit subList', () async {
-      var model =
-          lastModel =
-              (_MyModel()
-                ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
-                ..dummy.v = _Dummy());
+      var model = lastModel = (_MyModel()
+        ..fillModel(CvFillOptions(valueStart: 0, collectionSize: 3))
+        ..dummy.v = _Dummy());
       model = _MyModel()..subList.v = model.subList.v;
       await edit(model);
     });
