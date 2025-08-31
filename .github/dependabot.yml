@@ -6,6 +6,10 @@ enable-beta-ecosystems: true
 
 updates:
   - package-ecosystem: "pub"
+    directory: "."
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
     directory: "app_bloc"
     schedule:
       interval: "monthly"
@@ -94,6 +98,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "pub"
+    directory: "app_url_launcher"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
     directory: "app_widget"
     schedule:
       interval: "monthly"
@@ -127,6 +135,10 @@ updates:
       interval: "monthly"
   - package-ecosystem: "pub"
     directory: "example/prefs_test_app_lib"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "pub"
+    directory: "example/roboto_test_app_lib"
     schedule:
       interval: "monthly"
   - package-ecosystem: "pub"

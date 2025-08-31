@@ -41,3 +41,4 @@ workspace:
   - example/widget_test_app_lib
   - repo_support
   - test_app
+  - app_url_launcher
