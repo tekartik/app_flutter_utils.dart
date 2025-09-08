@@ -13,4 +13,4 @@ export 'src/mini_ui_menu.dart'
         muiScreenWidget,
         muiBodyWidget,
         muiBuildContext;
-export 'src/snack.dart' show muiSnack;
+export 'src/snack.dart' show muiSnack, muiSnackSync;
