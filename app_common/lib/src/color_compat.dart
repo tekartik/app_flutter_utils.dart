@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Flutter extension for color compatibility
-extension TekartikColorFlutterExt on Color {
+extension TekartikColorFlutterCompatExt on Color {
   static int _floatToInt8(double x) {
     return (x * 255.0).round() & 0xff;
   }
