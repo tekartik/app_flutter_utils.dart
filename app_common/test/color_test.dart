@@ -8,6 +8,7 @@ Future<void> main() async {
     test('isDark', () {
       expect(const Color(0xFFFFca00).isDark, isFalse);
       expect(const Color(0xFFFF0000).isDark, isTrue);
+      expect(Colors.blue.isDark, isTrue);
     });
   });
 }
