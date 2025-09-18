@@ -1,6 +1,6 @@
 name: tekartik_app_url_launcher_flutter
 description: "URL launcher helper"
-version: 0.0.1
+version: 1.0.0
 publish_to: none
 
 environment:
