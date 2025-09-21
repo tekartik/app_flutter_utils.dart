@@ -12,7 +12,6 @@ dependencies:
   tekartik_app_bloc:
     git:
       url: https://github.com/tekartik/app_common_utils.dart
-      ref: dart3a
       path: app_bloc
     version: '>=0.1.0'
 
@@ -24,7 +23,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 dependency_overrides:

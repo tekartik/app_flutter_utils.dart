@@ -13,12 +13,10 @@ dependencies:
   tekartik_platform_io:
     git:
       url: https://github.com/tekartik/platform.dart
-      ref: dart3a
       path: platform_io
   tekartik_platform_browser:
     git:
       url: https://github.com/tekartik/platform.dart
-      ref: dart3a
       path: platform_browser
 
 dev_dependencies:
@@ -28,7 +26,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 

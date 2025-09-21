@@ -16,18 +16,15 @@ dependencies:
   tekartik_app_common_utils:
     git:
       url: https://github.com/tekartik/app_common_utils.dart
-      ref: dart3a
       path: app
     version: '>=0.1.0'
   tekartik_common_utils:
     git:
       url: https://github.com/tekartik/common_utils.dart
-      ref: dart3a
     version: '>=0.15.2'
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 dev_dependencies:

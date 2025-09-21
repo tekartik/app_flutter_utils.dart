@@ -13,12 +13,10 @@ dependencies:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
       path: app_firebase
-      ref: dart3a
   tekartik_firebase_auth_flutter:
     git:
       url: https://github.com/tekartik/firebase_flutter
       path: auth_flutter
-      ref: dart3a
     version: '>=0.7.0'
 dev_dependencies:
   flutter_test:
@@ -27,7 +25,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 resolution: workspace

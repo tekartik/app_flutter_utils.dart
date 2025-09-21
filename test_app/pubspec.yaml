@@ -27,37 +27,31 @@ dependencies:
   tekartik_app_flutter_plugin:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_plugin
     version: '>=0.1.0'
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
-      ref: dart3a
       path: test_menu_flutter
     version: '>=0.2.4'
   tekartik_app_flutter_firebase:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_firebase
     version: '>=0.1.0'
   tekartik_app_flutter_firebase_auth:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_firebase_auth
     version: '>=0.1.0'
   tekartik_app_flutter_firebase_firestore:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_firebase_firestore
     version: '>=0.1.0'
   tekartik_app_roboto:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_roboto
     version: '>=0.1.0'
   process_run: ">=1.2.1+1"
@@ -68,7 +62,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 

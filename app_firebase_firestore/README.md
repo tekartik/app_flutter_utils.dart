@@ -11,7 +11,6 @@ dependencies:
   tekartik_app_flutter_firebase_firestore:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_firebase_firestore
     version: '>=0.1.0'
 ```

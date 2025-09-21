@@ -15,7 +15,6 @@ dependencies:
   tekartik_app_flutter_sqflite:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_sqflite
     version: '>=0.5.0'
   path: ">=1.9.0"
@@ -28,7 +27,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 

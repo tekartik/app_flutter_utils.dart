@@ -13,22 +13,18 @@ dependencies:
   tekartik_app_flutter_bloc:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_bloc
   tekartik_app_flutter_common_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_common
   tekartik_app_rx_bloc:
     git:
       url: https://github.com/tekartik/app_common_utils.dart
-      ref: dart3a
       path: app_rx_bloc
   tekartik_app_rx_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_rx_utils
 
 dev_dependencies:

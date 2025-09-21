@@ -12,23 +12,19 @@ dependencies:
   tekartik_app_navigator_flutter:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_navigator
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
-      ref: dart3a
       path: test_menu_flutter
     version: '>=0.2.3'
   tekartik_app_flutter_widget:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_widget
     version: '>=0.2.1'
 

@@ -13,7 +13,6 @@ dependencies:
     git:
       url: https://github.com/tekartik/firebase_flutter
       path: firebase_flutter
-      ref: dart3a
     version: '>=0.4.0'
 dev_dependencies:
   flutter_test:
@@ -22,7 +21,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 dependency_overrides:

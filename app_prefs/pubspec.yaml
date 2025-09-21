@@ -12,19 +12,16 @@ dependencies:
   tekartik_prefs_flutter:
     git:
       url: https://github.com/tekartik/prefs.dart
-      ref: dart3a
       path: prefs_flutter
   tekartik_prefs_sembast:
     git:
       url: https://github.com/tekartik/prefs.dart
       path: prefs_sembast
-      ref: dart3a
     version: '>=0.1.0'
   tekartik_prefs_browser:
     git:
       url: https://github.com/tekartik/prefs.dart
       path: prefs_browser
-      ref: dart3a
     version: '>=0.1.0'
   path: ">=1.9.0"
   process_run: ">=1.2.1+1"
@@ -32,13 +29,11 @@ dependencies:
   tekartik_prefs:
     git:
       url: https://github.com/tekartik/prefs.dart
-      ref: dart3a
       path: prefs
 dev_dependencies:
   tekartik_app_platform:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_platform
     version: '>=0.1.0'
   flutter_test:
@@ -47,7 +42,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 

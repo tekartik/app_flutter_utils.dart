@@ -50,24 +50,20 @@ dependencies:
   tekartik_app_flutter_common_web_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_common_web
     version: '>=0.1.0'
   tekartik_test_menu_flutter:
     git:
       url: https://github.com/tekartik/test_menu_flutter
-      ref: dart3a
       path: test_menu_flutter
     version: '>=0.2.3'
   tekartik_app_roboto:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_roboto
   tekartik_app_flutter_sqflite:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart3a
       path: app_sqflite
 dev_dependencies:
   flutter_test:
@@ -77,7 +73,6 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
   process_run: ">=1.2.1+1"
