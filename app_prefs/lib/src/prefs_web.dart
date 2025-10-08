@@ -11,3 +11,12 @@ PrefsAsyncFactory get prefsAsyncFactory => prefsAsyncFactoryBrowser;
 /// Browser prefs factory
 PrefsAsyncFactory getPrefsAsyncFactory({String? packageName}) =>
     prefsAsyncFactory;
+
+/// Browser prefs factory
+PrefsAsyncWithCacheFactory get prefsAsyncWithCacheFactory =>
+    prefsAsyncWithCacheFactoryBrowser;
+
+/// Browser prefs factory
+PrefsAsyncWithCacheFactory getPrefsAsyncWithCacheFactory({
+  String? packageName,
+}) => prefsAsyncWithCacheFactory;
