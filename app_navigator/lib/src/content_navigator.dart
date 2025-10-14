@@ -184,10 +184,18 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }*/
   /// Pop until a matching path or push it
-  void popUntilPathOrPush(BuildContext context, ContentPath path) {
+  void popUntilPathOrPush(
+    BuildContext context,
+    ContentPath path, {
+    TransitionDelegate? transitionDelegate,
+  }) {
     if (_routeAwareManager != null) {
       _routeAwareManager.popLock.synchronized(() {
-        _popUntilPathOrPush(context, path);
+        _popUntilPathOrPush(
+          context,
+          path,
+          transitionDelegate: transitionDelegate,
+        );
 
         /// Late cleanup
         routeAwareManager.popLock.synchronized(() {
@@ -195,7 +203,11 @@ class ContentNavigatorBloc extends BaseBloc {
         });
       });
     } else {
-      _popUntilPathOrPush(context, path);
+      _popUntilPathOrPush(
+        context,
+        path,
+        transitionDelegate: transitionDelegate,
+      );
     }
   }
 
@@ -237,13 +249,17 @@ class ContentNavigatorBloc extends BaseBloc {
     }
   }
 
-  void _popUntilPathOrPush(BuildContext context, ContentPath path) {
+  void _popUntilPathOrPush(
+    BuildContext context,
+    ContentPath path, {
+    TransitionDelegate? transitionDelegate,
+  }) {
     var found = _popUntilPath(
       context,
       path,
     ); // print('popUntil($path) found $found');
     if (!found) {
-      pushPath<void>(path);
+      pushPath<void>(path, transitionDelegate: transitionDelegate);
     }
   }
 
