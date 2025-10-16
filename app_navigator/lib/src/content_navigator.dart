@@ -82,6 +82,9 @@ class ContentNavigatorBloc extends BaseBloc {
   RouterConfig<ContentPath> get routerConfig => RouterConfig(
     routerDelegate: routerDelegate,
     routeInformationParser: routeInformationParser,
+    routeInformationProvider: PlatformRouteInformationProvider(
+      initialRouteInformation: RouteInformation(uri: Uri.base),
+    ),
   );
 
   /// RouteInformationParser for MaterialApp.router

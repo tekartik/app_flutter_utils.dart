@@ -4,6 +4,12 @@ import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 import 'package:tekartik_app_navigator_flutter/route_aware.dart';
 import 'package:tekartik_test_menu_flutter/test.dart';
 
+Future<void> main() async {
+  mainMenuFlutter(() {
+    defineNavigatorMenu();
+  }, showConsole: true);
+}
+
 void defineNavigatorMenu() {
   menu('navigator', () {
     item('run app with navigator', () async {
@@ -27,6 +33,13 @@ final pageStartDef = ContentPageDef(
     return muiScreenWidget('Start', () {
       muiItem('push Page 1', () async {
         await _pushPage1(muiBuildContext);
+      });
+      muiItem('push Page 2', () async {
+        var result = await ContentNavigator.of(
+          muiBuildContext,
+        ).pushPath<Object?>(Page2ContentPath());
+        // ignore: use_build_context_synchronously
+        await muiSnack(muiBuildContext, 'push Page 2 result: $result');
       });
     });
   },
@@ -69,6 +82,11 @@ var page2Def = ContentPageDef(
         ContentNavigator.of(muiBuildContext).transientPopAll();
         await _pushPage1(muiBuildContext);
       });
+      muiItem('popUntilPathOrPush page 1', () async {
+        ContentNavigator.of(
+          muiBuildContext,
+        ).popUntilPathOrPush(muiBuildContext, Page1ContentPath());
+      });
     });
   },
 );
@@ -90,6 +108,8 @@ class Page2ContentPath extends ContentPathBase {
 final contentNavigatorDef = ContentNavigatorDef(
   defs: [pageStartDef, page1Def, page2Def],
 );
+
+//var _contentNavigator =
 void runAppWithNavigator() {
   runApp(
     ContentNavigator(
@@ -102,8 +122,7 @@ void runAppWithNavigator() {
             debugShowCheckedModeBanner: false,
             title: 'Navigator',
             //navigatorObservers: [cn.routeObserver],
-            routerDelegate: cn.routerDelegate,
-            routeInformationParser: cn.routeInformationParser,
+            routerConfig: cn.routerConfig,
           );
         },
       ),

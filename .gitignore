@@ -28,3 +28,14 @@ pubspec.lock
 .flutter-*
 /app_dev_menu/.metadata
 /app_dev_menu/
+
+.*
+!.gitignore
+!/.github
+
+linux/
+macos/
+windows/
+web/
+ios/
+android/
