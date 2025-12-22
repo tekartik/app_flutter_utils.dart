@@ -26,6 +26,7 @@ void main() {
         var txn = db.transaction('simple', idbModeReadWrite);
         var store = txn.objectStore('simple');
         await store.put('test', 1);
+        await txn.completed;
         db.close();
         db = await open();
         txn = db.transaction('simple', idbModeReadOnly);
