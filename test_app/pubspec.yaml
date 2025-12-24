@@ -56,6 +56,10 @@ dependencies:
     version: '>=0.1.0'
   process_run: ">=1.2.1+1"
   pub_semver: ">=2.1.4"
+  tekartik_app_dev_menu_flutter:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_dev_menu
 dev_dependencies:
   flutter_test:
     sdk: flutter

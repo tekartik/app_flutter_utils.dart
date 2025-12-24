@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:tekartik_app_dev_menu_flutter/dev_menu.dart';
 import 'package:tekartik_app_flutter_sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_app_platform/app_platform.dart';
@@ -15,16 +16,14 @@ import 'package:tekartik_navigator_test_app_lib/main.dart';
 import 'package:tekartik_prefs_test_app_lib/main.dart' as prefs;
 import 'package:tekartik_sembast_test_app_lib/main.dart' as sembast;
 import 'package:tekartik_sqflite_test_app_lib/main.dart' as sqflite;
-import 'package:tekartik_test_menu_flutter/test.dart';
-import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart';
 import 'package:tekartik_widget_test_app_lib/main.dart' as widget;
 
-void main() {
+void main(List<String> args) {
   platformInit();
   if (!kIsWeb) {
     sqfliteWindowsFfiInit();
   }
-  mainMenuFlutter(() {
+  mainMenu(args, () {
     defineImageMenu();
     prefs.defineMenu();
     idb.defineMenu();
@@ -42,5 +41,5 @@ void main() {
         write(jsonPretty(platformContext.toMap())); // ignore: avoid_print
       });
     });
-  }, showConsole: true);
+  });
 }

@@ -1,11 +1,11 @@
-import 'package:tekartik_test_menu_flutter/test.dart';
+import 'package:tekartik_app_dev_menu_flutter/dev_menu.dart';
 
 import 'fs_main.dart' as fs;
 import 'monkey_main.dart' as monkey;
 
-void main() {
+Future<void> main(List<String> args) async {
   // print('Starting test app');
-  mainMenuFlutter(() {
+  mainMenuUniversal(args, () {
     fs.main();
     monkey.main();
   });

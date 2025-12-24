@@ -26,8 +26,6 @@ pubspec_overrides.yaml
 .dart_tool/
 pubspec.lock
 .flutter-*
-/app_dev_menu/.metadata
-/app_dev_menu/
 
 .*
 !.gitignore

@@ -42,3 +42,5 @@ workspace:
   - repo_support
   - test_app
   - app_url_launcher
+  - app_dev_menu
+
