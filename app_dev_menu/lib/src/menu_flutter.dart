@@ -1,10 +1,13 @@
 import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart'
-    show mainMenuFlutter;
+    show mainMenuFlutter, initTestMenuFlutter;
 
 export 'package:tekartik_app_dev_menu/dev_menu.dart'
     hide mainMenu, mainMenuUniversal;
 export 'package:tekartik_test_menu_flutter/test_menu_flutter.dart'
     show navigator, buildContext, initTestMenuFlutter, mainMenuFlutter;
+
+/// Shortcut, to prefer over initTestMenuFlutter
+const initMainMenuFlutter = initTestMenuFlutter;
 
 /// Universal main menu - flutter implementation
 void mainMenuUniversal(
