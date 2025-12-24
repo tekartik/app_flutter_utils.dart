@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tekartik_test_menu_flutter/test.dart';
+import 'package:tekartik_app_dev_menu_flutter/dev_menu_flutter.dart';
 
 void menuAppScrollBehavior() {
   menu('scroll_behavior', () {

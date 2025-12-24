@@ -4,7 +4,7 @@ import 'package:tekartik_test_menu_flutter/test_menu_flutter.dart'
 export 'package:tekartik_app_dev_menu/dev_menu.dart'
     hide mainMenu, mainMenuUniversal;
 export 'package:tekartik_test_menu_flutter/test_menu_flutter.dart'
-    show buildContext, initTestMenuFlutter, mainMenuFlutter;
+    show navigator, buildContext, initTestMenuFlutter, mainMenuFlutter;
 
 /// Universal main menu - flutter implementation
 void mainMenuUniversal(

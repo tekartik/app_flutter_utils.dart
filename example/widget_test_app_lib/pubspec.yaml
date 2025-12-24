@@ -15,11 +15,10 @@ dependencies:
       url: https://github.com/tekartik/app_flutter_utils.dart
       path: app_common
     version: '>=0.1.0'
-  tekartik_test_menu_flutter:
+  tekartik_app_dev_menu_flutter:
     git:
-      url: https://github.com/tekartik/test_menu_flutter
-      path: test_menu_flutter
-    version: '>=0.2.3'
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_dev_menu
   tekartik_common_utils:
     git:
       url: https://github.com/tekartik/common_utils.dart
