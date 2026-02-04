@@ -9,11 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  fs_shim: ">=2.4.0-1"
+  fs_shim: ">=2.5.0-3"
   path_provider:
   process_run: ">=1.2.1+1"
   path: ">=1.9.0"
-  idb_shim:
+  idb_shim: ">=2.8.1-2 <4.0.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
