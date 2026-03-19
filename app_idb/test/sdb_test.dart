@@ -13,12 +13,14 @@ void main() {
         Future<SdbDatabase> open() async {
           var db = await factory.openDatabase(
             'test.db',
-            version: 1,
-            onVersionChange: (e) {
-              if (e.oldVersion < 1) {
-                e.db.createStore(simpleStore);
-              }
-            },
+            options: SdbOpenDatabaseOptions(
+              version: 1,
+              onVersionChange: (e) {
+                if (e.oldVersion < 1) {
+                  e.db.createStore(simpleStore);
+                }
+              },
+            ),
           );
           return db;
         }
