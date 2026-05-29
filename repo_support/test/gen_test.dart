@@ -14,6 +14,7 @@ final _runningOnGithub = platformIo.runningOnGithub;
 var topDir = '..';
 void main() {
   test('gen_test', () {
+    // ignore: avoid_print
     print('skipped if "$_runningOnGithub" (running on github)');
   });
   group(

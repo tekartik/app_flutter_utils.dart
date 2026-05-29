@@ -15,7 +15,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.0
+  sdk: ^3.12.0
 
 dependencies:
   flutter:
@@ -23,7 +23,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ">=1.0.8"
+  cupertino_icons: ">=1.0.9"
   tekartik_app_flutter_plugin:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
@@ -55,7 +55,7 @@ dependencies:
       path: app_roboto
     version: '>=0.1.0'
   process_run: ">=1.2.1+1"
-  pub_semver: ">=2.1.4"
+  pub_semver: ">=2.2.0"
   tekartik_app_dev_menu_flutter:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
