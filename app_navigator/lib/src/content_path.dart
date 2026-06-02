@@ -167,6 +167,7 @@ class _ContentPath extends ContentPathBase {
 
   _ContentPath(this.fields);
 }
+
 /*
 class _ContentPath with PathMixin implements ContentPath {
   @override
