@@ -11,5 +11,5 @@ export 'src/lazy_list_view.dart'
         SliverLazyList,
         LazyListViewDelegate,
         LazyItemWidgetBuilder,
-        LazyLoadingWidgetBuilder,
+        LazyItemLoadingWidgetBuilder,
         LazyErrorWidgetBuilder;

@@ -9,7 +9,7 @@ typedef LazyItemWidgetBuilder<T> =
     Widget Function(BuildContext context, T item, int index);
 
 /// Builds a placeholder while the item at [index] is loading.
-typedef LazyLoadingWidgetBuilder =
+typedef LazyItemLoadingWidgetBuilder =
     Widget Function(BuildContext context, int index);
 
 /// Builds an error widget.
@@ -36,7 +36,7 @@ class LazyListViewDelegate<T> extends SliverChildBuilderDelegate {
   LazyListViewDelegate({
     required this.controller,
     required LazyItemWidgetBuilder<T> itemBuilder,
-    LazyLoadingWidgetBuilder? loadingBuilder,
+    LazyItemLoadingWidgetBuilder? itemLoadingBuilder,
     super.addAutomaticKeepAlives,
     super.addRepaintBoundaries,
     super.addSemanticIndexes,
@@ -51,7 +51,7 @@ class LazyListViewDelegate<T> extends SliverChildBuilderDelegate {
          if (controller.hasItem(index)) {
            return itemBuilder(context, item as T, index);
          }
-         return (loadingBuilder ?? _defaultLoadingItem)(context, index);
+         return (itemLoadingBuilder ?? _defaultLoadingItem)(context, index);
        }, childCount: controller.totalCount);
 
   @override
@@ -73,14 +73,14 @@ class SliverLazyList<T> extends StatefulWidget {
   final LazyItemWidgetBuilder<T> itemBuilder;
 
   /// Builder for placeholder while an item is loading.
-  final LazyLoadingWidgetBuilder? loadingBuilder;
+  final LazyItemLoadingWidgetBuilder? itemLoadingBuilder;
 
   /// Constructor
   const SliverLazyList({
     super.key,
     required this.controller,
     required this.itemBuilder,
-    this.loadingBuilder,
+    this.itemLoadingBuilder,
   });
 
   @override
@@ -121,7 +121,7 @@ class _SliverLazyListState<T> extends State<SliverLazyList<T>> {
       delegate: LazyListViewDelegate<T>(
         controller: widget.controller,
         itemBuilder: widget.itemBuilder,
-        loadingBuilder: widget.loadingBuilder,
+        itemLoadingBuilder: widget.itemLoadingBuilder,
       ),
     );
   }
@@ -156,10 +156,11 @@ class LazyListView<T> extends StatefulWidget {
   final LazyItemWidgetBuilder<T> itemBuilder;
 
   /// Builder for placeholder while an item is loading.
-  final LazyLoadingWidgetBuilder? loadingBuilder;
+  final LazyItemLoadingWidgetBuilder? itemLoadingBuilder;
 
-  /// Builder to show the initial loading state (before the count is known).
-  final WidgetBuilder? initialLoadingBuilder;
+  /// Builder for the global loading state, shown until the first data is
+  /// available (or the list is known to be empty or in error).
+  final WidgetBuilder? loadingBuilder;
 
   /// Builder to show error state.
   final LazyErrorWidgetBuilder? errorBuilder;
@@ -222,8 +223,8 @@ class LazyListView<T> extends StatefulWidget {
     this.watchCount,
     this.pageSize = 50,
     required this.itemBuilder,
+    this.itemLoadingBuilder,
     this.loadingBuilder,
-    this.initialLoadingBuilder,
     this.errorBuilder,
     this.emptyBuilder,
     this.scrollDirection = Axis.vertical,
@@ -312,11 +313,6 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_controller.isInitialized && _controller.error == null) {
-      return widget.initialLoadingBuilder?.call(context) ??
-          const Center(child: CircularProgressIndicator());
-    }
-
     if (_controller.error != null) {
       return widget.errorBuilder?.call(
             context,
@@ -328,6 +324,14 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
 
     if (_controller.totalCount == 0) {
       return widget.emptyBuilder?.call(context) ?? const SizedBox.shrink();
+    }
+
+    if (_controller.loadedItems.isEmpty) {
+      // No data available yet, global loading state. Trigger the first page
+      // load (the list, not being built, would not trigger it).
+      _controller.getItem(0);
+      return widget.loadingBuilder?.call(context) ??
+          const Center(child: CircularProgressIndicator());
     }
 
     return ListView.custom(
@@ -346,7 +350,7 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
       childrenDelegate: LazyListViewDelegate<T>(
         controller: _controller,
         itemBuilder: widget.itemBuilder,
-        loadingBuilder: widget.loadingBuilder,
+        itemLoadingBuilder: widget.itemLoadingBuilder,
         addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
         addRepaintBoundaries: widget.addRepaintBoundaries,
         addSemanticIndexes: widget.addSemanticIndexes,

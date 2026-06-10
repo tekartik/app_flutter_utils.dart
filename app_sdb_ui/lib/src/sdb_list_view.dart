@@ -43,10 +43,11 @@ class SdbStoreListView<K extends SdbKey, V extends SdbValue>
   itemBuilder;
 
   /// Builder for placeholder while an item is loading.
-  final LazyLoadingWidgetBuilder? loadingBuilder;
+  final LazyItemLoadingWidgetBuilder? itemLoadingBuilder;
 
-  /// Builder to show the initial loading state (before the count is known).
-  final WidgetBuilder? initialLoadingBuilder;
+  /// Builder for the global loading state, shown until the first data is
+  /// available.
+  final WidgetBuilder? loadingBuilder;
 
   /// Builder to show error state.
   final LazyErrorWidgetBuilder? errorBuilder;
@@ -85,8 +86,8 @@ class SdbStoreListView<K extends SdbKey, V extends SdbValue>
     this.watch = false,
     this.pageSize = 50,
     required this.itemBuilder,
+    this.itemLoadingBuilder,
     this.loadingBuilder,
-    this.initialLoadingBuilder,
     this.errorBuilder,
     this.emptyBuilder,
     this.scrollDirection = Axis.vertical,
@@ -170,8 +171,8 @@ class _SdbStoreListViewState<K extends SdbKey, V extends SdbValue>
     return LazyListView<SdbRecordSnapshot<K, V>>(
       controller: _controller,
       itemBuilder: widget.itemBuilder,
+      itemLoadingBuilder: widget.itemLoadingBuilder,
       loadingBuilder: widget.loadingBuilder,
-      initialLoadingBuilder: widget.initialLoadingBuilder,
       errorBuilder: widget.errorBuilder,
       emptyBuilder: widget.emptyBuilder,
       scrollDirection: widget.scrollDirection,
@@ -228,10 +229,11 @@ class SdbIndexListView<
   itemBuilder;
 
   /// Builder for placeholder while an item is loading.
-  final LazyLoadingWidgetBuilder? loadingBuilder;
+  final LazyItemLoadingWidgetBuilder? itemLoadingBuilder;
 
-  /// Builder to show the initial loading state (before the count is known).
-  final WidgetBuilder? initialLoadingBuilder;
+  /// Builder for the global loading state, shown until the first data is
+  /// available.
+  final WidgetBuilder? loadingBuilder;
 
   /// Builder to show error state.
   final LazyErrorWidgetBuilder? errorBuilder;
@@ -270,8 +272,8 @@ class SdbIndexListView<
     this.watch = false,
     this.pageSize = 50,
     required this.itemBuilder,
+    this.itemLoadingBuilder,
     this.loadingBuilder,
-    this.initialLoadingBuilder,
     this.errorBuilder,
     this.emptyBuilder,
     this.scrollDirection = Axis.vertical,
@@ -360,8 +362,8 @@ class _SdbIndexListViewState<
     return LazyListView<SdbIndexRecordSnapshot<K, V, I>>(
       controller: _controller,
       itemBuilder: widget.itemBuilder,
+      itemLoadingBuilder: widget.itemLoadingBuilder,
       loadingBuilder: widget.loadingBuilder,
-      initialLoadingBuilder: widget.initialLoadingBuilder,
       errorBuilder: widget.errorBuilder,
       emptyBuilder: widget.emptyBuilder,
       scrollDirection: widget.scrollDirection,

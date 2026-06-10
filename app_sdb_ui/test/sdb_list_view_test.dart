@@ -205,7 +205,7 @@ void main() {
                 pageSize: 2,
                 itemBuilder: (context, snapshot, index) =>
                     SizedBox(height: 50, child: Text(snapshot.value)),
-                loadingBuilder: (context, index) =>
+                itemLoadingBuilder: (context, index) =>
                     const SizedBox(height: 50, child: Text('loading...')),
               ),
             ),

@@ -15,6 +15,9 @@ based items with a Stream based count).
 - The count is optional: when missing, the end of the list is inferred when a
   page returns fewer items than requested.
 - Stream based pages remain watched, so item updates are reflected live.
+- `LazyListView` shows a global `loadingBuilder` until the first data is
+  available, then `itemLoadingBuilder` as a placeholder for each item being
+  loaded (plus `errorBuilder` and `emptyBuilder`).
 
 Three UI entry points share the same controller:
 

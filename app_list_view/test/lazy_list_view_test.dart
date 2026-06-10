@@ -134,7 +134,7 @@ void main() {
               pageSize: 2,
               itemBuilder: (context, item, index) =>
                   SizedBox(height: 50, child: Text(item)),
-              loadingBuilder: (context, index) =>
+              itemLoadingBuilder: (context, index) =>
                   const SizedBox(height: 50, child: Text('loading...')),
             ),
           ),
@@ -148,6 +148,42 @@ void main() {
       expect(find.text('val 1'), findsOneWidget);
       expect(find.text('val 4'), findsOneWidget);
     }, timeout: const Timeout(Duration(seconds: 5)));
+
+    testWidgets(
+      'global loadingBuilder until first data',
+      (tester) async {
+        var countCompleter = Completer<int>();
+        var itemsCompleter = Completer<List<String>>();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: LazyListView<String>(
+                getItems: (offset, limit) => itemsCompleter.future,
+                getCount: () => countCompleter.future,
+                itemBuilder: (context, item, index) =>
+                    SizedBox(height: 50, child: Text(item)),
+                loadingBuilder: (context) => const Text('global loading'),
+              ),
+            ),
+          ),
+        );
+
+        // Shown before the count is known.
+        expect(find.text('global loading'), findsOneWidget);
+
+        countCompleter.complete(2);
+        await tester.pump();
+        // Count known (2) but no data yet, still globally loading.
+        expect(find.text('global loading'), findsOneWidget);
+
+        itemsCompleter.complete(['a', 'b']);
+        await tester.pumpAndSettle();
+        expect(find.text('global loading'), findsNothing);
+        expect(find.text('a'), findsOneWidget);
+        expect(find.text('b'), findsOneWidget);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
 
     testWidgets('displays empty state', (tester) async {
       await tester.pumpWidget(
