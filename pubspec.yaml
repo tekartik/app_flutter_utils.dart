@@ -43,4 +43,6 @@ workspace:
   - test_app
   - app_url_launcher
   - app_dev_menu
+  - app_sdb_ui
+  - app_list_view
 
