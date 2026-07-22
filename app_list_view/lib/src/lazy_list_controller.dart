@@ -121,6 +121,7 @@ class LazyListController<T> extends ChangeNotifier {
         if (_disposed) return;
         _totalCount = total;
         _isInitialized = true;
+
         notifyListeners();
       } else if (watchCount != null) {
         _countSubscription = watchCount!().listen(
@@ -128,17 +129,20 @@ class LazyListController<T> extends ChangeNotifier {
             _totalCount = total;
             _inferredTotalPageIndex = null;
             _isInitialized = true;
+
             notifyListeners();
           },
           onError: (Object e, StackTrace st) {
             _error = e;
             _stackTrace = st;
             _isInitialized = true;
+
             notifyListeners();
           },
         );
       } else {
         _isInitialized = true;
+
         notifyListeners();
       }
     } catch (e, st) {
@@ -146,6 +150,7 @@ class LazyListController<T> extends ChangeNotifier {
       _error = e;
       _stackTrace = st;
       _isInitialized = true;
+
       notifyListeners();
     }
   }
@@ -176,6 +181,7 @@ class LazyListController<T> extends ChangeNotifier {
         onError: (Object e, StackTrace st) {
           _error = e;
           _stackTrace = st;
+
           notifyListeners();
         },
       );
@@ -193,6 +199,7 @@ class LazyListController<T> extends ChangeNotifier {
           _fetchingPages.remove(pageIndex);
           _error = e;
           _stackTrace = st;
+
           notifyListeners();
         }
       }();
@@ -226,6 +233,7 @@ class LazyListController<T> extends ChangeNotifier {
       _totalCount = null;
       _inferredTotalPageIndex = null;
     }
+
     notifyListeners();
   }
 
@@ -239,6 +247,7 @@ class LazyListController<T> extends ChangeNotifier {
     _error = null;
     _stackTrace = null;
     _isInitialized = false;
+
     notifyListeners();
     _init();
   }

@@ -83,6 +83,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
               // }
               // ignore: invalid_use_of_protected_member
               cnBloc.onPopPageRoute(route, result);
+
               notifyListeners();
 
               return true;
@@ -96,6 +97,7 @@ class ContentRouterDelegate extends RouterDelegate<ContentPath>
               }
               // ignore: invalid_use_of_protected_member
               cnBloc.onDidRemovePage(page);
+
               scheduleMicrotask(() => notifyListeners());
             },
       observers: observers ?? <NavigatorObserver>[],

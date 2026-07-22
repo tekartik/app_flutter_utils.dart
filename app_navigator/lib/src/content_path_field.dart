@@ -91,6 +91,7 @@ extension ContentFieldListExt on List<ContentPathField> {
   /// Convert to a map
   Map<String, String?> toStringMap() {
     var map = <String, String?>{};
+
     forEach((field) {
       map[field.name] = field.value;
     });

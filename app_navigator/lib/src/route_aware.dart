@@ -31,6 +31,7 @@ extension RouteAwareManagerPrvExt on RouteAwareManager {
 
   /// Set to true to ignore the next pop
   bool get popTransient => _popTransient;
+
   set popTransient(bool value) {
     _popTransient = value;
   }

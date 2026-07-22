@@ -37,6 +37,7 @@ extension AppFileSystem on FileSystem {
     if (this == fs) {
       return src.getApplicationDocumentsDirectory(packageName: packageName);
     }
+
     return getFsApplicationDocumentsDirectory(this);
   }
 }

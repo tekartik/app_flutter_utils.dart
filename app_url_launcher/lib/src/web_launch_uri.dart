@@ -6,5 +6,6 @@ void webLaunchUri(Uri uri) {
   if (kDebugMode) {
     print(uri);
   }
+
   launchUrl(uri, webOnlyWindowName: '_blank');
 }

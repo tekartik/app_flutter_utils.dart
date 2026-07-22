@@ -58,9 +58,11 @@ int sdbWindowCount(SdbFindOptions? base, int rawCount) {
 Stream<int> _onCount<K extends SdbKey, V extends SdbValue>(
   SdbDatabase database,
   SdbStoreRef<K, V> store,
+
   Future<int> Function() getCount,
 ) {
   late StreamController<int> controller;
+
   void addCount() {
     getCount().then(
       (count) {

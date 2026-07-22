@@ -26,7 +26,9 @@ int tintValueCompat(int value, double factor) =>
 /// Tint a color by a factor.
 Color tintColorCompat(Color color, double factor) => Color.fromRGBO(
   tintValueCompat(color.compatRed, factor),
+
   tintValueCompat(color.compatGreen, factor),
+
   tintValueCompat(color.compatBlue, factor),
   1,
 );
@@ -38,7 +40,9 @@ int shadeValueCompat(int value, double factor) =>
 /// Shade a color by a factor.
 Color shadeColorCompat(Color color, double factor) => Color.fromRGBO(
   shadeValueCompat(color.compatRed, factor),
+
   shadeValueCompat(color.compatGreen, factor),
+
   shadeValueCompat(color.compatBlue, factor),
   1,
 );

@@ -8,7 +8,7 @@ import 'package:process_run/shell_run.dart';
 /// File system
 FileSystem get fs => fileSystemIo;
 
-///
+/// Get applications directory using path provider if needed
 Future<Directory> getApplicationDocumentsDirectory({
   String? packageName,
 }) async {
@@ -17,6 +17,7 @@ Future<Directory> getApplicationDocumentsDirectory({
     return fs.directory(dataPath);
   } else {
     var directory = await plugin.getApplicationDocumentsDirectory();
+
     return wrapIoDirectory(directory);
   }
 }

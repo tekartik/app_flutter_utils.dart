@@ -38,6 +38,7 @@ extension ContentPathRouteExt on ContentPath {
     for (var part in fields) {
       assert(part.value != null, 'invalid path $this');
     }
+
     return ContentPathRouteSettings(this, arguments);
   }
 }

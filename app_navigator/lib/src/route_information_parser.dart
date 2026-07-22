@@ -27,8 +27,10 @@ class ContentRouteInformationParser
     // Convert the current path to a displayable string
     if (configuration is ContentPath) {
       var location = configuration.toPathString();
+
       return RouteInformation(uri: Uri.parse(location));
     }
+
     return RouteInformation(uri: Uri.parse('/?'));
   }
 }
@@ -62,6 +64,7 @@ extension ContentRouteInformationParserPrvExt on ContentRouteInformationParser {
     if (contentNavigatorDebug) {
       _log('/cnip:  !!!parseRouteInformation nothing found!');
     }
+
     throw StateError('invalid path: ${routeInformation.uri}');
   }
 }

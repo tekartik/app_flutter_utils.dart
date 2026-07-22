@@ -44,6 +44,7 @@ class _ContentPageInStack {
       page.name == rs.path.toPathString(),
       'name of page must match the content path',
     );
+
     assert(page.arguments == rs.arguments, 'arguments of page must match');
     // devPrint('build page ${page.key} for $routePath');
     return page;

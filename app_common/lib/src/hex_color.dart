@@ -24,6 +24,7 @@ extension HexColor on Color {
     if (value == null) {
       return null;
     }
+
     return Color(value);
   }
 

@@ -5,6 +5,7 @@ export 'package:tekartik_app_dev_menu/dev_menu.dart'
 /// Universal main menu - io or web implementation
 void mainMenuUniversal(
   List<String> arguments,
+
   void Function() body, {
   bool? noConsole,
 }) {

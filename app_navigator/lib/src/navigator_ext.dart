@@ -6,6 +6,7 @@ extension TekartikNavigatorStateExt on NavigatorState {
   /// Pop until a path is matched. Returns true if found.
   bool popUntilPath(ContentPath path) {
     var found = false;
+
     popUntil((route) {
       // print('popUntil($path) checking ${route.settings.name}');
       var matches =
@@ -23,6 +24,7 @@ extension TekartikNavigatorStatePrvExt on NavigatorState {
   /// Pop until a path is matched. Returns true if found.
   bool popUntilPath(ContentPath path) {
     var found = false;
+
     popUntil((route) {
       // print('popUntil($path) checking $route');
       var matches =

@@ -12,10 +12,12 @@ const initMainMenuFlutter = initTestMenuFlutter;
 /// Universal main menu - flutter implementation
 void mainMenuUniversal(
   List<String> arguments,
+
   void Function() body, {
   bool? noConsole,
 }) {
   noConsole ??= false;
+
   mainMenuFlutter(body, showConsole: !noConsole);
 }
 
