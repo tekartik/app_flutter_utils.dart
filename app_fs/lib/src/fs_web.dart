@@ -13,3 +13,8 @@ Future<Directory> getApplicationDocumentsDirectory({
 }) async {
   return getFsApplicationDocumentsDirectory(fs);
 }
+
+/// Get the application support directory
+Future<Directory> getApplicationSupportDirectory() async {
+  return getFsApplicationSupportDirectory(fs);
+}

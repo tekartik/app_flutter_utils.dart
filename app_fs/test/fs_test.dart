@@ -15,6 +15,12 @@ void main() {
         '${context.separator}data',
       );
     });
+    test('getApplicationSupportDirectory()', () async {
+      expect(
+        (await fsMemory.getApplicationSupportDirectory()).path,
+        '${context.separator}support',
+      );
+    });
     /*
     group('simple', () {
       test('open', () async {

@@ -40,4 +40,21 @@ extension AppFileSystem on FileSystem {
 
     return getFsApplicationDocumentsDirectory(this);
   }
+
+  /// Path to a directory where the application may place application
+  /// support files, i.e. files that are not user-generated and that your
+  /// app does not want exposed to the user.
+  ///
+  /// On iOS and macOS, this uses the `NSApplicationSupportDirectory` API.
+  ///
+  /// On Android, this uses the Flutter engine's `PathUtils.getFilesDir` API.
+  ///
+  /// On the web, it is a dedicated directory within the data root.
+  Future<Directory> getApplicationSupportDirectory() async {
+    if (this == fs) {
+      return src.getApplicationSupportDirectory();
+    }
+
+    return getFsApplicationSupportDirectory(this);
+  }
 }

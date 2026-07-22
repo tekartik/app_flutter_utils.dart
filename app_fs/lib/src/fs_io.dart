@@ -21,3 +21,10 @@ Future<Directory> getApplicationDocumentsDirectory({
     return wrapIoDirectory(directory);
   }
 }
+
+/// Get the application support directory using path provider
+Future<Directory> getApplicationSupportDirectory() async {
+  var directory = await plugin.getApplicationSupportDirectory();
+
+  return wrapIoDirectory(directory);
+}

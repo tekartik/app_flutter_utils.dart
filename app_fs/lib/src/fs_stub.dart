@@ -10,6 +10,10 @@ FileSystem get testFs => _stub('testFs');
 Future<Directory> getApplicationDocumentsDirectory({String? packageName}) =>
     _stub('getApplicationDocumentsDirectory');
 
+/// Get the application support directory
+Future<Directory> getApplicationSupportDirectory() =>
+    _stub('getApplicationSupportDirectory');
+
 T _stub<T>(String message) {
   throw UnimplementedError(message);
 }

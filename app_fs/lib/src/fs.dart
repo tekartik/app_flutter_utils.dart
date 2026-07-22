@@ -11,7 +11,18 @@ const dataDirectory = 'data';
 /// Data directory path
 final String dataDirectoryPath = '${context.separator}$dataDirectory';
 
+/// Support directory
+const supportDirectory = 'support';
+
+/// Support directory path
+final String supportDirectoryPath = '${context.separator}$supportDirectory';
+
 /// Get the application file system
 Directory getFsApplicationDocumentsDirectory(FileSystem fs) {
   return fs.directory(dataDirectoryPath);
+}
+
+/// Get the application support directory
+Directory getFsApplicationSupportDirectory(FileSystem fs) {
+  return fs.directory(supportDirectoryPath);
 }
