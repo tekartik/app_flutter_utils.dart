@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
-import 'package:sqflite/sqflite.dart' as sqflite show databaseFactory;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 String buildDatabasesPath(String packageName) {
@@ -17,12 +16,9 @@ String buildDatabasesPath(String packageName) {
 }
 
 /// Workaround for flutter test
-bool get _inFlutterTest => Platform.environment['FLUTTER_TEST'] == 'true';
+/// bool get _inFlutterTest => Platform.environment['FLUTTER_TEST'] == 'true';
 
-DatabaseFactory get _defaultDatabaseFactory =>
-    (Platform.isLinux || Platform.isWindows || _inFlutterTest)
-    ? databaseFactoryFfi
-    : sqflite.databaseFactory;
+DatabaseFactory get _defaultDatabaseFactory => databaseFactoryFfi;
 
 /// All but Linux/Windows
 DatabaseFactory get databaseFactory => _defaultDatabaseFactory;
