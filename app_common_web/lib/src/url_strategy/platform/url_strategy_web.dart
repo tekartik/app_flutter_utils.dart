@@ -7,9 +7,9 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 /// or desktop. In that case, it will simply be a noop.
 ///
 /// See also:
-///  * [setHashUrlStrategy], which will use a hash URL strategy instead.
-void setPathUrlStrategy() {
-  setUrlStrategy(PathUrlStrategy());
+///  * [webUseHashUrlStrategy], which will use a hash URL strategy instead.
+void webUsePathUrlStrategy() {
+  usePathUrlStrategy();
 }
 
 /// Sets the URL strategy of your web app to using a leading has (`#`) instead
@@ -19,7 +19,7 @@ void setPathUrlStrategy() {
 /// or desktop. In that case, it will simply be a noop.
 ///
 /// See also:
-///  * [setPathUrlStrategy], which will use a path URL strategy instead.
-void setHashUrlStrategy() {
-  setUrlStrategy(const HashUrlStrategy());
+///  * [webUsePathUrlStrategy], which will use a path URL strategy instead.
+void webUseHashUrlStrategy() {
+  usePathUrlStrategy();
 }

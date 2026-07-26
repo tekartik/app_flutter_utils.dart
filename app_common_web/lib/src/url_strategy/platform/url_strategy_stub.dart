@@ -5,8 +5,8 @@
 /// or desktop. In that case, it will simply be a noop.
 ///
 /// See also:
-///  * [setHashUrlStrategy], which will use a hash URL strategy instead.
-void setPathUrlStrategy() {
+///  * [webUseHashUrlStrategy], which will use a hash URL strategy instead.
+void webUsePathUrlStrategy() {
   // Noop.
 }
 
@@ -17,7 +17,7 @@ void setPathUrlStrategy() {
 /// or desktop. In that case, it will simply be a noop.
 ///
 /// See also:
-///  * [setPathUrlStrategy], which will use a path URL strategy instead.
-void setHashUrlStrategy() {
+///  * [webUsePathUrlStrategy], which will use a path URL strategy instead.
+void webUseHashUrlStrategy() {
   // Noop.
 }
