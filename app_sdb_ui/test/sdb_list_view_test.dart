@@ -187,116 +187,100 @@ void main() {
       controller.dispose();
     });
 
-    testWidgets(
-      'SdbStoreListView displays items',
-      (tester) async {
-        await tester.runAsync(() async {
-          for (var i = 0; i < 5; i++) {
-            await simpleStore.record(i).put(db, 'val $i');
-          }
-        });
+    testWidgets('SdbStoreListView displays items', (tester) async {
+      await tester.runAsync(() async {
+        for (var i = 0; i < 5; i++) {
+          await simpleStore.record(i).put(db, 'val $i');
+        }
+      });
 
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SdbStoreListView<int, String>(
-                client: db,
-                store: simpleStore,
-                pageSize: 2,
-                itemBuilder: (context, snapshot, index) =>
-                    SizedBox(height: 50, child: Text(snapshot.value)),
-                itemLoadingBuilder: (context, index) =>
-                    const SizedBox(height: 50, child: Text('loading...')),
-              ),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SdbStoreListView<int, String>(
+              client: db,
+              store: simpleStore,
+              pageSize: 2,
+              itemBuilder: (context, snapshot, index) =>
+                  SizedBox(height: 50, child: Text(snapshot.value)),
+              itemLoadingBuilder: (context, index) =>
+                  const SizedBox(height: 50, child: Text('loading...')),
             ),
           ),
-        );
+        ),
+      );
 
-        await pumpUntilFound(tester, find.text('val 4'));
+      await pumpUntilFound(tester, find.text('val 4'));
 
-        expect(find.text('val 0'), findsOneWidget);
-        expect(find.text('val 1'), findsOneWidget);
-        expect(find.text('val 4'), findsOneWidget);
-      },
-      timeout: const Timeout(Duration(seconds: 10)),
-    );
+      expect(find.text('val 0'), findsOneWidget);
+      expect(find.text('val 1'), findsOneWidget);
+      expect(find.text('val 4'), findsOneWidget);
+    }, timeout: const Timeout(Duration(seconds: 10)));
 
-    testWidgets(
-      'SdbStoreListView watch updates on changes',
-      (tester) async {
-        await tester.runAsync(() => simpleStore.record(0).put(db, 'first'));
+    testWidgets('SdbStoreListView watch updates on changes', (tester) async {
+      await tester.runAsync(() => simpleStore.record(0).put(db, 'first'));
 
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SdbStoreListView<int, String>(
-                client: db,
-                store: simpleStore,
-                watch: true,
-                itemBuilder: (context, snapshot, index) =>
-                    SizedBox(height: 50, child: Text(snapshot.value)),
-              ),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SdbStoreListView<int, String>(
+              client: db,
+              store: simpleStore,
+              watch: true,
+              itemBuilder: (context, snapshot, index) =>
+                  SizedBox(height: 50, child: Text(snapshot.value)),
             ),
           ),
-        );
+        ),
+      );
 
-        await pumpUntilFound(tester, find.text('first'));
-        expect(find.text('first'), findsOneWidget);
+      await pumpUntilFound(tester, find.text('first'));
+      expect(find.text('first'), findsOneWidget);
 
-        await tester.runAsync(() => simpleStore.record(1).put(db, 'second'));
-        await pumpUntilFound(tester, find.text('second'));
-        expect(find.text('second'), findsOneWidget);
-      },
-      timeout: const Timeout(Duration(seconds: 10)),
-    );
+      await tester.runAsync(() => simpleStore.record(1).put(db, 'second'));
+      await pumpUntilFound(tester, find.text('second'));
+      expect(find.text('second'), findsOneWidget);
+    }, timeout: const Timeout(Duration(seconds: 10)));
 
-    testWidgets(
-      'SdbIndexListView displays items',
-      (tester) async {
-        await tester.runAsync(() async {
-          await itemStore.add(db, {'name': 'cherry'});
-          await itemStore.add(db, {'name': 'apple'});
-        });
+    testWidgets('SdbIndexListView displays items', (tester) async {
+      await tester.runAsync(() async {
+        await itemStore.add(db, {'name': 'cherry'});
+        await itemStore.add(db, {'name': 'apple'});
+      });
 
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SdbIndexListView<int, SdbModel, String>(
-                client: db,
-                index: nameIndex,
-                itemBuilder: (context, snapshot, index) =>
-                    SizedBox(height: 50, child: Text(snapshot.indexKey)),
-              ),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SdbIndexListView<int, SdbModel, String>(
+              client: db,
+              index: nameIndex,
+              itemBuilder: (context, snapshot, index) =>
+                  SizedBox(height: 50, child: Text(snapshot.indexKey)),
             ),
           ),
-        );
+        ),
+      );
 
-        await pumpUntilFound(tester, find.text('cherry'));
-        expect(find.text('apple'), findsOneWidget);
-        expect(find.text('cherry'), findsOneWidget);
-      },
-      timeout: const Timeout(Duration(seconds: 10)),
-    );
+      await pumpUntilFound(tester, find.text('cherry'));
+      expect(find.text('apple'), findsOneWidget);
+      expect(find.text('cherry'), findsOneWidget);
+    }, timeout: const Timeout(Duration(seconds: 10)));
 
-    testWidgets(
-      'SdbStoreListView displays empty state',
-      (tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SdbStoreListView<int, String>(
-                client: db,
-                store: simpleStore,
-                itemBuilder: (context, snapshot, index) => Text(snapshot.value),
-                emptyBuilder: (context) => const Text('empty'),
-              ),
+    testWidgets('SdbStoreListView displays empty state', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SdbStoreListView<int, String>(
+              client: db,
+              store: simpleStore,
+              itemBuilder: (context, snapshot, index) => Text(snapshot.value),
+              emptyBuilder: (context) => const Text('empty'),
             ),
           ),
-        );
-        await pumpUntilFound(tester, find.text('empty'));
-        expect(find.text('empty'), findsOneWidget);
-      },
-      timeout: const Timeout(Duration(seconds: 10)),
-    );
+        ),
+      );
+      await pumpUntilFound(tester, find.text('empty'));
+      expect(find.text('empty'), findsOneWidget);
+    }, timeout: const Timeout(Duration(seconds: 10)));
   });
 }

@@ -1,4 +1,13 @@
 # tekartik flutter recommended lints (extension over google lints and pedantic)
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 include: package:tekartik_lints_flutter/strict.yaml
 
 linter:

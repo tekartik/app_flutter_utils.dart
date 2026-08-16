@@ -149,41 +149,37 @@ void main() {
       expect(find.text('val 4'), findsOneWidget);
     }, timeout: const Timeout(Duration(seconds: 5)));
 
-    testWidgets(
-      'global loadingBuilder until first data',
-      (tester) async {
-        var countCompleter = Completer<int>();
-        var itemsCompleter = Completer<List<String>>();
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: LazyListView<String>(
-                getItems: (offset, limit) => itemsCompleter.future,
-                getCount: () => countCompleter.future,
-                itemBuilder: (context, item, index) =>
-                    SizedBox(height: 50, child: Text(item)),
-                loadingBuilder: (context) => const Text('global loading'),
-              ),
+    testWidgets('global loadingBuilder until first data', (tester) async {
+      var countCompleter = Completer<int>();
+      var itemsCompleter = Completer<List<String>>();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyListView<String>(
+              getItems: (offset, limit) => itemsCompleter.future,
+              getCount: () => countCompleter.future,
+              itemBuilder: (context, item, index) =>
+                  SizedBox(height: 50, child: Text(item)),
+              loadingBuilder: (context) => const Text('global loading'),
             ),
           ),
-        );
+        ),
+      );
 
-        // Shown before the count is known.
-        expect(find.text('global loading'), findsOneWidget);
+      // Shown before the count is known.
+      expect(find.text('global loading'), findsOneWidget);
 
-        countCompleter.complete(2);
-        await tester.pump();
-        // Count known (2) but no data yet, still globally loading.
-        expect(find.text('global loading'), findsOneWidget);
+      countCompleter.complete(2);
+      await tester.pump();
+      // Count known (2) but no data yet, still globally loading.
+      expect(find.text('global loading'), findsOneWidget);
 
-        itemsCompleter.complete(['a', 'b']);
-        await tester.pumpAndSettle();
-        expect(find.text('global loading'), findsNothing);
-        expect(find.text('a'), findsOneWidget);
-        expect(find.text('b'), findsOneWidget);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+      itemsCompleter.complete(['a', 'b']);
+      await tester.pumpAndSettle();
+      expect(find.text('global loading'), findsNothing);
+      expect(find.text('a'), findsOneWidget);
+      expect(find.text('b'), findsOneWidget);
+    }, timeout: const Timeout(Duration(seconds: 5)));
 
     testWidgets('displays empty state', (tester) async {
       await tester.pumpWidget(
@@ -261,42 +257,38 @@ void main() {
   });
 
   group('SliverLazyList', () {
-    testWidgets(
-      'displays items in a CustomScrollView',
-      (tester) async {
-        var data = List.generate(3, (i) => 'sliver $i');
-        var controller = LazyListController<String>.future(
-          getItems: (offset, limit) async =>
-              data.skip(offset).take(limit).toList(),
-          getCount: () async => data.length,
-        );
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: CustomScrollView(
-                slivers: [
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 50, child: Text('header')),
-                  ),
-                  SliverLazyList<String>(
-                    controller: controller,
-                    itemBuilder: (context, item, index) =>
-                        SizedBox(height: 50, child: Text(item)),
-                  ),
-                ],
-              ),
+    testWidgets('displays items in a CustomScrollView', (tester) async {
+      var data = List.generate(3, (i) => 'sliver $i');
+      var controller = LazyListController<String>.future(
+        getItems: (offset, limit) async =>
+            data.skip(offset).take(limit).toList(),
+        getCount: () async => data.length,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 50, child: Text('header')),
+                ),
+                SliverLazyList<String>(
+                  controller: controller,
+                  itemBuilder: (context, item, index) =>
+                      SizedBox(height: 50, child: Text(item)),
+                ),
+              ],
             ),
           ),
-        );
+        ),
+      );
 
-        await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-        expect(find.text('header'), findsOneWidget);
-        expect(find.text('sliver 0'), findsOneWidget);
-        expect(find.text('sliver 2'), findsOneWidget);
-        controller.dispose();
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+      expect(find.text('header'), findsOneWidget);
+      expect(find.text('sliver 0'), findsOneWidget);
+      expect(find.text('sliver 2'), findsOneWidget);
+      controller.dispose();
+    }, timeout: const Timeout(Duration(seconds: 5)));
   });
 }
