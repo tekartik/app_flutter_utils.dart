@@ -141,6 +141,41 @@ void main() {
       controller.dispose();
     });
 
+    test('SdbStoreListController.watch stops watching evicted pages', () async {
+      for (var i = 0; i < 100; i++) {
+        await simpleStore.record(i).put(db, 'item $i');
+      }
+
+      var controller = SdbStoreListController<int, String>.watch(
+        database: db,
+        store: simpleStore,
+        pageSize: 10,
+        pageWindowMargin: 0,
+      );
+
+      await waitUntil(() => controller.isInitialized);
+      expect(controller.totalCount, 100);
+
+      controller.getItem(0);
+      await waitUntil(() => controller.hasItem(0));
+      // Note: read through loadedItems, getItem() would mark index 0 as
+      // requested again and keep its page in the window.
+      expect(controller.loadedItems[0]?.value, 'item 0');
+
+      // Scroll far away: page 0 is dropped and its query is cancelled, it
+      // must not be re-run (nor re-populate the cache) on later changes.
+      controller.getItem(90);
+      await waitUntil(() => controller.hasItem(90));
+      expect(controller.loadedItems[90]?.value, 'item 90');
+      expect(controller.hasItem(0), isFalse);
+
+      await simpleStore.record(0).put(db, 'item 0 updated');
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(controller.hasItem(0), isFalse);
+      expect(controller.hasItem(90), isTrue);
+      controller.dispose();
+    });
+
     test('SdbIndexListController basic logic', () async {
       await itemStore.add(db, {'name': 'cherry'});
       await itemStore.add(db, {'name': 'apple'});

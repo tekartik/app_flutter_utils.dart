@@ -34,6 +34,11 @@ class SdbStoreListView<K extends SdbKey, V extends SdbValue>
   /// Page size for lazy loading.
   final int pageSize;
 
+  /// Number of extra pages kept loaded around the visible range, see
+  /// [LazyListController.pageWindowMargin]. Only used when this widget owns
+  /// its controller.
+  final int? pageWindowMargin;
+
   /// Item builder to display a loaded record.
   final Widget Function(
     BuildContext context,
@@ -85,6 +90,7 @@ class SdbStoreListView<K extends SdbKey, V extends SdbValue>
     this.findOptions,
     this.watch = false,
     this.pageSize = 50,
+    this.pageWindowMargin = lazyListDefaultPageWindowMargin,
     required this.itemBuilder,
     this.itemLoadingBuilder,
     this.loadingBuilder,
@@ -133,6 +139,7 @@ class _SdbStoreListViewState<K extends SdbKey, V extends SdbValue>
           store: widget.store!,
           findOptions: widget.findOptions,
           pageSize: widget.pageSize,
+          pageWindowMargin: widget.pageWindowMargin,
         );
       } else {
         _ownedController = SdbStoreListController<K, V>(
@@ -140,6 +147,7 @@ class _SdbStoreListViewState<K extends SdbKey, V extends SdbValue>
           store: widget.store!,
           findOptions: widget.findOptions,
           pageSize: widget.pageSize,
+          pageWindowMargin: widget.pageWindowMargin,
         );
       }
     }
@@ -153,7 +161,8 @@ class _SdbStoreListViewState<K extends SdbKey, V extends SdbValue>
         oldWidget.store != widget.store ||
         oldWidget.findOptions != widget.findOptions ||
         oldWidget.watch != widget.watch ||
-        oldWidget.pageSize != widget.pageSize) {
+        oldWidget.pageSize != widget.pageSize ||
+        oldWidget.pageWindowMargin != widget.pageWindowMargin) {
       _ownedController?.dispose();
       _ownedController = null;
       _initController();
@@ -220,6 +229,11 @@ class SdbIndexListView<
   /// Page size for lazy loading.
   final int pageSize;
 
+  /// Number of extra pages kept loaded around the visible range, see
+  /// [LazyListController.pageWindowMargin]. Only used when this widget owns
+  /// its controller.
+  final int? pageWindowMargin;
+
   /// Item builder to display a loaded record.
   final Widget Function(
     BuildContext context,
@@ -271,6 +285,7 @@ class SdbIndexListView<
     this.findOptions,
     this.watch = false,
     this.pageSize = 50,
+    this.pageWindowMargin = lazyListDefaultPageWindowMargin,
     required this.itemBuilder,
     this.itemLoadingBuilder,
     this.loadingBuilder,
@@ -324,6 +339,7 @@ class _SdbIndexListViewState<
           index: widget.index!,
           findOptions: widget.findOptions,
           pageSize: widget.pageSize,
+          pageWindowMargin: widget.pageWindowMargin,
         );
       } else {
         _ownedController = SdbIndexListController<K, V, I>(
@@ -331,6 +347,7 @@ class _SdbIndexListViewState<
           index: widget.index!,
           findOptions: widget.findOptions,
           pageSize: widget.pageSize,
+          pageWindowMargin: widget.pageWindowMargin,
         );
       }
     }
@@ -344,7 +361,8 @@ class _SdbIndexListViewState<
         oldWidget.index != widget.index ||
         oldWidget.findOptions != widget.findOptions ||
         oldWidget.watch != widget.watch ||
-        oldWidget.pageSize != widget.pageSize) {
+        oldWidget.pageSize != widget.pageSize ||
+        oldWidget.pageWindowMargin != widget.pageWindowMargin) {
       _ownedController?.dispose();
       _ownedController = null;
       _initController();

@@ -119,6 +119,187 @@ void main() {
       expect(controller.getItem(0), 'x');
       controller.dispose();
     });
+
+    test('evicts pages outside the window (stream)', () async {
+      var listened = <int>[];
+      var cancelled = <int>[];
+      var pageControllers = <int, StreamController<List<String>>>{};
+      StreamController<List<String>> pageController(int offset) =>
+          pageControllers[offset] ??= StreamController<List<String>>(
+            onListen: () => listened.add(offset),
+            onCancel: () => cancelled.add(offset),
+          );
+
+      var controller = LazyListController<String>.stream(
+        watchItems: (offset, limit) => pageController(offset).stream,
+        watchCount: () => Stream.value(100),
+        pageSize: 2,
+        pageWindowMargin: 0,
+      );
+      await pumpAsync();
+      expect(controller.totalCount, 100);
+
+      controller.getItem(0);
+      controller.getItem(1);
+      await pumpAsync();
+      expect(listened, [0]);
+      pageControllers[0]!.add(['a', 'b']);
+      await pumpAsync();
+      // hasItem/loadedItems do not mark the index as requested.
+      expect(controller.hasItem(0), isTrue);
+      expect(controller.loadedItems[0], 'a');
+
+      // Scroll far away, page 0 falls out of the window: it must be dropped
+      // and, above all, stop being watched.
+      controller.getItem(50);
+      controller.getItem(51);
+      await pumpAsync();
+      expect(cancelled, [0]);
+      expect(listened, [0, 50]);
+      expect(controller.hasItem(0), isFalse);
+      expect(controller.hasItem(1), isFalse);
+
+      controller.dispose();
+      for (var pageController in pageControllers.values) {
+        await pageController.close();
+      }
+    });
+
+    test('evicts pages outside the window (future)', () async {
+      var data = List.generate(100, (i) => 'item $i');
+      var controller = LazyListController<String>.future(
+        getItems: (offset, limit) async =>
+            data.skip(offset).take(limit).toList(),
+        getCount: () async => data.length,
+        pageSize: 10,
+        pageWindowMargin: 1,
+      );
+      await pumpAsync();
+      controller.getItem(0);
+      await pumpAsync();
+      expect(controller.hasItem(0), isTrue);
+
+      controller.getItem(90);
+      await pumpAsync();
+      await pumpAsync();
+      expect(controller.hasItem(90), isTrue);
+      // Only the window (pages 8, 9, 10 -> 9 and 10 exist) is kept.
+      expect(controller.hasItem(0), isFalse);
+      expect(controller.loadedItems.length, 10);
+      controller.dispose();
+    });
+
+    test('keeps every page with a null window margin', () async {
+      var data = List.generate(100, (i) => 'item $i');
+      var controller = LazyListController<String>.future(
+        getItems: (offset, limit) async =>
+            data.skip(offset).take(limit).toList(),
+        getCount: () async => data.length,
+        pageSize: 10,
+        pageWindowMargin: null,
+      );
+      await pumpAsync();
+      controller.getItem(0);
+      await pumpAsync();
+      controller.getItem(90);
+      await pumpAsync();
+      await pumpAsync();
+      expect(controller.hasItem(0), isTrue);
+      expect(controller.hasItem(90), isTrue);
+      controller.dispose();
+    });
+
+    test('hasEverLoadedItems survives eviction, reset by refresh', () async {
+      var data = List.generate(100, (i) => 'item $i');
+      var controller = LazyListController<String>.future(
+        getItems: (offset, limit) async =>
+            data.skip(offset).take(limit).toList(),
+        getCount: () async => data.length,
+        pageSize: 10,
+        pageWindowMargin: 0,
+      );
+      await pumpAsync();
+      expect(controller.hasEverLoadedItems, isFalse);
+      controller.getItem(0);
+      await pumpAsync();
+      expect(controller.hasEverLoadedItems, isTrue);
+
+      controller.getItem(90);
+      await pumpAsync();
+      // Page 0 has been evicted, but the list is known to have had data.
+      expect(controller.hasItem(0), isFalse);
+      expect(controller.hasEverLoadedItems, isTrue);
+
+      controller.refresh();
+      expect(controller.hasEverLoadedItems, isFalse);
+      controller.dispose();
+    });
+
+    test('coalesces notifications of a single change', () async {
+      var pageControllers = <int, StreamController<List<String>>>{};
+      var controller = LazyListController<String>.stream(
+        watchItems: (offset, limit) =>
+            (pageControllers[offset] ??= StreamController<List<String>>())
+                .stream,
+        watchCount: () => Stream.value(10),
+        pageSize: 2,
+      );
+      await pumpAsync();
+      controller.getItem(0);
+      controller.getItem(2);
+      controller.getItem(4);
+      await pumpAsync();
+
+      var notifications = 0;
+      controller.addListener(() => notifications++);
+      // One data change makes every watched page re-emit, the listeners must
+      // only be notified once.
+      pageControllers[0]!.add(['a', 'b']);
+      pageControllers[2]!.add(['c', 'd']);
+      pageControllers[4]!.add(['e', 'f']);
+      await pumpAsync();
+      expect(notifications, 1);
+      expect(controller.getItem(0), 'a');
+      expect(controller.getItem(4), 'e');
+
+      controller.dispose();
+      for (var pageController in pageControllers.values) {
+        await pageController.close();
+      }
+    });
+
+    test('watched count is not shrunk by a short page', () async {
+      var countController = StreamController<int>();
+      var pageControllers = <int, StreamController<List<String>>>{};
+      var controller = LazyListController<String>.stream(
+        watchItems: (offset, limit) =>
+            (pageControllers[offset] ??= StreamController<List<String>>())
+                .stream,
+        watchCount: () => countController.stream,
+        pageSize: 4,
+      );
+      countController.add(8);
+      await pumpAsync();
+      expect(controller.totalCount, 8);
+
+      controller.getItem(4);
+      await pumpAsync();
+      // Last page is short (a delete happened), the watched count is
+      // authoritative and re-emits on the same change: do not oscillate.
+      pageControllers[4]!.add(['e', 'f']);
+      await pumpAsync();
+      expect(controller.totalCount, 8);
+
+      countController.add(6);
+      await pumpAsync();
+      expect(controller.totalCount, 6);
+
+      controller.dispose();
+      await countController.close();
+      for (var pageController in pageControllers.values) {
+        await pageController.close();
+      }
+    });
   });
 
   group('LazyListView', () {
@@ -214,6 +395,50 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.textContaining('count failed'), findsOneWidget);
+    }, timeout: const Timeout(Duration(seconds: 5)));
+
+    testWidgets('keeps the list when scrolled to unloaded pages', (
+      tester,
+    ) async {
+      var data = List.generate(1000, (i) => 'val $i');
+      var scrollController = ScrollController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyListView<String>(
+              getItems: (offset, limit) async =>
+                  data.skip(offset).take(limit).toList(),
+              getCount: () async => data.length,
+              pageSize: 20,
+              pageWindowMargin: 0,
+              scrollController: scrollController,
+              itemBuilder: (context, item, index) =>
+                  SizedBox(height: 50, child: Text(item)),
+              itemLoadingBuilder: (context, index) =>
+                  const SizedBox(height: 50, child: Text('loading...')),
+              loadingBuilder: (context) => const Text('global loading'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('val 0'), findsOneWidget);
+
+      // Jump to item 500, its page is not loaded and the pages that were
+      // loaded get evicted: the list (and so the scroll position) must be
+      // kept, showing the item placeholders.
+      scrollController.jumpTo(500 * 50.0);
+      await tester.pump();
+      expect(find.text('global loading'), findsNothing);
+      await tester.pump();
+      expect(find.text('global loading'), findsNothing);
+
+      await tester.pumpAndSettle();
+      expect(find.text('global loading'), findsNothing);
+      expect(find.text('val 500'), findsOneWidget);
+      expect(find.text('val 0'), findsNothing);
+      expect(scrollController.offset, 500 * 50.0);
+      scrollController.dispose();
     }, timeout: const Timeout(Duration(seconds: 5)));
 
     testWidgets('updates on stream events', (tester) async {

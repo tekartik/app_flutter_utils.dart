@@ -1,6 +1,7 @@
 export 'src/lazy_list_controller.dart'
     show
         LazyListController,
+        lazyListDefaultPageWindowMargin,
         LazyItemsGetter,
         LazyItemsStreamer,
         LazyCountGetter,

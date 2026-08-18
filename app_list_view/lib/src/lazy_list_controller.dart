@@ -18,6 +18,10 @@ typedef LazyCountGetter = Future<int> Function();
 /// The stream can emit multiple times when the underlying data changes.
 typedef LazyCountStreamer = Stream<int> Function();
 
+/// Default number of pages kept loaded on each side of the range of items
+/// currently requested by the list.
+const lazyListDefaultPageWindowMargin = 2;
+
 /// Controller managing paginated state and lazy-loading of items.
 ///
 /// Items are fetched page by page (offset/limit), either through a Future
@@ -25,11 +29,15 @@ typedef LazyCountStreamer = Stream<int> Function();
 /// Future ([getCount]) or a Stream ([watchCount]). When no count source is
 /// provided, the end of the list is inferred when a page returns fewer items
 /// than requested.
+///
+/// Only the pages around the range of items currently requested are kept
+/// loaded, see [pageWindowMargin].
 class LazyListController<T> extends ChangeNotifier {
   /// Future based page fetch.
   final LazyItemsGetter<T>? getItems;
 
-  /// Stream based page fetch, each page remains watched until [refresh] or
+  /// Stream based page fetch, each page remains watched while it is in the
+  /// window of kept pages (see [pageWindowMargin]), or until [refresh] or
   /// [dispose].
   final LazyItemsStreamer<T>? watchItems;
 
@@ -41,6 +49,20 @@ class LazyListController<T> extends ChangeNotifier {
 
   /// Items per page.
   final int pageSize;
+
+  /// Number of extra pages kept loaded on each side of the range of items
+  /// currently requested (i.e. built by the list).
+  ///
+  /// Pages outside that window are evicted: their items are dropped and, in
+  /// stream mode, their query subscription is cancelled. This is what bounds
+  /// memory and, much more importantly in stream mode, the number of live
+  /// queries re-run on every data change: without it a list scrolled through
+  /// 20000 records keeps 400 queries alive, each one re-reading the database
+  /// on every single write.
+  ///
+  /// Use null to keep every page loaded (and watched) forever, only suitable
+  /// for small lists.
+  final int? pageWindowMargin;
 
   final _items = <int, T>{};
   final _fetchingPages = <int>{};
@@ -55,8 +77,15 @@ class LazyListController<T> extends ChangeNotifier {
   Object? _error;
   StackTrace? _stackTrace;
   bool _isInitialized = false;
+  bool _hasEverLoadedItems = false;
   bool _disposed = false;
   int _revision = 0;
+
+  /// Range of item indexes requested since the last eviction pass.
+  int? _requestedMinIndex;
+  int? _requestedMaxIndex;
+  bool _pruneScheduled = false;
+  bool _notifyScheduled = false;
 
   /// Requires exactly one of [getItems]/[watchItems] and at most one of
   /// [getCount]/[watchCount]. Future and Stream sources can be mixed.
@@ -66,6 +95,7 @@ class LazyListController<T> extends ChangeNotifier {
     this.getCount,
     this.watchCount,
     this.pageSize = 50,
+    this.pageWindowMargin = lazyListDefaultPageWindowMargin,
   }) : assert(
          (getItems == null) != (watchItems == null),
          'Provide exactly one of getItems or watchItems',
@@ -73,6 +103,10 @@ class LazyListController<T> extends ChangeNotifier {
        assert(
          getCount == null || watchCount == null,
          'Provide at most one of getCount or watchCount',
+       ),
+       assert(
+         pageWindowMargin == null || pageWindowMargin >= 0,
+         'pageWindowMargin must be positive or null',
        ) {
     _init();
   }
@@ -82,14 +116,26 @@ class LazyListController<T> extends ChangeNotifier {
     required LazyItemsGetter<T> getItems,
     LazyCountGetter? getCount,
     int pageSize = 50,
-  }) : this(getItems: getItems, getCount: getCount, pageSize: pageSize);
+    int? pageWindowMargin = lazyListDefaultPageWindowMargin,
+  }) : this(
+         getItems: getItems,
+         getCount: getCount,
+         pageSize: pageSize,
+         pageWindowMargin: pageWindowMargin,
+       );
 
   /// Stream based controller.
   LazyListController.stream({
     required LazyItemsStreamer<T> watchItems,
     LazyCountStreamer? watchCount,
     int pageSize = 50,
-  }) : this(watchItems: watchItems, watchCount: watchCount, pageSize: pageSize);
+    int? pageWindowMargin = lazyListDefaultPageWindowMargin,
+  }) : this(
+         watchItems: watchItems,
+         watchCount: watchCount,
+         pageSize: pageSize,
+         pageWindowMargin: pageWindowMargin,
+       );
 
   bool get _hasCountSource => getCount != null || watchCount != null;
 
@@ -106,10 +152,21 @@ class LazyListController<T> extends ChangeNotifier {
   StackTrace? get stackTrace => _stackTrace;
 
   /// Currently loaded items by index.
+  ///
+  /// Only holds the pages in the current window, an item that was displayed
+  /// before can be gone (see [pageWindowMargin]).
   Map<int, T> get loadedItems => _items;
 
   /// True if the item at [index] is loaded.
   bool hasItem(int index) => _items.containsKey(index);
+
+  /// True once at least one item has been loaded, stays true even when the
+  /// loaded pages are later evicted. Reset by [refresh].
+  ///
+  /// Allows a view to tell an initial load (nothing to display yet) from a
+  /// scroll to a not yet loaded part of the list (where the list must be kept
+  /// to preserve the scroll position).
+  bool get hasEverLoadedItems => _hasEverLoadedItems;
 
   /// Incremented on every change, allows delegates to know when to rebuild.
   int get revision => _revision;
@@ -157,9 +214,13 @@ class LazyListController<T> extends ChangeNotifier {
 
   /// Get item at index, triggers lazy-loading if not cached.
   ///
+  /// Also marks the index as currently needed, pages far from the requested
+  /// indexes are evicted (see [pageWindowMargin]).
+  ///
   /// Returns null while loading (use [hasItem] to disambiguate if T is
   /// nullable) or if the index is past the end.
   T? getItem(int index) {
+    _noteRequestedIndex(index);
     if (_items.containsKey(index)) {
       return _items[index];
     }
@@ -168,6 +229,56 @@ class LazyListController<T> extends ChangeNotifier {
     }
     _loadPage(index ~/ pageSize);
     return null;
+  }
+
+  /// Track the range of indexes the list is currently interested in and
+  /// schedule an eviction pass. The pass runs in a microtask, i.e. once the
+  /// whole build/layout phase that requested the items is done.
+  void _noteRequestedIndex(int index) {
+    if (pageWindowMargin == null || index < 0) {
+      return;
+    }
+    if (_totalCount != null && index >= _totalCount!) {
+      return;
+    }
+    var min = _requestedMinIndex;
+    var max = _requestedMaxIndex;
+    if (min == null || index < min) {
+      _requestedMinIndex = index;
+    }
+    if (max == null || index > max) {
+      _requestedMaxIndex = index;
+    }
+    if (!_pruneScheduled) {
+      _pruneScheduled = true;
+      scheduleMicrotask(_prunePages);
+    }
+  }
+
+  /// Drop (and stop watching) the pages outside the current window.
+  void _prunePages() {
+    _pruneScheduled = false;
+    var margin = pageWindowMargin;
+    var minIndex = _requestedMinIndex;
+    var maxIndex = _requestedMaxIndex;
+    _requestedMinIndex = null;
+    _requestedMaxIndex = null;
+    if (_disposed || margin == null || minIndex == null || maxIndex == null) {
+      return;
+    }
+    var firstPage = (minIndex ~/ pageSize) - margin;
+    var lastPage = (maxIndex ~/ pageSize) + margin;
+    bool outside(int pageIndex) =>
+        pageIndex < firstPage || pageIndex > lastPage;
+
+    for (var pageIndex in _pageSubscriptions.keys.toList()) {
+      if (outside(pageIndex)) {
+        unawaited(_pageSubscriptions.remove(pageIndex)!.cancel());
+      }
+    }
+    // A page being fetched (Future mode) cannot be cancelled, its result is
+    // simply evicted by a later pass if it is still out of the window.
+    _items.removeWhere((index, _) => outside(index ~/ pageSize));
   }
 
   void _loadPage(int pageIndex) {
@@ -215,13 +326,21 @@ class LazyListController<T> extends ChangeNotifier {
     for (var i = 0; i < items.length; i++) {
       _items[offset + i] = items[i];
     }
+    if (items.isNotEmpty) {
+      _hasEverLoadedItems = true;
+    }
     if (items.length < pageSize) {
       // A short page marks the end of the list, also handles a count that
-      // got stale (items deleted after a one-shot count).
+      // got stale (items deleted after a one-shot count). A watched count is
+      // authoritative though: the change that shortened the page also
+      // re-emits the count, inferring here would only make the total (and so
+      // the list extent) oscillate while scrolling.
       var newTotal = offset + items.length;
+      var countIsAuthoritative = watchCount != null;
       if (_totalCount == null ||
-          newTotal < _totalCount! ||
-          _inferredTotalPageIndex == pageIndex) {
+          (!countIsAuthoritative &&
+              (newTotal < _totalCount! ||
+                  _inferredTotalPageIndex == pageIndex))) {
         _totalCount = newTotal;
         if (!_hasCountSource) {
           _inferredTotalPageIndex = pageIndex;
@@ -247,6 +366,9 @@ class LazyListController<T> extends ChangeNotifier {
     _error = null;
     _stackTrace = null;
     _isInitialized = false;
+    _hasEverLoadedItems = false;
+    _requestedMinIndex = null;
+    _requestedMaxIndex = null;
 
     notifyListeners();
     _init();
@@ -261,12 +383,27 @@ class LazyListController<T> extends ChangeNotifier {
     _countSubscription = null;
   }
 
+  /// Bumps [revision] right away but notifies the listeners at most once per
+  /// microtask: in stream mode a single data change makes every watched page
+  /// re-emit, notifying for each one would rebuild the whole list as many
+  /// times.
   @override
   void notifyListeners() {
-    if (!_disposed) {
-      _revision++;
-      super.notifyListeners();
+    if (_disposed) {
+      return;
     }
+    _revision++;
+    if (_notifyScheduled) {
+      return;
+    }
+    _notifyScheduled = true;
+    scheduleMicrotask(() {
+      _notifyScheduled = false;
+      if (_disposed) {
+        return;
+      }
+      super.notifyListeners();
+    });
   }
 
   @override

@@ -111,6 +111,7 @@ class SdbStoreListController<K extends SdbKey, V extends SdbValue>
     required SdbStoreRef<K, V> store,
     SdbFindOptions<K>? findOptions,
     super.pageSize,
+    super.pageWindowMargin,
   }) : super(
          getItems: (offset, limit) async {
            var options = sdbPageFindOptions(findOptions, offset, limit);
@@ -132,6 +133,7 @@ class SdbStoreListController<K extends SdbKey, V extends SdbValue>
     required SdbStoreRef<K, V> store,
     SdbFindOptions<K>? findOptions,
     super.pageSize,
+    super.pageWindowMargin,
   }) : super(
          watchItems: (offset, limit) {
            var options = sdbPageFindOptions(findOptions, offset, limit);
@@ -173,6 +175,7 @@ class SdbIndexListController<
     required SdbIndexRef<K, V, I> index,
     SdbFindOptions<I>? findOptions,
     super.pageSize,
+    super.pageWindowMargin,
   }) : super(
          getItems: (offset, limit) async {
            var options = sdbPageFindOptions(findOptions, offset, limit);
@@ -194,6 +197,7 @@ class SdbIndexListController<
     required SdbIndexRef<K, V, I> index,
     SdbFindOptions<I>? findOptions,
     super.pageSize,
+    super.pageWindowMargin,
   }) : super(
          watchItems: (offset, limit) {
            var options = sdbPageFindOptions(findOptions, offset, limit);

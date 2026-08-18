@@ -1,0 +1,42 @@
+name: tekartik_sdb_ui_test_app_lib
+description: Sdb UI test app lib
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  tekartik_app_sdb_ui_flutter:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_sdb_ui
+    version: '>=0.1.0'
+  tekartik_app_flutter_idb:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_idb
+    version: '>=0.1.0'
+  tekartik_app_dev_menu_flutter:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_dev_menu
+  tekartik_app_platform:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_platform
+    version: '>=0.1.0'
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  tekartik_lints_flutter:
+    git:
+      url: https://github.com/tekartik/common_flutter.dart
+      path: packages/lints_flutter
+    version: '>=0.1.0'
+
+flutter:
+  uses-material-design: true
+resolution: workspace

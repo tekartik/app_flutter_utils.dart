@@ -152,6 +152,10 @@ class LazyListView<T> extends StatefulWidget {
   /// Page size for lazy loading (when the controller is owned).
   final int pageSize;
 
+  /// Number of extra pages kept loaded around the visible range (when the
+  /// controller is owned), see [LazyListController.pageWindowMargin].
+  final int? pageWindowMargin;
+
   /// Item builder to display a loaded item.
   final LazyItemWidgetBuilder<T> itemBuilder;
 
@@ -222,6 +226,7 @@ class LazyListView<T> extends StatefulWidget {
     this.getCount,
     this.watchCount,
     this.pageSize = 50,
+    this.pageWindowMargin = lazyListDefaultPageWindowMargin,
     required this.itemBuilder,
     this.itemLoadingBuilder,
     this.loadingBuilder,
@@ -271,6 +276,7 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
         getCount: widget.getCount,
         watchCount: widget.watchCount,
         pageSize: widget.pageSize,
+        pageWindowMargin: widget.pageWindowMargin,
       );
     }
     _controller.addListener(_onControllerChanged);
@@ -296,7 +302,8 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
         oldWidget.watchItems != widget.watchItems ||
         oldWidget.getCount != widget.getCount ||
         oldWidget.watchCount != widget.watchCount ||
-        oldWidget.pageSize != widget.pageSize) {
+        oldWidget.pageSize != widget.pageSize ||
+        oldWidget.pageWindowMargin != widget.pageWindowMargin) {
       oldWidget.controller?.removeListener(_onControllerChanged);
       _ownedController?.removeListener(_onControllerChanged);
       _ownedController?.dispose();
@@ -326,9 +333,14 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
       return widget.emptyBuilder?.call(context) ?? const SizedBox.shrink();
     }
 
-    if (_controller.loadedItems.isEmpty) {
-      // No data available yet, global loading state. Trigger the first page
+    if (_controller.loadedItems.isEmpty && !_controller.hasEverLoadedItems) {
+      // Nothing loaded yet, global loading state. Trigger the first page
       // load (the list, not being built, would not trigger it).
+      //
+      // Once something has been loaded the list is kept even when the loaded
+      // pages are all gone (scrolled far away, pages evicted): replacing it
+      // by the global loading state would lose the scroll position. The
+      // itemLoadingBuilder placeholders are shown instead.
       _controller.getItem(0);
       return widget.loadingBuilder?.call(context) ??
           const Center(child: CircularProgressIndicator());

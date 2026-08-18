@@ -32,9 +32,11 @@ workspace:
   - example/fs_test_app_lib
   - example/idb_test_app_lib
   - example/image_test_app_lib
+  - example/list_view_test_app_lib
   - example/navigator_test_app_lib
   - example/prefs_test_app_lib
   - example/roboto_test_app_lib
+  - example/sdb_ui_test_app_lib
   - example/sembast_test_app_lib
   - example/sqflite_test_app_lib
   - example/test_app
