@@ -9,6 +9,10 @@ import 'package:tekartik_list_view_test_app_lib/demo_store.dart';
 /// watched list every loaded page is re-queried on every change, so the query
 /// count is the direct measure of what [LazyListController.pageWindowMargin]
 /// saves.
+/// Every tile (loading or loaded) is built with this height so the list can
+/// be given a fixed item extent.
+const _tileExtent = 56.0;
+
 class LazyListViewDemoPage extends StatefulWidget {
   /// Page title.
   final String title;
@@ -31,6 +35,10 @@ class LazyListViewDemoPage extends StatefulWidget {
   /// (and watched) forever.
   final int? pageWindowMargin;
 
+  /// Fixed item extent, null to let the items size themselves (which makes a
+  /// long jump build every item scrolled over, see [LazyListView.itemExtent]).
+  final double? itemExtent;
+
   /// Constructor
   const LazyListViewDemoPage({
     super.key,
@@ -40,6 +48,7 @@ class LazyListViewDemoPage extends StatefulWidget {
     this.withCount = true,
     this.pageSize = 50,
     this.pageWindowMargin = lazyListDefaultPageWindowMargin,
+    this.itemExtent = _tileExtent,
   });
 
   @override
@@ -76,14 +85,17 @@ class _LazyListViewDemoPageState extends State<LazyListViewDemoPage> {
     super.dispose();
   }
 
-  Widget _loadingTile(BuildContext context, int index) => ListTile(
-    dense: true,
-    leading: const SizedBox(
-      width: 24,
-      height: 24,
-      child: CircularProgressIndicator(strokeWidth: 2),
+  Widget _loadingTile(BuildContext context, int index) => SizedBox(
+    height: _tileExtent,
+    child: ListTile(
+      dense: true,
+      leading: const SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
+      title: Text('loading ${index + 1}...'),
     ),
-    title: Text('loading ${index + 1}...'),
   );
 
   @override
@@ -121,11 +133,15 @@ class _LazyListViewDemoPageState extends State<LazyListViewDemoPage> {
       ),
       body: LazyListView<String>(
         controller: _controller,
+        itemExtent: widget.itemExtent,
         itemLoadingBuilder: _loadingTile,
-        itemBuilder: (context, item, index) => ListTile(
-          dense: true,
-          leading: Text('${index + 1}'),
-          title: Text(item),
+        itemBuilder: (context, item, index) => SizedBox(
+          height: _tileExtent,
+          child: ListTile(
+            dense: true,
+            leading: Text('${index + 1}'),
+            title: Text(item),
+          ),
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -144,6 +160,7 @@ class _LazyListViewDemoPageState extends State<LazyListViewDemoPage> {
                 subtitle: Text(
                   'page size ${widget.pageSize}, '
                   'window margin ${widget.pageWindowMargin ?? 'none'}, '
+                  'item extent ${widget.itemExtent ?? 'none'}, '
                   'page queries ${_store.queryCount}',
                 ),
               );

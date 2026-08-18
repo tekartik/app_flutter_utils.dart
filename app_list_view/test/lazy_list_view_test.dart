@@ -481,6 +481,71 @@ void main() {
     }, timeout: const Timeout(Duration(seconds: 5)));
   });
 
+  group('LazyListView item extent', () {
+    /// Jump far in a 100000 item list and report what it cost.
+    Future<({int builds, int queries})> jumpFar(
+      WidgetTester tester, {
+      double? itemExtent,
+    }) async {
+      var builds = 0;
+      var queries = 0;
+      var data = List.generate(100000, (i) => 'Item $i');
+      var scrollController = ScrollController();
+      addTearDown(scrollController.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyListView<String>(
+              getItems: (offset, limit) async {
+                queries++;
+                return data.skip(offset).take(limit).toList();
+              },
+              getCount: () async => data.length,
+              pageSize: 50,
+              itemExtent: itemExtent,
+              scrollController: scrollController,
+              itemBuilder: (context, item, index) {
+                builds++;
+                return SizedBox(height: 48, child: Text(item));
+              },
+              itemLoadingBuilder: (context, index) {
+                builds++;
+                return const SizedBox(height: 48, child: Text('loading'));
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      builds = 0;
+      queries = 0;
+      scrollController.jumpTo(1000000);
+      await tester.pumpAndSettle();
+      return (builds: builds, queries: queries);
+    }
+
+    testWidgets('a long jump only builds the visible items', (tester) async {
+      // Without a known item extent the sliver has to lay out every item
+      // before the target one, and the list loads a page for each of them:
+      // thousands of builds and hundreds of queries for a single jump.
+      var result = await jumpFar(tester, itemExtent: 48);
+      expect(result.builds, lessThan(100));
+      expect(result.queries, lessThan(5));
+    }, timeout: const Timeout(Duration(seconds: 120)));
+
+    testWidgets('itemExtent is exclusive with prototypeItem', (tester) async {
+      expect(
+        () => LazyListView<String>(
+          getItems: (offset, limit) async => <String>[],
+          itemExtent: 48,
+          prototypeItem: const SizedBox(),
+          itemBuilder: (context, item, index) => Text(item),
+        ),
+        throwsAssertionError,
+      );
+    });
+  });
+
   group('SliverLazyList', () {
     testWidgets('displays items in a CustomScrollView', (tester) async {
       var data = List.generate(3, (i) => 'sliver $i');
@@ -513,6 +578,63 @@ void main() {
       expect(find.text('header'), findsOneWidget);
       expect(find.text('sliver 0'), findsOneWidget);
       expect(find.text('sliver 2'), findsOneWidget);
+      controller.dispose();
+    }, timeout: const Timeout(Duration(seconds: 5)));
+
+    testWidgets('displays items with a fixed item extent', (tester) async {
+      var data = List.generate(3, (i) => 'sliver $i');
+      var controller = LazyListController<String>.future(
+        getItems: (offset, limit) async =>
+            data.skip(offset).take(limit).toList(),
+        getCount: () async => data.length,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                SliverLazyList<String>(
+                  controller: controller,
+                  itemExtent: 50,
+                  itemBuilder: (context, item, index) => Text(item),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(SliverFixedExtentList), findsOneWidget);
+      expect(find.text('sliver 0'), findsOneWidget);
+      expect(find.text('sliver 2'), findsOneWidget);
+      controller.dispose();
+    }, timeout: const Timeout(Duration(seconds: 5)));
+
+    testWidgets('displays items with a prototype item', (tester) async {
+      var data = List.generate(3, (i) => 'proto $i');
+      var controller = LazyListController<String>.future(
+        getItems: (offset, limit) async =>
+            data.skip(offset).take(limit).toList(),
+        getCount: () async => data.length,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                SliverLazyList<String>(
+                  controller: controller,
+                  prototypeItem: const SizedBox(height: 50),
+                  itemBuilder: (context, item, index) => Text(item),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(SliverPrototypeExtentList), findsOneWidget);
+      expect(find.text('proto 0'), findsOneWidget);
       controller.dispose();
     }, timeout: const Timeout(Duration(seconds: 5)));
   });

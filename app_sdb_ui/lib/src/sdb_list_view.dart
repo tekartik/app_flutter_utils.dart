@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:idb_shim/sdb.dart';
 import 'package:tekartik_app_list_view_flutter/list_view_flutter.dart';
 
@@ -81,6 +82,17 @@ class SdbStoreListView<K extends SdbKey, V extends SdbValue>
   /// ListView configuration: padding.
   final EdgeInsetsGeometry? padding;
 
+  /// Fixed extent of every item, strongly recommended on long lists, see
+  /// [LazyListView.itemExtent].
+  final double? itemExtent;
+
+  /// Item used to measure the (fixed) item extent, see
+  /// [LazyListView.itemExtent].
+  final Widget? prototypeItem;
+
+  /// Per index item extent, see [LazyListView.itemExtent].
+  final ItemExtentBuilder? itemExtentBuilder;
+
   /// Constructor
   const SdbStoreListView({
     super.key,
@@ -103,6 +115,9 @@ class SdbStoreListView<K extends SdbKey, V extends SdbValue>
     this.physics,
     this.shrinkWrap = false,
     this.padding,
+    this.itemExtent,
+    this.prototypeItem,
+    this.itemExtentBuilder,
   }) : assert(
          (controller != null) != (store != null && client != null),
          'Provide either a controller or a client and a store',
@@ -191,6 +206,9 @@ class _SdbStoreListViewState<K extends SdbKey, V extends SdbValue>
       physics: widget.physics,
       shrinkWrap: widget.shrinkWrap,
       padding: widget.padding,
+      itemExtent: widget.itemExtent,
+      prototypeItem: widget.prototypeItem,
+      itemExtentBuilder: widget.itemExtentBuilder,
     );
   }
 }
@@ -276,6 +294,17 @@ class SdbIndexListView<
   /// ListView configuration: padding.
   final EdgeInsetsGeometry? padding;
 
+  /// Fixed extent of every item, strongly recommended on long lists, see
+  /// [LazyListView.itemExtent].
+  final double? itemExtent;
+
+  /// Item used to measure the (fixed) item extent, see
+  /// [LazyListView.itemExtent].
+  final Widget? prototypeItem;
+
+  /// Per index item extent, see [LazyListView.itemExtent].
+  final ItemExtentBuilder? itemExtentBuilder;
+
   /// Constructor
   const SdbIndexListView({
     super.key,
@@ -298,6 +327,9 @@ class SdbIndexListView<
     this.physics,
     this.shrinkWrap = false,
     this.padding,
+    this.itemExtent,
+    this.prototypeItem,
+    this.itemExtentBuilder,
   }) : assert(
          (controller != null) != (index != null && client != null),
          'Provide either a controller or a client and an index',
@@ -391,6 +423,9 @@ class _SdbIndexListViewState<
       physics: widget.physics,
       shrinkWrap: widget.shrinkWrap,
       padding: widget.padding,
+      itemExtent: widget.itemExtent,
+      prototypeItem: widget.prototypeItem,
+      itemExtentBuilder: widget.itemExtentBuilder,
     );
   }
 }

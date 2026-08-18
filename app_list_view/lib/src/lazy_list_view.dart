@@ -65,6 +65,9 @@ class LazyListViewDelegate<T> extends SliverChildBuilderDelegate {
 }
 
 /// A lazy list sliver to use inside a [CustomScrollView].
+///
+/// Prefer giving the items a known extent ([itemExtent], [prototypeItem] or
+/// [itemExtentBuilder]) on long lists, see [LazyListView.itemExtent].
 class SliverLazyList<T> extends StatefulWidget {
   /// The controller managing the state, not disposed by this widget.
   final LazyListController<T> controller;
@@ -75,13 +78,32 @@ class SliverLazyList<T> extends StatefulWidget {
   /// Builder for placeholder while an item is loading.
   final LazyItemLoadingWidgetBuilder? itemLoadingBuilder;
 
+  /// Fixed item extent, see [LazyListView.itemExtent].
+  final double? itemExtent;
+
+  /// Item used to measure the (fixed) item extent, see
+  /// [LazyListView.itemExtent].
+  final Widget? prototypeItem;
+
+  /// Per index item extent, see [LazyListView.itemExtent].
+  final ItemExtentBuilder? itemExtentBuilder;
+
   /// Constructor
   const SliverLazyList({
     super.key,
     required this.controller,
     required this.itemBuilder,
     this.itemLoadingBuilder,
-  });
+    this.itemExtent,
+    this.prototypeItem,
+    this.itemExtentBuilder,
+  }) : assert(
+         (itemExtent == null && prototypeItem == null) ||
+             (itemExtent == null && itemExtentBuilder == null) ||
+             (prototypeItem == null && itemExtentBuilder == null),
+         'You can only pass one of itemExtent, prototypeItem and '
+         'itemExtentBuilder.',
+       );
 
   @override
   State<SliverLazyList<T>> createState() => _SliverLazyListState<T>();
@@ -117,13 +139,30 @@ class _SliverLazyListState<T> extends State<SliverLazyList<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: LazyListViewDelegate<T>(
-        controller: widget.controller,
-        itemBuilder: widget.itemBuilder,
-        itemLoadingBuilder: widget.itemLoadingBuilder,
-      ),
+    var delegate = LazyListViewDelegate<T>(
+      controller: widget.controller,
+      itemBuilder: widget.itemBuilder,
+      itemLoadingBuilder: widget.itemLoadingBuilder,
     );
+    var itemExtent = widget.itemExtent;
+    if (itemExtent != null) {
+      return SliverFixedExtentList(delegate: delegate, itemExtent: itemExtent);
+    }
+    var prototypeItem = widget.prototypeItem;
+    if (prototypeItem != null) {
+      return SliverPrototypeExtentList(
+        delegate: delegate,
+        prototypeItem: prototypeItem,
+      );
+    }
+    var itemExtentBuilder = widget.itemExtentBuilder;
+    if (itemExtentBuilder != null) {
+      return SliverVariedExtentList(
+        delegate: delegate,
+        itemExtentBuilder: itemExtentBuilder,
+      );
+    }
+    return SliverList(delegate: delegate);
   }
 }
 
@@ -132,6 +171,11 @@ class _SliverLazyListState<T> extends State<SliverLazyList<T>> {
 /// Either provide an external [controller] or the fetch callbacks
 /// ([getItems]/[watchItems] and optionally [getCount]/[watchCount]) to let
 /// the widget create and own its controller.
+///
+/// On a long list, give the items a known extent ([itemExtent],
+/// [prototypeItem] or [itemExtentBuilder]): without it, a long scroll jump
+/// costs one build (and so one page load) per item scrolled over, see
+/// [itemExtent].
 class LazyListView<T> extends StatefulWidget {
   /// External controller, not disposed by this widget. Exclusive with the
   /// fetch callbacks.
@@ -193,6 +237,29 @@ class LazyListView<T> extends StatefulWidget {
   /// ListView configuration: padding.
   final EdgeInsetsGeometry? padding;
 
+  /// Fixed extent of every item, strongly recommended on long lists.
+  ///
+  /// A list of items of unknown extent can only find the item at a given
+  /// scroll offset by laying out every item before it: a long jump (a fling,
+  /// a scrollbar drag, a [ScrollController.jumpTo]) then builds every item
+  /// scrolled over, and this list loads a page for each of them. With 100000
+  /// items that is seconds of work and hundreds of queries for a single
+  /// jump.
+  ///
+  /// With a known extent the target item is computed directly and only the
+  /// visible items are built (and loaded).
+  ///
+  /// Use [prototypeItem] instead when the extent is not known in advance but
+  /// every item has the same one, or [itemExtentBuilder] when it varies by
+  /// index. Only one of the three can be given.
+  final double? itemExtent;
+
+  /// Item used to measure the (fixed) item extent, see [itemExtent].
+  final Widget? prototypeItem;
+
+  /// Per index item extent, see [itemExtent].
+  final ItemExtentBuilder? itemExtentBuilder;
+
   /// ListView configuration: addAutomaticKeepAlives.
   final bool addAutomaticKeepAlives;
 
@@ -239,6 +306,9 @@ class LazyListView<T> extends StatefulWidget {
     this.physics,
     this.shrinkWrap = false,
     this.padding,
+    this.itemExtent,
+    this.prototypeItem,
+    this.itemExtentBuilder,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
@@ -250,6 +320,13 @@ class LazyListView<T> extends StatefulWidget {
   }) : assert(
          (controller != null) != (getItems != null || watchItems != null),
          'Provide either a controller or fetch callbacks',
+       ),
+       assert(
+         (itemExtent == null && prototypeItem == null) ||
+             (itemExtent == null && itemExtentBuilder == null) ||
+             (prototypeItem == null && itemExtentBuilder == null),
+         'You can only pass one of itemExtent, prototypeItem and '
+         'itemExtentBuilder.',
        );
 
   @override
@@ -354,6 +431,9 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
       physics: widget.physics,
       shrinkWrap: widget.shrinkWrap,
       padding: widget.padding,
+      itemExtent: widget.itemExtent,
+      prototypeItem: widget.prototypeItem,
+      itemExtentBuilder: widget.itemExtentBuilder,
       scrollCacheExtent: widget.scrollCacheExtent,
       dragStartBehavior: widget.dragStartBehavior,
       keyboardDismissBehavior: widget.keyboardDismissBehavior,

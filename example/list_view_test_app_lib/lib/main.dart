@@ -41,6 +41,17 @@ void defineMenu() {
         ),
       );
     });
+    item('LazyListView (future, no item extent)', () async {
+      // Without a fixed item extent a long jump (fling, scrollbar drag) has
+      // to build every item scrolled over, and loads a page for each of
+      // them: seconds of work and hundreds of queries for one jump.
+      await _push(
+        const LazyListViewDemoPage(
+          title: 'Future, no item extent',
+          itemExtent: null,
+        ),
+      );
+    });
     item('LazyListView (watch, small pages)', () async {
       await _push(
         const LazyListViewDemoPage(

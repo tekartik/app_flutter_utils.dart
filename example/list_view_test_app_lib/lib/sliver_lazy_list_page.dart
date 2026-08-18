@@ -46,6 +46,7 @@ class _SliverLazyListDemoPageState extends State<SliverLazyListDemoPage> {
           ),
           SliverLazyList<String>(
             controller: _controller,
+            itemExtent: 56,
             itemLoadingBuilder: (context, index) =>
                 ListTile(dense: true, title: Text('loading ${index + 1}...')),
             itemBuilder: (context, item, index) => ListTile(

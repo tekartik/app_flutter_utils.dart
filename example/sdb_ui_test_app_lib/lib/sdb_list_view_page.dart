@@ -14,6 +14,10 @@ enum SdbListSource {
   nameIndex,
 }
 
+/// Every tile is built with this height so the list can be given a fixed item
+/// extent, which is what keeps a long scroll jump cheap.
+const _tileExtent = 56.0;
+
 /// Demo page for [SdbStoreListView] and [SdbIndexListView].
 ///
 /// The status bar shows what the controller keeps loaded: with [watch] on,
@@ -131,21 +135,27 @@ class _SdbListViewDemoPageState extends State<SdbListViewDemoPage> {
         )
       : null;
 
-  Widget _loadingTile(BuildContext context, int index) => ListTile(
-    dense: true,
-    leading: const SizedBox(
-      width: 24,
-      height: 24,
-      child: CircularProgressIndicator(strokeWidth: 2),
+  Widget _loadingTile(BuildContext context, int index) => SizedBox(
+    height: _tileExtent,
+    child: ListTile(
+      dense: true,
+      leading: const SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
+      title: Text('loading ${index + 1}...'),
     ),
-    title: Text('loading ${index + 1}...'),
   );
 
-  Widget _tile(int index, String name, Object? value) => ListTile(
-    dense: true,
-    leading: Text('${index + 1}'),
-    title: Text(name),
-    subtitle: Text('$value'),
+  Widget _tile(int index, String name, Object? value) => SizedBox(
+    height: _tileExtent,
+    child: ListTile(
+      dense: true,
+      leading: Text('${index + 1}'),
+      title: Text(name),
+      subtitle: Text('$value'),
+    ),
   );
 
   Widget _emptyView(BuildContext context) =>
@@ -156,6 +166,7 @@ class _SdbListViewDemoPageState extends State<SdbListViewDemoPage> {
     if (storeController != null) {
       return SdbStoreListView<int, SdbModel>(
         controller: storeController,
+        itemExtent: _tileExtent,
         itemLoadingBuilder: _loadingTile,
         emptyBuilder: _emptyView,
         itemBuilder: (context, snapshot, index) => _tile(
@@ -169,6 +180,7 @@ class _SdbListViewDemoPageState extends State<SdbListViewDemoPage> {
     if (indexController != null) {
       return SdbIndexListView<int, SdbModel, String>(
         controller: indexController,
+        itemExtent: _tileExtent,
         itemLoadingBuilder: _loadingTile,
         emptyBuilder: _emptyView,
         itemBuilder: (context, snapshot, index) =>
