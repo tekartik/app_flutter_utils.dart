@@ -185,7 +185,9 @@ class _SdbJoinListViewState<
       if (widget.watch) {
         var client = widget.client;
         if (client is! SdbDatabase) {
-          throw ArgumentError('client must be a SdbDatabase when watch is true');
+          throw ArgumentError(
+            'client must be a SdbDatabase when watch is true',
+          );
         }
         _ownedController = SdbJoinListController<K, V, SK, JK, JV>.watch(
           database: client,

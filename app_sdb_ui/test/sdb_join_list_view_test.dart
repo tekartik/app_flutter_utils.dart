@@ -135,10 +135,12 @@ void main() {
 
       controller.getItem(0);
       await waitUntil(() => controller.hasItem(0));
-      expect(
-        List.generate(4, (i) => controller.getItem(i)?.record.key),
-        [1, 2, 3, 6],
-      );
+      expect(List.generate(4, (i) => controller.getItem(i)?.record.key), [
+        1,
+        2,
+        3,
+        6,
+      ]);
       controller.dispose();
     });
 
@@ -180,20 +182,22 @@ void main() {
       controller.getItem(0);
       controller.getItem(2);
       await waitUntil(() => controller.hasItem(0) && controller.hasItem(2));
-      expect(
-        List.generate(3, (i) => controller.getItem(i)?.record.key),
-        [3, 4, 5],
-      );
+      expect(List.generate(3, (i) => controller.getItem(i)?.record.key), [
+        3,
+        4,
+        5,
+      ]);
       controller.dispose();
     });
 
     test('SdbJoinListController.watch updates on either store', () async {
-      var controller = SdbJoinListController<int, SdbModel, int, int, SdbModel>.watch(
-        database: db,
-        source: bookStore.asJoinSourceAt('authorId'),
-        target: authorStore.asJoinTarget,
-        pageSize: 10,
-      );
+      var controller =
+          SdbJoinListController<int, SdbModel, int, int, SdbModel>.watch(
+            database: db,
+            source: bookStore.asJoinSourceAt('authorId'),
+            target: authorStore.asJoinTarget,
+            pageSize: 10,
+          );
 
       await waitUntil(() => controller.isInitialized);
       expect(controller.totalCount, 6);
@@ -272,13 +276,14 @@ void main() {
     });
 
     test('SdbJoinListController.watch on an index target', () async {
-      var controller = SdbJoinListController<int, SdbModel, int, int, SdbModel>.watch(
-        database: db,
-        source: bookStore.asJoinSource,
-        target: reviewBookIndex.asJoinTarget,
-        joinOptions: const SdbJoinFindOptions(inner: true),
-        pageSize: 10,
-      );
+      var controller =
+          SdbJoinListController<int, SdbModel, int, int, SdbModel>.watch(
+            database: db,
+            source: bookStore.asJoinSource,
+            target: reviewBookIndex.asJoinTarget,
+            joinOptions: const SdbJoinFindOptions(inner: true),
+            pageSize: 10,
+          );
 
       await waitUntil(() => controller.isInitialized);
       expect(controller.totalCount, 3);
@@ -322,13 +327,12 @@ void main() {
     test('SdbJoinListController on an index source, index key order', () async {
       // The join key is the index key, so books with no authorId are not in
       // the index at all and never show up.
-      var controller =
-          SdbJoinListController<int, SdbModel, int, int, SdbModel>(
-            client: db,
-            source: bookAuthorIndex.asJoinSource,
-            target: authorStore.asJoinTarget,
-            pageSize: 10,
-          );
+      var controller = SdbJoinListController<int, SdbModel, int, int, SdbModel>(
+        client: db,
+        source: bookAuthorIndex.asJoinSource,
+        target: authorStore.asJoinTarget,
+        pageSize: 10,
+      );
 
       await waitUntil(() => controller.isInitialized);
       // Books 1, 2, 3, 5, 6 have an authorId; book 4 has none.
@@ -351,17 +355,14 @@ void main() {
     });
 
     test('SdbJoinListController on an index source, boundaries', () async {
-      var controller =
-          SdbJoinListController<int, SdbModel, int, int, SdbModel>(
-            client: db,
-            source: bookAuthorIndex.asJoinSource,
-            target: authorStore.asJoinTarget,
-            joinOptions: const SdbJoinFindOptions(inner: true),
-            findOptions: SdbFindOptions(
-              boundaries: SdbBoundaries.values(1, 3),
-            ),
-            pageSize: 2,
-          );
+      var controller = SdbJoinListController<int, SdbModel, int, int, SdbModel>(
+        client: db,
+        source: bookAuthorIndex.asJoinSource,
+        target: authorStore.asJoinTarget,
+        joinOptions: const SdbJoinFindOptions(inner: true),
+        findOptions: SdbFindOptions(boundaries: SdbBoundaries.values(1, 3)),
+        pageSize: 2,
+      );
 
       await waitUntil(() => controller.isInitialized);
       // Authors 1 and 2 only.
@@ -370,10 +371,11 @@ void main() {
       controller.getItem(0);
       controller.getItem(2);
       await waitUntil(() => controller.hasItem(0) && controller.hasItem(2));
-      expect(
-        List.generate(3, (i) => controller.getItem(i)?.record.key),
-        [1, 2, 3],
-      );
+      expect(List.generate(3, (i) => controller.getItem(i)?.record.key), [
+        1,
+        2,
+        3,
+      ]);
       controller.dispose();
     });
 
@@ -424,7 +426,9 @@ void main() {
       expect(find.text('t5'), findsNothing);
     });
 
-    testWidgets('SdbJoinListView on a store source with a key path', (tester) async {
+    testWidgets('SdbJoinListView on a store source with a key path', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -450,7 +454,9 @@ void main() {
       expect(find.text('null'), findsNWidgets(2));
     });
 
-    testWidgets('SdbJoinListView on a store source, inner join', (tester) async {
+    testWidgets('SdbJoinListView on a store source, inner join', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
