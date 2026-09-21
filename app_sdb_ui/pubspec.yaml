@@ -1,5 +1,5 @@
 name: tekartik_app_sdb_ui_flutter
-description: SDB UI for Flutter (ListView lazily loading records of a store or index query, one-shot or watched)
+description: SDB UI for Flutter (ListView lazily loading records of a store, index or join query, one-shot or watched)
 version: 0.1.0
 publish_to: none
 
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  idb_shim: ">=2.9.7+1"
+  idb_shim: ">=2.9.10-1"
   tekartik_app_list_view_flutter:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart

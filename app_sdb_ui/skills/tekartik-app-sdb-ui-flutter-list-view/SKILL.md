@@ -1,11 +1,13 @@
 ---
 name: tekartik-app-sdb-ui-flutter-list-view
 description: >-
-  Use when displaying the records of an sdb (package:idb_shim/sdb.dart) store
-  or index query in a Flutter list with tekartik_app_sdb_ui_flutter:
-  SdbStoreListView and SdbIndexListView lazily load pages of
-  SdbRecordSnapshot/SdbIndexRecordSnapshot by offset/limit from a SdbStoreRef
-  or SdbIndexRef with SdbFindOptions (boundaries, filter, descending,
+  Use when displaying the records of an sdb (package:idb_shim/sdb.dart) store,
+  index or join query in a Flutter list with tekartik_app_sdb_ui_flutter:
+  SdbStoreListView, SdbIndexListView and SdbJoinListView lazily load pages of
+  SdbRecordSnapshot/SdbIndexRecordSnapshot/SdbJoinRow by offset/limit from a
+  SdbStoreRef, a SdbIndexRef or a join between two stores (targetStore,
+  joinKeyPath, joinOptions)
+  with SdbFindOptions (boundaries, filter, descending,
   offset/limit window), one-shot or watched (watch: true, the list updates on
   store changes), with itemBuilder, itemLoadingBuilder, loadingBuilder,
   emptyBuilder, errorBuilder, pageSize, pageWindowMargin and itemExtent.
@@ -77,6 +79,13 @@ class NotesList extends StatelessWidget {
   are `SdbIndexRecordSnapshot<K, V, I>` (`key` is the primary key,
   `indexKey`, `value`, `store`, `index`). There is no `ref`: to write the
   record use `snapshot.store.record(snapshot.key)`.
+* `SdbJoinListView<K, V, JK, JV>` lists a store query together with the
+  records it references at `joinKeyPath` in `targetStore` (an sql `LEFT JOIN`,
+  see `joinIterate` in `idb_shim`). Items are `SdbJoinRow<K, V, JK, JV>`
+  (`record`, `joinedRecord`, `joinKey`, either snapshot being null when
+  absent or hidden). Use it instead of reading the referenced record in
+  `itemBuilder`: the referenced records of a page are read in one query, and
+  a record referenced by several rows is read once.
 * The type parameters must match the store/index reference: `K` is `int` or
   `String`, `V` is usually `SdbModel` (`Map<String, Object?>`), `I` is `int`,
   `String` or `SdbTimestamp`. `V` can also be a plain value type
@@ -280,6 +289,71 @@ Widget buildTop100(SdbDatabase db) => SdbIndexListView<int, SdbModel, int>(
   ),
 );
 ```
+
+### Join list: books with their author
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:idb_shim/sdb.dart';
+import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
+
+final authorStore = SdbStoreRef<int, SdbModel>('author');
+final bookStore = SdbStoreRef<int, SdbModel>('book');
+// A book value looks like {'title': 't1', 'authorId': 1}
+
+class BooksScreen extends StatelessWidget {
+  final SdbDatabase db;
+  const BooksScreen({super.key, required this.db});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Books')),
+      body: SdbJoinListView<int, SdbModel, int, SdbModel>(
+        client: db,
+        store: bookStore,
+        targetStore: authorStore,
+        joinKeyPath: 'authorId',
+        // Skip the books whose author is missing; left join by default.
+        joinOptions: const SdbJoinFindOptions(inner: true),
+        watch: true,
+        itemExtent: 56,
+        itemBuilder: (context, row, index) {
+          var book = row.record;
+          var author = row.joinedRecord;
+          return ListTile(
+            title: Text(book.value['title'] as String? ?? ''),
+            subtitle: Text(author?.value['name'] as String? ?? 'unknown'),
+            onTap: () => bookStore.record(book.key).put(db, {
+              ...book.value,
+              'read': true,
+            }),
+          );
+        },
+        emptyBuilder: (context) => const Center(child: Text('No book')),
+      ),
+    );
+  }
+}
+```
+
+To list the referenced records themselves — every author that has at least one
+book, each one once — the rows still carry both sides, so read the joined one:
+
+```dart
+SdbJoinListView<int, SdbModel, int, SdbModel>(
+  client: db,
+  store: bookStore,
+  targetStore: authorStore,
+  joinKeyPath: 'authorId',
+  joinOptions: const SdbJoinFindOptions(distinct: true, inner: true),
+  itemBuilder: (context, row, index) =>
+      ListTile(title: Text('${row.joinedRecord!.value['name']}')),
+);
+```
+
+Outside a list, `bookStore.findJoinedRecords(...)` gives those authors
+directly, as plain records rather than rows.
 
 ## Common mistakes
 

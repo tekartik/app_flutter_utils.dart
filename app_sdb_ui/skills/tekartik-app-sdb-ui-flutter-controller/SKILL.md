@@ -1,9 +1,10 @@
 ---
 name: tekartik-app-sdb-ui-flutter-controller
 description: >-
-  Use when an sdb (package:idb_shim/sdb.dart) query must feed a custom lazy
-  list layout in Flutter with tekartik_app_sdb_ui_flutter: SdbStoreListController
-  and SdbIndexListController (one-shot or .watch) used with SliverLazyList in a
+  Use when an sdb (package:idb_shim/sdb.dart) store, index or join query must
+  feed a custom lazy list layout in Flutter with tekartik_app_sdb_ui_flutter:
+  SdbStoreListController, SdbIndexListController and SdbJoinListController
+  (one-shot or .watch) used with SliverLazyList in a
   CustomScrollView, LazyListViewDelegate with ListView.custom, an external
   controller shared with SdbStoreListView, refresh(), getItem/hasItem/
   totalCount/loadedItems, pageWindowMargin eviction, and the
@@ -77,6 +78,16 @@ class _ItemsScreenState extends State<ItemsScreen> {
   ...)`. Pages are `onSnapshots` streams and the count is re-queried on every
   store change (through `addOnChangesListener`). Needs a `SdbDatabase`, not
   a transaction.
+* Join (`SdbJoinListController<K, V, JK, JV>(client:, store:, targetStore:,
+  joinKeyPath:, joinOptions:, findOptions:, ...)`, or
+  `.watch(database:, ...)`): items are `SdbJoinRow<K, V, JK, JV>` (`record`,
+  never null, `joinedRecord`, null on a left join, `joinKey`). `joinOptions`
+  is a `SdbJoinFindOptions` (`distinct`, `inner`, `chunkSize`), separate from
+  the `findOptions` on the iterated store. Each page is one `findJoinRows`
+  and the count one `joinCount`. The watched variant re-queries on a change
+  of **either** store, since both feed the rows. Without `distinct` nor
+  `inner` the count is the record count of the iterated store, so it is as
+  cheap as `count`; with either of them the join is scanned to count.
 * Create it once (`initState`, a `late final` field, a riverpod/provider
   holder), pass it to the widgets and call `dispose()` when done. The
   widgets (`SdbStoreListView`, `LazyListView`, `SliverLazyList`) only listen
