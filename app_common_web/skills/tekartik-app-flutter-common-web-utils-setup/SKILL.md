@@ -1,13 +1,14 @@
 ---
 name: tekartik-app-flutter-common-web-utils-setup
 description: >-
-  Use when a Flutter app that also targets the web needs path URLs (no #) or
-  must hide and show the mouse cursor (kiosk, TV, projector screens) from
-  code shared with mobile and desktop, with
+  Use when a Flutter app that also targets the web needs path URLs (no #),
+  a hash URL override from the page url (?url-strategy=hash for static
+  servers without rewrites), or must hide and show the mouse cursor (kiosk,
+  TV, projector screens) from code shared with mobile and desktop, with
   tekartik_app_flutter_common_web_utils: webUsePathUrlStrategy,
-  webUseHashUrlStrategy, setPathUrlStrategy, setHashUrlStrategy
-  (url_strategy.dart), hideCursor, showCursor (cursor_utils.dart), all safe
-  no-ops off the web.
+  webUseHashUrlStrategy, webUseUrlStrategy, webIsPathUrlStrategy,
+  webIsHashUrlStrategy (url_strategy.dart), hideCursor, showCursor
+  (cursor_utils.dart), all safe no-ops off the web.
 ---
 
 # Flutter web helpers callable from shared code (tekartik_app_flutter_common_web_utils)
@@ -31,14 +32,23 @@ themselves.
 * URL strategy, `package:tekartik_app_flutter_common_web_utils/url_strategy.dart`:
   `webUsePathUrlStrategy()` switches the web app from `/#/settings` to
   `/settings` URLs (it calls `usePathUrlStrategy()` from
-  `flutter_web_plugins`). Call it in `main()` before `runApp`, before any
-  router reads the initial location. `setPathUrlStrategy()` is the older
-  alias. The hosting server must then serve `index.html` for every path
-  (Firebase Hosting rewrites, the `flutter run` dev server does).
-* Hash URLs are Flutter's default: to keep them, call nothing. In the current
-  source `webUseHashUrlStrategy()` / `setHashUrlStrategy()` are placeholders
-  whose web implementation also calls `usePathUrlStrategy()`; do not rely on
-  them to restore hash URLs.
+  `flutter_web_plugins`). Call it once in `main()` before `runApp`, before
+  any router reads the initial location (Flutter asserts on a second call).
+  `setPathUrlStrategy()` is the older alias. The hosting server must then
+  serve `index.html` for every path (Firebase Hosting rewrites, the
+  `flutter run` dev server does).
+* `webUseHashUrlStrategy()` (alias `setHashUrlStrategy()`) sets the hash
+  strategy explicitly; `webUseUrlStrategy(WebUrlStrategy.path)` takes the
+  choice as a value.
+* The page url can enforce the strategy, whatever the app asks for:
+  `?url-strategy=hash` or `?url-strategy=path` (`webUrlStrategyQueryParameter`),
+  in the query before the `#`. With `hash` the parameter stays in the address
+  bar (the hash strategy only rewrites the fragment), so reloads keep it:
+  handy on a static server without rewrites (`dhttpd`, a sub folder). Unknown
+  values are ignored. `webUrlStrategyFromUri(uri)` and
+  `webResolveUrlStrategy(strategy, uri: uri)` expose the parsing.
+* `webIsPathUrlStrategy` / `webIsHashUrlStrategy` tell which strategy is in
+  use (e.g. to build a shareable link), both `false` off the web.
 * Cursor, `package:tekartik_app_flutter_common_web_utils/cursor_utils.dart`:
   `hideCursor()` and `showCursor()` return `Future<void>`. On the web they
   write `cursor: none;` or `cursor: default;` into the `style` attribute of
@@ -73,6 +83,22 @@ void main() {
       },
     ),
   );
+}
+```
+
+### Links that follow the url strategy in use
+
+```dart
+import 'package:tekartik_app_flutter_common_web_utils/url_strategy.dart';
+
+/// The shareable url of an app [location] such as `/settings`, served from
+/// [origin].
+String appLink(String origin, String location) {
+  if (webIsHashUrlStrategy) {
+    // Keep the enforcing parameter, the page is on a server without rewrites.
+    return '$origin/?$webUrlStrategyQueryParameter=hash#$location';
+  }
+  return '$origin$location';
 }
 ```
 
