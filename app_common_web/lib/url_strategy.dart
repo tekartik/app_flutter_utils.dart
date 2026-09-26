@@ -11,5 +11,7 @@ export 'src/url_strategy/url_strategy_common.dart'
     show
         WebUrlStrategy,
         webUrlStrategyQueryParameter,
+        webUrlStrategyMetaName,
+        webUrlStrategyFromName,
         webUrlStrategyFromUri,
         webResolveUrlStrategy;

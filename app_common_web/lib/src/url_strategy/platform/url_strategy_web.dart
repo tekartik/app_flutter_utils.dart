@@ -1,16 +1,26 @@
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:web/web.dart' as web;
 
 import '../url_strategy_common.dart';
 
-/// Sets the URL strategy of your web app to [strategy], unless the page url
-/// enforces another one (`?url-strategy=hash` or `?url-strategy=path`).
+/// The `content` of the `<meta name="url-strategy">` of the page, if any.
+String? _urlStrategyMetaContent() => web.document
+    .querySelector('meta[name="$webUrlStrategyMetaName"]')
+    ?.getAttribute('content');
+
+/// Sets the URL strategy of your web app to [strategy], unless the page
+/// enforces another one: in its url (`?url-strategy=hash` or
+/// `?url-strategy=path`), or in a `<meta name="url-strategy" content="hash">`.
 ///
 /// Must be called once, before `runApp`.
 ///
 /// You can safely call this on all platforms, i.e. also when running on mobile
 /// or desktop. In that case, it will simply be a noop.
 void webUseUrlStrategy(WebUrlStrategy strategy) {
-  switch (webResolveUrlStrategy(strategy)) {
+  switch (webResolveUrlStrategy(
+    strategy,
+    metaContent: _urlStrategyMetaContent(),
+  )) {
     case WebUrlStrategy.path:
       usePathUrlStrategy();
     case WebUrlStrategy.hash:

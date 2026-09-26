@@ -13,17 +13,35 @@ enum WebUrlStrategy {
 /// It must be in the query of the page url, before the `#`.
 const webUrlStrategyQueryParameter = 'url-strategy';
 
-/// The url strategy enforced by the query of [uri], null if none or unknown.
-WebUrlStrategy? webUrlStrategyFromUri(Uri uri) {
-  var value = uri.queryParameters[webUrlStrategyQueryParameter];
+/// Meta name of the page enforcing the url strategy, after the query:
+/// `<meta name="url-strategy" content="hash">`, what a server rewriting the
+/// entry injects (tkwhost does, its sites are hash sites by default), so
+/// that the plain page url works too.
+const webUrlStrategyMetaName = 'url-strategy';
+
+/// The url strategy named [value] (`hash` or `path`, any case), null if none
+/// or unknown.
+WebUrlStrategy? webUrlStrategyFromName(String? value) {
   if (value == null) {
     return null;
   }
   return WebUrlStrategy.values.asNameMap()[value.trim().toLowerCase()];
 }
 
-/// The url strategy to use: the one enforced in [uri] (default to [Uri.base],
-/// the page url on the web) if any, [strategy] otherwise.
-WebUrlStrategy webResolveUrlStrategy(WebUrlStrategy strategy, {Uri? uri}) {
-  return webUrlStrategyFromUri(uri ?? Uri.base) ?? strategy;
+/// The url strategy enforced by the query of [uri], null if none or unknown.
+WebUrlStrategy? webUrlStrategyFromUri(Uri uri) =>
+    webUrlStrategyFromName(uri.queryParameters[webUrlStrategyQueryParameter]);
+
+/// The url strategy to use: the one enforced by the query of [uri] (default
+/// to [Uri.base], the page url on the web) if any, then the one enforced by
+/// the page meta [metaContent] (the `content` of
+/// `<meta name="url-strategy">`), [strategy] otherwise.
+WebUrlStrategy webResolveUrlStrategy(
+  WebUrlStrategy strategy, {
+  Uri? uri,
+  String? metaContent,
+}) {
+  return webUrlStrategyFromUri(uri ?? Uri.base) ??
+      webUrlStrategyFromName(metaContent) ??
+      strategy;
 }

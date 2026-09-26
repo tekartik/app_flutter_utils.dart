@@ -63,5 +63,41 @@ Future<void> main() async {
         WebUrlStrategy.path,
       );
     });
+
+    test('webResolveUrlStrategy meta', () {
+      WebUrlStrategy resolve(
+        WebUrlStrategy strategy,
+        String url,
+        String? metaContent,
+      ) => webResolveUrlStrategy(
+        strategy,
+        uri: Uri.parse(url),
+        metaContent: metaContent,
+      );
+      // The meta when the query says nothing.
+      expect(
+        resolve(WebUrlStrategy.path, 'https://example.com/', 'hash'),
+        WebUrlStrategy.hash,
+      );
+      expect(
+        resolve(WebUrlStrategy.hash, 'https://example.com/', ' Path '),
+        WebUrlStrategy.path,
+      );
+      expect(
+        resolve(WebUrlStrategy.path, 'https://example.com/', 'dummy'),
+        WebUrlStrategy.path,
+      );
+      // The query wins.
+      expect(
+        resolve(
+          WebUrlStrategy.hash,
+          'https://example.com/?url-strategy=path',
+          'hash',
+        ),
+        WebUrlStrategy.path,
+      );
+      expect(webUrlStrategyFromName(null), isNull);
+      expect(webUrlStrategyMetaName, 'url-strategy');
+    });
   });
 }
