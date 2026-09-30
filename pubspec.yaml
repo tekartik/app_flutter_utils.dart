@@ -47,4 +47,6 @@ workspace:
   - app_dev_menu
   - app_sdb_ui
   - app_list_view
+  - app_full_screen
+  - example/full_screen_test_app_lib
 

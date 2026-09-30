@@ -51,6 +51,8 @@ dependencies:
     path: ../list_view_test_app_lib
   tekartik_sdb_ui_test_app_lib:
     path: ../sdb_ui_test_app_lib
+  tekartik_full_screen_test_app_lib:
+    path: ../full_screen_test_app_lib
   tekartik_app_flutter_common_web_utils:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart

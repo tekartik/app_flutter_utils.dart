@@ -10,6 +10,7 @@ import 'package:tekartik_common_test_app_lib/main.dart' as common;
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_web_test_app_lib/main.dart' as common_web;
 import 'package:tekartik_fs_test_app_lib/main.dart' as fs;
+import 'package:tekartik_full_screen_test_app_lib/main.dart' as full_screen;
 import 'package:tekartik_idb_test_app_lib/main.dart' as idb;
 import 'package:tekartik_image_test_app_lib/main.dart';
 import 'package:tekartik_list_view_test_app_lib/main.dart' as list_view;
@@ -35,6 +36,7 @@ void main(List<String> args) {
     list_view.defineMenu();
     sdb_ui.defineMenu();
     widget.defineMenu();
+    full_screen.defineMenu();
     app_plugin.defineMenu();
     common.defineMenu();
     common_web.defineMenu();
