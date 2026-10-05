@@ -28,9 +28,8 @@ void main() {
         isTrue,
       );
       expect(
-        ContentPathField(
-          'test',
-        ).matchesField(ContentPathField('test', 'value')),
+        ContentPathField('test')
+            .matchesField(ContentPathField('test', 'value')),
         isTrue,
       );
       expect(

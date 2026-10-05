@@ -18,10 +18,7 @@ class _ContentPageInStack {
   final TransitionDelegate? transitionDelegate;
   final ContentPathRouteSettings rs;
   final ContentPageDef? def;
-  final completer =
-      Completer<
-        Object?
-      >(); // Not async we need the return value in the next sequence to allow popping again
+  final completer = Completer<Object?>(); // Not async we need the return value in the next sequence to allow popping again
 
   _ContentPageInStack({
     required this.def,
@@ -511,9 +508,8 @@ class ContentNavigator extends StatefulWidget {
     ContentPathRouteSettings rs, {
     TransitionDelegate? transitionDelegate,
   }) async {
-    return await ContentNavigator.of(
-      context,
-    ).push<T>(rs, transitionDelegate: transitionDelegate);
+    return await ContentNavigator.of(context)
+        .push<T>(rs, transitionDelegate: transitionDelegate);
   }
 
   /// Push a replacement path setting.
@@ -590,9 +586,8 @@ class ContentNavigator extends StatefulWidget {
     required WidgetBuilder builder,
     bool? noAnimation,
   }) async {
-    return await Navigator.of(
-      context,
-    ).pushBuilder<T>(builder: builder, noAnimation: noAnimation);
+    return await Navigator.of(context)
+        .pushBuilder<T>(builder: builder, noAnimation: noAnimation);
   }
 }
 

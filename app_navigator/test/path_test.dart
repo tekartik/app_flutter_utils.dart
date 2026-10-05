@@ -135,39 +135,33 @@ void main() {
       expect(simple1.matchesPath(simple2), isTrue);
       */
       expect(
-        ContentPath.fromString(
-          'test/*/sub/*',
-        ).matchesPath(ContentPath.fromString('test/34/sub/28')),
+        ContentPath.fromString('test/*/sub/*')
+            .matchesPath(ContentPath.fromString('test/34/sub/28')),
         isTrue,
       );
       expect(
-        ContentPath.fromString(
-          'test/1/sub/2',
-        ).matchesPath(ContentPath.fromString('test/34/dub/28')),
+        ContentPath.fromString('test/1/sub/2')
+            .matchesPath(ContentPath.fromString('test/34/dub/28')),
         isFalse,
       );
       expect(
-        ContentPath.fromString(
-          'test/1',
-        ).matchesPath(ContentPath.fromString('test')),
+        ContentPath.fromString('test/1')
+            .matchesPath(ContentPath.fromString('test')),
         isFalse,
       );
       expect(
-        ContentPath.fromString(
-          '/test/1',
-        ).matchesPath(ContentPath.fromString('test/1')),
+        ContentPath.fromString('/test/1')
+            .matchesPath(ContentPath.fromString('test/1')),
         isTrue,
       );
       expect(
-        ContentPath.fromString(
-          'test/1',
-        ).matchesPath(ContentPath.fromString('/test/1')),
+        ContentPath.fromString('test/1')
+            .matchesPath(ContentPath.fromString('/test/1')),
         isTrue,
       );
       expect(
-        ContentPath.fromString(
-          'test/1',
-        ).matchesPath(ContentPath.fromString('test/2')),
+        ContentPath.fromString('test/1')
+            .matchesPath(ContentPath.fromString('test/2')),
         isFalse,
       );
 
