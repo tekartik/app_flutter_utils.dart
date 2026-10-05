@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'color_compat.dart';
 
 String _toHex(int value) {

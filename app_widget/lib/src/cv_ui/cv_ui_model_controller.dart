@@ -1,6 +1,6 @@
 import 'package:cv/cv.dart';
 import 'package:cv/utils/value_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/src/confirm_dialog.dart';
 import 'package:tekartik_app_flutter_widget/view/cv_ui.dart';
 
@@ -341,9 +341,8 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
           actions: <Widget>[
             DialogButton(
               onPressed: () {
-                Navigator.of(
-                  context,
-                ).pop(CvUiEditResult(type: CvUiEditResultType.create));
+                Navigator.of(context)
+                    .pop(CvUiEditResult(type: CvUiEditResultType.create));
               },
               text: 'CREATE',
             ),
@@ -367,9 +366,8 @@ class _NullifyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DialogButton(
       onPressed: () {
-        Navigator.of(
-          context,
-        ).pop(CvUiEditTextResult(type: CvUiEditResultType.nullify));
+        Navigator.of(context)
+            .pop(CvUiEditTextResult(type: CvUiEditResultType.nullify));
       },
       text: 'NULLIFY',
     );
@@ -386,9 +384,8 @@ class _DeleteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DialogButton(
       onPressed: () {
-        Navigator.of(
-          context,
-        ).pop(CvUiEditTextResult(type: CvUiEditResultType.delete));
+        Navigator.of(context)
+            .pop(CvUiEditTextResult(type: CvUiEditResultType.delete));
       },
       text: 'DELETE',
     );

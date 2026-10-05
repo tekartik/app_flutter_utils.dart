@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
-import 'package:flutter/material.dart';
+
+import 'package:material_ui/material_ui.dart';
 
 import 'package:tekartik_app_image_flutter/utils/ui_size_utils.dart';
 import 'package:tekartik_common_utils/num_utils.dart';

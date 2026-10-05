@@ -1,5 +1,5 @@
 import 'package:cv/cv.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_dev_menu_flutter/dev_menu_flutter.dart';
 import 'package:tekartik_app_flutter_common_utils/common_utils_import.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
@@ -64,9 +64,8 @@ class CvUiStringEditResult {
 
 BuildContext get _buildContext => castAsNullable(buildContext)!;
 Future<Object?> _push({required WidgetBuilder builder}) async {
-  return await Navigator.of(
-    _buildContext,
-  ).push<Object?>(MaterialPageRoute<Object?>(builder: builder));
+  return await Navigator.of(_buildContext)
+      .push<Object?>(MaterialPageRoute<Object?>(builder: builder));
 }
 
 void menuCvUi() {

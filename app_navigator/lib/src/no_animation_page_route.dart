@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// No animation material page route
 class NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {

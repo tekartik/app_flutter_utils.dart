@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_dev_menu_flutter/dev_menu_flutter.dart';
 import 'package:tekartik_app_flutter_widget/app_widget.dart';
 import 'package:tekartik_app_image_flutter/utils/ui_image_generator.dart';

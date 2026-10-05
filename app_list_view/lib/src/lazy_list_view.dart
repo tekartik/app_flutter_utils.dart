@@ -1,20 +1,28 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'lazy_list_controller.dart';
 
 /// Builds a widget for a loaded item.
-typedef LazyItemWidgetBuilder<T> =
-    Widget Function(BuildContext context, T item, int index);
+typedef LazyItemWidgetBuilder<T> = Widget Function(
+  BuildContext context,
+  T item,
+  int index,
+);
 
 /// Builds a placeholder while the item at [index] is loading.
-typedef LazyItemLoadingWidgetBuilder =
-    Widget Function(BuildContext context, int index);
+typedef LazyItemLoadingWidgetBuilder = Widget Function(
+  BuildContext context,
+  int index,
+);
 
 /// Builds an error widget.
-typedef LazyErrorWidgetBuilder =
-    Widget Function(BuildContext context, Object error, StackTrace? stackTrace);
+typedef LazyErrorWidgetBuilder = Widget Function(
+  BuildContext context,
+  Object error,
+  StackTrace? stackTrace,
+);
 
 Widget _defaultLoadingItem(BuildContext context, int index) => const SizedBox(
   height: 50,

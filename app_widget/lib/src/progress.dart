@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A bad but efficient catch all place holder.
 class CenteredProgress extends StatelessWidget {

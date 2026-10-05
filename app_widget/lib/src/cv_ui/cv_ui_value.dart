@@ -1,6 +1,6 @@
 import 'package:cv/cv.dart';
 import 'package:cv/utils/value_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'cv_ui_impl.dart';
 import 'cv_ui_layout.dart';

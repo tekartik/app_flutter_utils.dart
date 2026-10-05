@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_full_screen/full_screen.dart';
 
 /// Shows the platform full screen state and lets the user change it.

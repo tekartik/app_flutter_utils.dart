@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 Future<void> muiSnack(BuildContext context, String message) async {
   muiSnackSync(context, message);

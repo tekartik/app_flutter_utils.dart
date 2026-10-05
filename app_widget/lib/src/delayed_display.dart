@@ -2,7 +2,7 @@ library;
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class DelayedDisplay extends StatefulWidget {
   /// Child that will be displayed with the animation and delay

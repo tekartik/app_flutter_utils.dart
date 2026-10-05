@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 import 'package:tekartik_app_navigator_flutter/route_aware.dart';
@@ -20,9 +20,8 @@ void defineNavigatorMenu() {
 }
 
 Future<void> _pushPage1(BuildContext context) async {
-  var result = await ContentNavigator.of(
-    muiBuildContext,
-  ).pushPath<Object?>(Page1ContentPath());
+  var result = await ContentNavigator.of(muiBuildContext)
+      .pushPath<Object?>(Page1ContentPath());
   // ignore: use_build_context_synchronously
   await muiSnack(muiBuildContext, 'push Page 1 result: $result');
 }
@@ -35,9 +34,8 @@ final pageStartDef = ContentPageDef(
         await _pushPage1(muiBuildContext);
       });
       muiItem('push Page 2', () async {
-        var result = await ContentNavigator.of(
-          muiBuildContext,
-        ).pushPath<Object?>(Page2ContentPath());
+        var result = await ContentNavigator.of(muiBuildContext)
+            .pushPath<Object?>(Page2ContentPath());
         // ignore: use_build_context_synchronously
         await muiSnack(muiBuildContext, 'push Page 2 result: $result');
       });
@@ -49,9 +47,8 @@ final page1Def = ContentPageDef(
   screenBuilder: (_) {
     return muiScreenWidget('Page 1', () {
       muiItem('push Page 2', () async {
-        var result = await ContentNavigator.of(
-          muiBuildContext,
-        ).pushPath<Object?>(Page2ContentPath());
+        var result = await ContentNavigator.of(muiBuildContext)
+            .pushPath<Object?>(Page2ContentPath());
         // ignore: use_build_context_synchronously
         await muiSnack(muiBuildContext, 'push Page 2 result: $result');
       });
@@ -83,9 +80,8 @@ var page2Def = ContentPageDef(
         await _pushPage1(muiBuildContext);
       });
       muiItem('popUntilPathOrPush page 1', () async {
-        ContentNavigator.of(
-          muiBuildContext,
-        ).popUntilPathOrPush(muiBuildContext, Page1ContentPath());
+        ContentNavigator.of(muiBuildContext)
+            .popUntilPathOrPush(muiBuildContext, Page1ContentPath());
       });
     });
   },

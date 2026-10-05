@@ -4,7 +4,7 @@ version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: ^3.12.0
+  sdk: ^3.13.0
 
 dependencies:
   flutter:
@@ -33,6 +33,7 @@ dependencies:
       url: https://github.com/tekartik/app_flutter_utils.dart
       path: app_platform
     version: '>=0.1.0'
+  material_ui: ">=1.5.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
