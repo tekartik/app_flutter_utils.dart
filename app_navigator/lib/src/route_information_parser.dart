@@ -48,7 +48,10 @@ extension ContentRouteInformationParserPrvExt on ContentRouteInformationParser {
     return path;
   }
 
-  ///Parse a route information to generate a known content path
+  /// Parse a route information to generate a known content path.
+  ///
+  /// If the path does not match any page definition (unknown deep link, url
+  /// typed by hand on the web), fall back to the home path instead of failing.
   ContentPath parseRouteInformationSync(RouteInformation routeInformation) {
     var path = parseAnyRouteInformationSync(routeInformation);
     //var pageDef = contentNavigatorDef.findPageDef(path);
@@ -61,10 +64,10 @@ extension ContentRouteInformationParserPrvExt on ContentRouteInformationParser {
       return contentPath;
     }
 
+    var homePath = cnBloc.homePath;
     if (contentNavigatorDebug) {
-      _log('/cnip:  !!!parseRouteInformation nothing found!');
+      _log('nothing found for ${routeInformation.uri}, using home $homePath');
     }
-
-    throw StateError('invalid path: ${routeInformation.uri}');
+    return homePath;
   }
 }

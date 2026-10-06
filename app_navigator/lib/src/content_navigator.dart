@@ -365,6 +365,15 @@ class ContentNavigatorBloc extends BaseBloc {
     _removeItem(index);
   }
 
+  /// The home path, the first page definition (the root page when defined).
+  ///
+  /// Used when the stack is empty and as a fallback for unknown paths.
+  ContentPath get homePath {
+    var def = contentNavigator!.def;
+    var rootDef = def.findPageDef(rootContentPath);
+    return rootDef?.path ?? def.defs.first.path;
+  }
+
   /// Return the same route if match found
   ContentPath? findPath(ContentPath path) {
     var pageDef = contentNavigator!.def.findPageDef(path);

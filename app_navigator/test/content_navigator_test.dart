@@ -33,5 +33,27 @@ void main() {
       );
       expect(find.text('home'), findsOneWidget);
     });
+    testWidgets('unknown_route_shows_home', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ContentNavigator(
+          def: contentNavigatorDef,
+          child: Builder(
+            builder: (context) {
+              var cn = ContentNavigator.of(context);
+              return MaterialApp.router(
+                routerDelegate: cn.routerDelegate,
+                routeInformationParser: cn.routeInformationParser,
+                routeInformationProvider: PlatformRouteInformationProvider(
+                  initialRouteInformation: RouteInformation(
+                    uri: Uri.parse('/privacy.html'),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      expect(find.text('home'), findsOneWidget);
+    });
   });
 }
