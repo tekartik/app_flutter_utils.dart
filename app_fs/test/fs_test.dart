@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path/path.dart';
 import 'package:tekartik_app_flutter_fs/fs.dart';
 
 void main() {
@@ -12,13 +11,13 @@ void main() {
         (await fsMemory.getApplicationDocumentsDirectory(
           packageName: 'test.tekartik.com',
         )).path,
-        '${context.separator}data',
+        '/data',
       );
     });
     test('getApplicationSupportDirectory()', () async {
       expect(
         (await fsMemory.getApplicationSupportDirectory()).path,
-        '${context.separator}support',
+        '/support',
       );
     });
     /*

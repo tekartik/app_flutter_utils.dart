@@ -1,5 +1,4 @@
 import 'package:fs_shim/fs.dart';
-import 'package:path/path.dart';
 
 export 'fs_stub.dart'
     if (dart.library.js_interop) 'fs_web.dart'
@@ -8,21 +7,21 @@ export 'fs_stub.dart'
 /// Data directory
 const dataDirectory = 'data';
 
-/// Data directory path
-final String dataDirectoryPath = '${context.separator}$dataDirectory';
-
 /// Support directory
 const supportDirectory = 'support';
 
-/// Support directory path
-final String supportDirectoryPath = '${context.separator}$supportDirectory';
+/// The directory [name] at the root of [fs], `/data`: in the path style of
+/// [fs], not of the platform, a memory or indexed db file system using `/` on
+/// Windows too.
+Directory _rootDirectory(FileSystem fs, String name) =>
+    fs.directory(fs.path.join(fs.path.separator, name));
 
 /// Get the application file system
 Directory getFsApplicationDocumentsDirectory(FileSystem fs) {
-  return fs.directory(dataDirectoryPath);
+  return _rootDirectory(fs, dataDirectory);
 }
 
 /// Get the application support directory
 Directory getFsApplicationSupportDirectory(FileSystem fs) {
-  return fs.directory(supportDirectoryPath);
+  return _rootDirectory(fs, supportDirectory);
 }
