@@ -183,7 +183,7 @@ void main() {
       await pumpAsync();
       await pumpAsync();
       expect(controller.hasItem(90), isTrue);
-      // Only the window (pages 8, 9, 10 -> 9 and 10 exist) is kept.
+      // Only the window (pages 8, 9, 10, only page 9 holds items) is kept.
       expect(controller.hasItem(0), isFalse);
       expect(controller.loadedItems.length, 10);
       controller.dispose();

@@ -34,7 +34,7 @@ class _MyModel extends CvModelBase {
     intList,
     stringList,
     subList,
-    mapModel,
+    modelMap,
     dummy,
   ];
 }

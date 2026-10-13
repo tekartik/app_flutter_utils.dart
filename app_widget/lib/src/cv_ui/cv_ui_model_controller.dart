@@ -2,6 +2,7 @@ import 'package:cv/cv.dart';
 import 'package:cv/utils/value_utils.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/src/confirm_dialog.dart';
+import 'package:tekartik_app_flutter_widget/src/text_input_dialog_prv.dart';
 import 'package:tekartik_app_flutter_widget/view/cv_ui.dart';
 
 import 'cv_ui_edit_result.dart';
@@ -117,8 +118,42 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
     return tmv;
   }
 
+  /// The model map field holding the value at [tmv], if any.
+  CvModelMapField? _modelMapFieldOf(CvModelTreeValue tmv) {
+    var parts = tmv.treePath.parts;
+    if (parts.isEmpty || parts.last is! String) {
+      return null;
+    }
+    var parentValue = parts.length == 1
+        ? model
+        : model
+              .cvTreeValueAtPath(CvTreePath(parts.take(parts.length - 1)))
+              .value;
+    if (parentValue is CvModel) {
+      var field = parentValue.field<Object?>(parts.last as String);
+      if (field is CvModelMapField) {
+        return field;
+      }
+    }
+    return null;
+  }
+
   Future<bool> add(BuildContext context, Widget widget) async {
     var tmv = _widgetTreePath(context, widget);
+
+    // Model map: a new model under a new key.
+    var mapField = _modelMapFieldOf(tmv);
+    if (mapField != null) {
+      var result = await editText(context, title: 'Add key');
+      var key = result?.type == CvUiEditResultType.ok ? result?.value : null;
+      var map = mapField.value;
+      if (key == null || key.isEmpty || map == null || map.containsKey(key)) {
+        return false;
+      }
+      map[key] = mapField.create({});
+      triggerRedraw?.call();
+      return true;
+    }
 
     var type = tmv.listItemType;
     // print('type $type');
@@ -283,46 +318,17 @@ class CvUiModelEditControllerImpl extends CvUiModelViewControllerImpl
     FormFieldValidator<String>? validator,
     String? hint,
   }) async {
-    _textFieldController.dispose();
-    _textFieldController = TextEditingController(text: value);
     return await showDialog<CvUiEditTextResult>(
       context: context,
-      builder: (context) {
-        final formKey = GlobalKey<FormState>();
-        return AlertDialog(
-          title: (title != null) ? Text(title) : null,
-          content: Form(
-            key: formKey,
-            child: TextFormField(
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: hint),
-              validator: validator,
-            ),
-          ),
-          actions: <Widget>[
-            DialogButton(
-              onPressed: () {
-                () async {
-                  formKey.currentState!.save();
-                  if (formKey.currentState!.validate()) {
-                    var text = _textFieldController.text;
-                    Navigator.of(context).pop(
-                      CvUiEditTextResult(
-                        type: CvUiEditResultType.ok,
-                        value: text,
-                      ),
-                    );
-                  }
-                }();
-              },
-              text: 'OK',
-            ),
-            const _DeleteButton(),
-            const _NullifyButton(),
-            const _CancelButton(),
-          ],
-        );
-      },
+      builder: (context) => TextInputDialogPrv<CvUiEditTextResult>(
+        title: title,
+        value: value,
+        hint: hint,
+        validator: validator,
+        okResult: (text) =>
+            CvUiEditTextResult(type: CvUiEditResultType.ok, value: text),
+        actions: const [_DeleteButton(), _NullifyButton(), _CancelButton()],
+      ),
     );
   }
 
@@ -408,6 +414,3 @@ class _CancelButton extends StatelessWidget {
     );
   }
 }
-
-// reused but never disposed
-var _textFieldController = TextEditingController();

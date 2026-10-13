@@ -31,7 +31,8 @@ class ContentPathField {
   }
 
   @override
-  int get hashCode => super.hashCode + (value?.hashCode ?? 0);
+  // Consistent with ==, also gives ContentPath (first field) a value hash.
+  int get hashCode => Object.hash(name, value);
 
   @override
   bool operator ==(other) {

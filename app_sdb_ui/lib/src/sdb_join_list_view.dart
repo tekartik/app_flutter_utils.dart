@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_list_view_flutter/list_view_flutter.dart';
 
 import 'sdb_join_list_controller.dart';
+import 'sdb_list_view_args.dart';
 
 /// A ListView that lazily loads the rows of an sdb join query.
 ///
@@ -215,12 +216,14 @@ class _SdbJoinListViewState<
   @override
   void didUpdateWidget(covariant SdbJoinListView<K, V, SK, JK, JV> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Arguments compared by value, they are usually created inline
+    // (`store.asJoinTarget`, `store.asJoinSourceAt(...)` build new objects).
     if (oldWidget.controller != widget.controller ||
         oldWidget.client != widget.client ||
-        oldWidget.source != widget.source ||
-        oldWidget.target != widget.target ||
-        oldWidget.joinOptions != widget.joinOptions ||
-        oldWidget.findOptions != widget.findOptions ||
+        !sdbJoinSourceEquals(oldWidget.source, widget.source) ||
+        !sdbJoinTargetEquals(oldWidget.target, widget.target) ||
+        !sdbJoinFindOptionsEquals(oldWidget.joinOptions, widget.joinOptions) ||
+        !sdbFindOptionsEquals(oldWidget.findOptions, widget.findOptions) ||
         oldWidget.watch != widget.watch ||
         oldWidget.pageSize != widget.pageSize ||
         oldWidget.pageWindowMargin != widget.pageWindowMargin) {

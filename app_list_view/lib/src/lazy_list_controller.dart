@@ -76,6 +76,12 @@ class LazyListController<T> extends ChangeNotifier {
   int? _inferredTotalPageIndex;
   Object? _error;
   StackTrace? _stackTrace;
+
+  /// Page that set [_error], null when it comes from the count.
+  int? _errorPageIndex;
+
+  /// Incremented by [refresh], a fetch started before it is ignored.
+  int _generation = 0;
   bool _isInitialized = false;
   bool _hasEverLoadedItems = false;
   bool _disposed = false;
@@ -172,10 +178,12 @@ class LazyListController<T> extends ChangeNotifier {
   int get revision => _revision;
 
   Future<void> _init() async {
+    var generation = _generation;
+    bool isStale() => _disposed || generation != _generation;
     try {
       if (getCount != null) {
         var total = await getCount!();
-        if (_disposed) return;
+        if (isStale()) return;
         _totalCount = total;
         _isInitialized = true;
 
@@ -186,12 +194,12 @@ class LazyListController<T> extends ChangeNotifier {
             _totalCount = total;
             _inferredTotalPageIndex = null;
             _isInitialized = true;
+            _clearErrorFrom(null);
 
             notifyListeners();
           },
           onError: (Object e, StackTrace st) {
-            _error = e;
-            _stackTrace = st;
+            _setError(e, st, null);
             _isInitialized = true;
 
             notifyListeners();
@@ -203,12 +211,28 @@ class LazyListController<T> extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e, st) {
-      if (_disposed) return;
-      _error = e;
-      _stackTrace = st;
+      if (isStale()) return;
+      _setError(e, st, null);
       _isInitialized = true;
 
       notifyListeners();
+    }
+  }
+
+  void _setError(Object error, StackTrace stackTrace, int? pageIndex) {
+    _error = error;
+    _stackTrace = stackTrace;
+    _errorPageIndex = pageIndex;
+  }
+
+  /// A source that failed before (a page, or the count when [pageIndex] is
+  /// null) delivered data again: its error is gone (i.e. a watched query
+  /// recovered).
+  void _clearErrorFrom(int? pageIndex) {
+    if (_error != null && _errorPageIndex == pageIndex) {
+      _error = null;
+      _stackTrace = null;
+      _errorPageIndex = null;
     }
   }
 
@@ -290,8 +314,7 @@ class LazyListController<T> extends ChangeNotifier {
           _applyPageResult(pageIndex, items);
         },
         onError: (Object e, StackTrace st) {
-          _error = e;
-          _stackTrace = st;
+          _setError(e, st, pageIndex);
 
           notifyListeners();
         },
@@ -299,17 +322,19 @@ class LazyListController<T> extends ChangeNotifier {
     } else {
       if (_fetchingPages.contains(pageIndex)) return;
       _fetchingPages.add(pageIndex);
+      var generation = _generation;
+      // A page fetched before a refresh would overwrite the fresh data.
+      bool isStale() => _disposed || generation != _generation;
       () async {
         try {
           var items = await getItems!(offset, pageSize);
-          if (_disposed) return;
+          if (isStale()) return;
           _fetchingPages.remove(pageIndex);
           _applyPageResult(pageIndex, items);
         } catch (e, st) {
-          if (_disposed) return;
+          if (isStale()) return;
           _fetchingPages.remove(pageIndex);
-          _error = e;
-          _stackTrace = st;
+          _setError(e, st, pageIndex);
 
           notifyListeners();
         }
@@ -318,6 +343,7 @@ class LazyListController<T> extends ChangeNotifier {
   }
 
   void _applyPageResult(int pageIndex, List<T> items) {
+    _clearErrorFrom(pageIndex);
     var offset = pageIndex * pageSize;
     // Remove stale entries when the page shrank.
     for (var i = items.length; i < pageSize; i++) {
@@ -358,6 +384,7 @@ class LazyListController<T> extends ChangeNotifier {
 
   /// Reset the controller and reload all data.
   void refresh() {
+    _generation++;
     _cancelSubscriptions();
     _items.clear();
     _fetchingPages.clear();
@@ -365,6 +392,7 @@ class LazyListController<T> extends ChangeNotifier {
     _inferredTotalPageIndex = null;
     _error = null;
     _stackTrace = null;
+    _errorPageIndex = null;
     _isInitialized = false;
     _hasEverLoadedItems = false;
     _requestedMinIndex = null;

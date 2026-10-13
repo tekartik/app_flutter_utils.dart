@@ -322,7 +322,7 @@ void main() {
       expect(find.text('r23'), findsOneWidget);
       // No review, dropped by the inner join.
       expect(find.text('t2'), findsNothing);
-    });
+    }, timeout: const Timeout(Duration(seconds: 30)));
 
     test('SdbJoinListController on an index source, index key order', () async {
       // The join key is the index key, so books with no authorId are not in
@@ -424,7 +424,7 @@ void main() {
       expect(find.text('t4'), findsNothing);
       // Author does not exist, dropped by the inner join.
       expect(find.text('t5'), findsNothing);
-    });
+    }, timeout: const Timeout(Duration(seconds: 30)));
 
     testWidgets('SdbJoinListView on a store source with a key path', (
       tester,
@@ -450,9 +450,9 @@ void main() {
       expect(find.text('t1'), findsOneWidget);
       expect(find.text('author1'), findsNWidgets(2));
       expect(find.text('t4'), findsOneWidget);
-      // Book 4 has no author id.
+      // Book 4 has no author id, the author 9 of book 5 does not exist.
       expect(find.text('null'), findsNWidgets(2));
-    });
+    }, timeout: const Timeout(Duration(seconds: 30)));
 
     testWidgets('SdbJoinListView on a store source, inner join', (
       tester,
@@ -479,6 +479,6 @@ void main() {
       // Dropped by the inner join.
       expect(find.text('t4'), findsNothing);
       expect(find.text('t5'), findsNothing);
-    });
+    }, timeout: const Timeout(Duration(seconds: 30)));
   });
 }

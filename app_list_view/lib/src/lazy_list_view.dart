@@ -184,6 +184,13 @@ class _SliverLazyListState<T> extends State<SliverLazyList<T>> {
 /// [prototypeItem] or [itemExtentBuilder]): without it, a long scroll jump
 /// costs one build (and so one page load) per item scrolled over, see
 /// [itemExtent].
+///
+/// An owned controller is kept across rebuilds as long as the same kinds of
+/// callbacks are given: the callbacks are usually closures created on every
+/// build and cannot be compared, a parent rebuild must not reload the list
+/// (and lose the scroll position). To reload with new callbacks, give the
+/// widget a new [Key], or use an external [controller] and call
+/// [LazyListController.refresh].
 class LazyListView<T> extends StatefulWidget {
   /// External controller, not disposed by this widget. Exclusive with the
   /// fetch callbacks.
@@ -382,11 +389,12 @@ class _LazyListViewState<T> extends State<LazyListView<T>> {
   @override
   void didUpdateWidget(covariant LazyListView<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Only the kind of callbacks is compared, see the class documentation.
     if (oldWidget.controller != widget.controller ||
-        oldWidget.getItems != widget.getItems ||
-        oldWidget.watchItems != widget.watchItems ||
-        oldWidget.getCount != widget.getCount ||
-        oldWidget.watchCount != widget.watchCount ||
+        (oldWidget.getItems == null) != (widget.getItems == null) ||
+        (oldWidget.watchItems == null) != (widget.watchItems == null) ||
+        (oldWidget.getCount == null) != (widget.getCount == null) ||
+        (oldWidget.watchCount == null) != (widget.watchCount == null) ||
         oldWidget.pageSize != widget.pageSize ||
         oldWidget.pageWindowMargin != widget.pageWindowMargin) {
       oldWidget.controller?.removeListener(_onControllerChanged);

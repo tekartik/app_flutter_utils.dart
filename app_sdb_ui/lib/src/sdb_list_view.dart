@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_list_view_flutter/list_view_flutter.dart';
 
 import 'sdb_list_controller.dart';
+import 'sdb_list_view_args.dart';
 
 /// A ListView that lazily loads the records of an sdb store query.
 ///
@@ -171,10 +172,11 @@ class _SdbStoreListViewState<K extends SdbKey, V extends SdbValue>
   @override
   void didUpdateWidget(covariant SdbStoreListView<K, V> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Arguments compared by value, they are usually created inline.
     if (oldWidget.controller != widget.controller ||
         oldWidget.client != widget.client ||
         oldWidget.store != widget.store ||
-        oldWidget.findOptions != widget.findOptions ||
+        !sdbFindOptionsEquals(oldWidget.findOptions, widget.findOptions) ||
         oldWidget.watch != widget.watch ||
         oldWidget.pageSize != widget.pageSize ||
         oldWidget.pageWindowMargin != widget.pageWindowMargin) {
@@ -388,10 +390,11 @@ class _SdbIndexListViewState<
   @override
   void didUpdateWidget(covariant SdbIndexListView<K, V, I> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Arguments compared by value, they are usually created inline.
     if (oldWidget.controller != widget.controller ||
         oldWidget.client != widget.client ||
-        oldWidget.index != widget.index ||
-        oldWidget.findOptions != widget.findOptions ||
+        !sdbIndexRefEquals(oldWidget.index, widget.index) ||
+        !sdbFindOptionsEquals(oldWidget.findOptions, widget.findOptions) ||
         oldWidget.watch != widget.watch ||
         oldWidget.pageSize != widget.pageSize ||
         oldWidget.pageWindowMargin != widget.pageWindowMargin) {
