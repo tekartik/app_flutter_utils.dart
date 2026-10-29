@@ -38,6 +38,10 @@ description: >-
   tab it merges into the control's node; in a rail it is a child of the tab
   node, and a web click on it bubbles to the tab (checked in headless
   Chrome).
+* A page in a nested navigator (go_router `ShellRoute`) next to a sidebar
+  painted before it: the route barrier's `BlockSemantics` drops the
+  semantics of the sidebar (no ids, no screen reader). Wrap the navigator
+  side in `Semantics(container: true, child: ...)`.
 * Ids are an api: one constants class per app (`abstract final class
   MyUiIds { static const home = 'home'; static String event(String id) =>
   'event-$id'; }`) in a pure Dart library, imported by the app and the
@@ -66,7 +70,7 @@ description: >-
 ## Example
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_agent_flutter/app_agent_flutter.dart';
 
 abstract final class DemoUiIds {
