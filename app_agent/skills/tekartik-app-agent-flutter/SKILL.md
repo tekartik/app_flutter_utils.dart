@@ -5,8 +5,10 @@ description: >-
   LLM with a browser, adb/uiautomator, Playwright, a headless Chrome check)
   can drive it, with tekartik_app_agent_flutter: AgentId (Semantics
   identifier merged with the control, container), agentInit (?semantics,
-  ?agent build the semantics from the start on the web), agentUrlOptions;
-  and when testing those ids in widget tests.
+  ?agent build the semantics from the start on the web; the commands exposed
+  by the window.tekartikAgent js bridge with ?agent and by the VM service
+  extensions ext.tekartik.agent.* in debug), AgentCommandsScope,
+  agentUrlOptions; and when testing those ids in widget tests.
 ---
 
 # Agent ids for Flutter apps (tekartik_app_agent_flutter)
@@ -42,6 +44,19 @@ description: >-
   painted before it: the route barrier's `BlockSemantics` drops the
   semantics of the sidebar (no ids, no screen reader). Wrap the navigator
   side in `Semantics(container: true, child: ...)`.
+* Commands (`AgentCommand` of tekartik_app_agent, re-exported): register
+  them where their context lives, with `AgentCommandsScope(commands:,
+  child:)` (built once, e.g. a `late final` list in the state of the app
+  root holding the router and the database), or `agentCommands.add(...)`.
+  `agentInit()` exposes whatever is registered when called: the js bridge
+  `window.tekartikAgent` with `?agent` (release builds included: the agent
+  acts as the signed-in user, no extra rights), the VM service extensions
+  `ext.tekartik.agent.commands` / `ext.tekartik.agent.run` (params `name`,
+  `args` json) in debug and profile.
+* From a browser agent: `await window.tekartikAgent.run('events', {day:
+  '2027-01-15'})` gives `{ok: true, result}` or `{ok: false, error}`;
+  `window.tekartikAgent.commands()` the names, descriptions and argument
+  schemas. From a tool: `AgentWebPage.run` (tekartik_app_agent).
 * Ids are an api: one constants class per app (`abstract final class
   MyUiIds { static const home = 'home'; static String event(String id) =>
   'event-$id'; }`) in a pure Dart library, imported by the app and the

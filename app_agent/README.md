@@ -11,7 +11,15 @@ Flutter helpers for the apps an agent (an LLM, a test tool) drives:
 - `agentInit()`: reads the `?semantics` / `?agent` options of the page url
   (`AgentUrlOptions`, also in a hash url fragment) and builds the semantics
   from the start when they ask for it, so that the web semantics DOM (and
-  its ids) exists without the "enable accessibility" button.
+  its ids) exists without the "enable accessibility" button. It exposes the
+  commands of the app (`agentCommands` of `tekartik_app_agent`): with
+  `?agent` on the web, the js bridge `window.tekartikAgent` (`commands()`,
+  `run(name, args)` returning a promise of `{ok, result}` or `{ok, error}`,
+  `help()`), release builds included; in a debug or profile run, the VM
+  service extensions `ext.tekartik.agent.commands` and
+  `ext.tekartik.agent.run` (`name`, `args` as json), for the Dart tooling.
+- `AgentCommandsScope(commands: [...], child:)`: registers commands while
+  in the tree (a screen, an app root with its router or database).
 
 A tool drives the web app by these ids with `AgentWebPage` of
 `tekartik_app_agent`

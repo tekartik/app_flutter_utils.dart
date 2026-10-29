@@ -75,4 +75,30 @@ void main() {
     expect(agentUrlOptions.agent, isTrue);
     expect(SemanticsBinding.instance.semanticsEnabled, isTrue);
   });
+
+  testWidgets('AgentCommandsScope registers while in the tree', (tester) async {
+    var registry = AgentCommands();
+    AgentCommand command(String result) =>
+        AgentCommand(name: 'hello', description: 'Hello.', run: (_) => result);
+    await tester.pumpWidget(
+      AgentCommandsScope(
+        registry: registry,
+        commands: [command('one')],
+        child: const SizedBox(),
+      ),
+    );
+    expect((await registry.run('hello')).result, 'one');
+    // Rebuilt with other commands: replaced.
+    await tester.pumpWidget(
+      AgentCommandsScope(
+        registry: registry,
+        commands: [command('two')],
+        child: const SizedBox(),
+      ),
+    );
+    expect((await registry.run('hello')).result, 'two');
+    expect(registry.describe(), hasLength(1));
+    await tester.pumpWidget(const SizedBox());
+    expect(registry.describe(), isEmpty);
+  });
 }
