@@ -1,0 +1,27 @@
+name: tekartik_app_agent_flutter
+description: Flutter helpers for the apps an agent (an LLM, a test tool) drives - AgentId (stable semantics ids, the web flt-semantics-identifier), agentInit (the semantics built from ?semantics / ?agent).
+version: 0.1.0
+homepage: https://github.com/tekartik/app_flutter_utils.dart
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  tekartik_app_agent:
+    git:
+      url: https://github.com/tekartik/app_common_utils.dart
+      path: app_agent
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  tekartik_lints_flutter:
+    git:
+      url: https://github.com/tekartik/common_flutter.dart
+      path: packages/lints_flutter
+
+resolution: workspace

@@ -49,4 +49,4 @@ workspace:
   - app_list_view
   - app_full_screen
   - example/full_screen_test_app_lib
-
+  - app_agent
