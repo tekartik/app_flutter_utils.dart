@@ -13,9 +13,11 @@ Flutter helpers for the apps an agent (an LLM, a test tool) drives:
   from the start when they ask for it, so that the web semantics DOM (and
   its ids) exists without the "enable accessibility" button. It exposes the
   commands of the app (`agentCommands` of `tekartik_app_agent`): with
-  `?agent` on the web, the js bridge `window.tekartikAgent` (`commands()`,
+  `?agent` on the web (`?agent=<key>` in a release build:
+  `agentInit(releaseKey:)`, the `AgentKey` of the app, see
+  tekartik_app_agent), the js bridge `window.tekartikAgent` (`commands()`,
   `run(name, args)` returning a promise of `{ok, result}` or `{ok, error}`,
-  `help()`), release builds included; in a debug or profile run, the VM
+  `help()`); in a debug or profile run, the VM
   service extensions `ext.tekartik.agent.commands` and
   `ext.tekartik.agent.run` (`name`, `args` as json), for the Dart tooling.
 - `AgentCommandsScope(commands: [...], child:)`: registers commands while

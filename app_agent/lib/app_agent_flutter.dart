@@ -6,7 +6,8 @@
 /// - [agentInit]: reads the [AgentUrlOptions] of the page url, builds the
 ///   semantics from the start when they ask for it (`?semantics`,
 ///   `?agent`), exposes the [agentCommands] (the web js bridge with
-///   `?agent`, VM service extensions in debug);
+///   `?agent`, `?agent=<key>` in a release build: [AgentKey], VM service
+///   extensions in debug);
 /// - [AgentCommandsScope]: registers commands while in the tree.
 library;
 
@@ -17,6 +18,7 @@ export 'package:tekartik_app_agent/app_agent.dart'
         AgentCommandResult,
         AgentCommands,
         AgentCommandsRegistration,
+        AgentKey,
         AgentSchema,
         AgentUrlOptions,
         agentBridgeName,
@@ -26,4 +28,4 @@ export 'package:tekartik_app_agent/app_agent.dart'
 
 export 'src/agent_commands_scope.dart' show AgentCommandsScope;
 export 'src/agent_id.dart' show AgentId;
-export 'src/agent_init.dart' show agentInit, agentUrlOptions;
+export 'src/agent_init.dart' show agentAllowed, agentInit, agentUrlOptions;
