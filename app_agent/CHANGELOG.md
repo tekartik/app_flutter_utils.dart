@@ -1,3 +1,8 @@
+## 0.2.1
+
+- The VM service extensions come from tekartik_app_agent 0.3.0
+  (`agentVmRegister`).
+
 ## 0.2.0
 
 - `agentInit` exposes `agentCommands`: with `?agent` on the web, the js

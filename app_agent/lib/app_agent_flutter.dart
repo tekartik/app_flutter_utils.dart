@@ -20,9 +20,10 @@ export 'package:tekartik_app_agent/app_agent.dart'
         AgentSchema,
         AgentUrlOptions,
         agentBridgeName,
-        agentCommands;
+        agentCommands,
+        agentVmCommandsExtension,
+        agentVmRunExtension;
 
 export 'src/agent_commands_scope.dart' show AgentCommandsScope;
 export 'src/agent_id.dart' show AgentId;
 export 'src/agent_init.dart' show agentInit, agentUrlOptions;
-export 'src/agent_vm.dart' show agentVmCommandsExtension, agentVmRunExtension;

@@ -4,7 +4,6 @@ import 'package:tekartik_app_agent/app_agent.dart';
 
 import 'agent_bridge_stub.dart'
     if (dart.library.js_interop) 'agent_bridge_web.dart';
-import 'agent_vm.dart';
 
 AgentUrlOptions? _options;
 SemanticsHandle? _semanticsHandle;
