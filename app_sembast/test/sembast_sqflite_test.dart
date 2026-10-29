@@ -10,7 +10,7 @@ Future main() async {
     test('factory', () async {
       sqfliteWindowsFfiInit();
       var factory = databaseFactorySqfliteFfi;
-      var db = await factory.openDatabase('test.db');
+      var db = await factory.openDatabase('sembast_sqflite_test.db');
 
       await db.close();
     });

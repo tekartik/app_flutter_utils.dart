@@ -11,7 +11,9 @@ Future main() async {
 
   group('sembast', () {
     test('factory', () async {
-      expect(await factory.openDatabase('test.db'), isNotNull);
+      var db = await factory.openDatabase('factory_test.db');
+      expect(db, isNotNull);
+      await db.close();
     });
   });
 }

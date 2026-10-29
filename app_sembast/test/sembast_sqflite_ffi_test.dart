@@ -10,7 +10,7 @@ Future main() async {
   group('sembast', () {
     test('factory', () async {
       var factory = databaseFactorySqflite;
-      var db = await factory.openDatabase('test.db');
+      var db = await factory.openDatabase('sembast_sqflite_ffi_test.db');
 
       await db.close();
     });

@@ -15,9 +15,9 @@ void main() {
       var factory = getDatabaseFactory();
 
       var store = StoreRef<String, String>.main();
-      await factory.deleteDatabase('test.db');
+      await factory.deleteDatabase('doc_test.db');
       Future<Database> open() async {
-        var db = await factory.openDatabase('test.db');
+        var db = await factory.openDatabase('doc_test.db');
         return db;
       }
 
@@ -31,7 +31,7 @@ void main() {
     test('open/close', () async {
       /// Using in memory implementation for unit test
       var factory = newDatabaseFactoryMemory();
-      var db = await factory.openDatabase('test.db');
+      var db = await factory.openDatabase('doc_test.db');
       await db.close();
     });
   });

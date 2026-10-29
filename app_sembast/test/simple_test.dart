@@ -16,9 +16,9 @@ void main() {
     group('memory', () {
       test('open', () async {
         var store = StoreRef<String, String>.main();
-        await factory.deleteDatabase('test.db');
+        await factory.deleteDatabase('simple_test.db');
         Future<Database> open() async {
-          var db = await factory.openDatabase('test.db');
+          var db = await factory.openDatabase('simple_test.db');
           return db;
         }
 
