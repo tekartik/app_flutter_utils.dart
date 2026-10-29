@@ -129,6 +129,11 @@ DatabaseFactory getDatabaseFactory({String? packageName, String? rootPath}) {
     );
     return databaseFactory;
   } else {
+    // Under flutter test (on macOS), the ffi default is ./.dart_tool, shared
+    // by all the test files running at once.
+    if (rootPath != null && _inFlutterTest) {
+      databaseFactory.setDatabasesPath(rootPath);
+    }
     return databaseFactory;
   }
 }

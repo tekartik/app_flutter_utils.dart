@@ -15,6 +15,8 @@ DatabaseFactory get databaseFactoryMemory =>
 ///
 /// On linux and windows, specify a package name or root path
 ///
+/// Under flutter test, root path is used on any platform
+///
 /// On the web the parameters are ignored.
 DatabaseFactory getDatabaseFactory({String? packageName, String? rootPath}) =>
     src.getDatabaseFactory(packageName: packageName, rootPath: rootPath);

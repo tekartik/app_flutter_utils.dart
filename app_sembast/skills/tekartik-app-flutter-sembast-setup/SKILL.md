@@ -49,7 +49,8 @@ plain `sembast` API.
   `packageName` (`'com.example.myapp'`) so files go to
   `<userAppDataPath>/<packageName>/databases`, or an explicit `rootPath` for a
   fully controlled location (handy in tests:
-  `'.dart_tool/my_app/db'`). On android/ios/macos both are ignored.
+  `'.dart_tool/my_app/db'`). On android/ios/macos both are ignored, except
+  `rootPath` under `flutter test`, used on any platform.
 * Call `WidgetsFlutterBinding.ensureInitialized()` before opening a database
   in `main()`, open the database **once** for the whole app and keep it open
   (the factory returns the same single instance for a given path); do not

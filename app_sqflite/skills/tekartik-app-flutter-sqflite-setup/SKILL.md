@@ -47,7 +47,9 @@ and computes a sane database directory on desktop, then hands back a plain
     `rootPath`, or to `<userAppDataPath>/<packageName>/databases` (created if
     missing). Without either, desktop databases land in a `.` folder, so
     always pass a reverse domain `packageName` (or an explicit `rootPath` in
-    tests). Both are ignored on android/ios/macos/web.
+    tests). Both are ignored on android/ios/macos/web, except `rootPath`
+    under `flutter test`, used on any platform (so macOS tests are isolated
+    too).
 * Open with options instead of raw arguments:
   `factory.openDatabase(path, options: OpenDatabaseOptions(version: 1,
   onCreate: ..., onUpgrade: ..., onConfigure: ...))`. Databases are

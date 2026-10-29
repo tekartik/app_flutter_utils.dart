@@ -61,4 +61,10 @@ void main() {
       expect(await factory.getDatabasesPath(), isNot(dummyDatabasesPath));
     }
   });
+
+  test('rootPath', () async {
+    var rootPath = '.dart_tool/tekartik_app_flutter_sqflite/test/databases';
+    factory = getDatabaseFactory(rootPath: rootPath);
+    expect(await factory.getDatabasesPath(), rootPath);
+  });
 }
