@@ -1,3 +1,9 @@
+## 0.1.1
+
+- `window_manager` >= 0.6.0 (nativeapi): the app window through
+  `WindowManager.instance.getCurrent()`, its full screen events instead of
+  the 0.5.x `WindowListener`.
+
 ## 0.1.0
 
 - Initial version: `PlatformFullScreen` (supported, isFullScreen, onChanged,

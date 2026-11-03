@@ -69,15 +69,16 @@ unsupported elsewhere. Extracted from the playelio karaoke player.
   are the defaults; leaving full screen restores `mobileNormalMode`, not the
   mode the app had before (there is no way to read it). Pass the app's own
   mode when it is not edge to edge. `SystemUiMode.manual` is not supported.
-* Desktop needs `window_manager` in the app's platform runners (Linux, macOS,
-  Windows): a plain `flutter create` app has it once the package is a
-  dependency. No extra configuration on the web or mobile.
+* Desktop goes through `window_manager` >= 0.6.0 (built on nativeapi, Flutter
+  3.47 / Dart 3.13, macOS 10.15): no runner setup, but its native core is
+  compiled by a build hook, so Linux build machines need `libgtk-3-dev
+  libx11-dev libxi-dev`. No extra configuration on the web or mobile.
 * On the web the whole document goes full screen, unless the page has an
   element with id `tekartik_full_screen_section` (then that element does).
 * Tests: use `PlatformFullScreenMemory` and inject it into the widget; it
   records every request in `requests` and `simulateFullScreenChanged(bool)`
-  plays an escape. The real implementation is safe in `flutter test` (the
-  requests are refused) but proves nothing.
+  plays an escape. The real implementation is safe in `flutter test` (no
+  app window: the requests are refused) but proves nothing.
 
 ## Examples
 

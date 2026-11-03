@@ -6,40 +6,63 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_full_screen/full_screen.dart';
 import 'package:tekartik_app_flutter_full_screen/src/full_screen_io.dart';
 
-const _windowManagerChannel = MethodChannel('window_manager');
-
 TestDefaultBinaryMessenger get _messenger =>
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 
-/// What the native side sends when the window manager changes state.
-Future<void> _sendWindowEvent(String eventName) async {
-  await _messenger.handlePlatformMessage(
-    _windowManagerChannel.name,
-    const StandardMethodCodec().encodeMethodCall(
-      MethodCall('onEvent', {'eventName': eventName}),
-    ),
-    (_) {},
-  );
+/// A desktop window recording the requests, failing on demand.
+class _FakeDesktopWindow implements PlatformFullScreenDesktopWindow {
+  final requests = <bool>[];
+  var listenCount = 0;
+  var disposed = false;
+
+  /// Thrown by every call when set.
+  Object? error;
+  ValueChanged<bool>? _onFullScreenChanged;
+
+  bool get listening => _onFullScreenChanged != null;
+
+  /// What the window manager reports (F11, the title bar button).
+  void simulateFullScreenChanged(bool fullScreen) =>
+      _onFullScreenChanged?.call(fullScreen);
+
+  @override
+  void setFullScreen(bool fullScreen) {
+    if (error != null) {
+      throw error!;
+    }
+    requests.add(fullScreen);
+  }
+
+  @override
+  VoidCallback listen(ValueChanged<bool> onFullScreenChanged) {
+    listenCount++;
+    if (error != null) {
+      throw error!;
+    }
+    _onFullScreenChanged = onFullScreenChanged;
+    return () => _onFullScreenChanged = null;
+  }
+
+  @override
+  void dispose() {
+    disposed = true;
+  }
 }
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('full_screen_io desktop', () {
-    late List<MethodCall> calls;
+    late _FakeDesktopWindow window;
     setUp(() {
-      calls = [];
-      _messenger.setMockMethodCallHandler(_windowManagerChannel, (call) async {
-        calls.add(call);
-        return null;
-      });
-    });
-    tearDown(() {
-      _messenger.setMockMethodCallHandler(_windowManagerChannel, null);
+      window = _FakeDesktopWindow();
     });
 
     test('setFullScreen', () async {
-      var fullScreen = createPlatformFullScreenIo(desktop: true);
+      var fullScreen = createPlatformFullScreenIo(
+        desktop: true,
+        desktopWindow: window,
+      );
       var changes = <bool>[];
       fullScreen.onChanged.listen(changes.add);
       expect(fullScreen.supported, isTrue);
@@ -47,71 +70,71 @@ void main() {
 
       await fullScreen.setFullScreen(true);
       expect(fullScreen.isFullScreen, isTrue);
-      expect(calls.map((call) => call.method), [
-        'ensureInitialized',
-        'setFullScreen',
-      ]);
-      expect(calls.last.arguments, {'isFullScreen': true});
+      expect(window.requests, [true]);
 
-      // Same state again: the plugin is called, no event.
+      // Same state again: the window is called, no event.
       await fullScreen.setFullScreen(true);
       await fullScreen.setFullScreen(false);
-      expect(calls.last.arguments, {'isFullScreen': false});
+      expect(window.requests, [true, true, false]);
       await fullScreen.toggleFullScreen();
       expect(fullScreen.isFullScreen, isTrue);
       await pumpEventQueue();
       expect(changes, [true, false, true]);
-      // Initialized once.
-      expect(
-        calls.where((call) => call.method == 'ensureInitialized').length,
-        1,
-      );
+      // Listening once.
+      expect(window.listenCount, 1);
       fullScreen.dispose();
+      expect(window.listening, isFalse);
+      expect(window.disposed, isTrue);
     });
 
     test('window manager events', () async {
-      var fullScreen = createPlatformFullScreenIo(desktop: true);
+      var fullScreen = createPlatformFullScreenIo(
+        desktop: true,
+        desktopWindow: window,
+      );
       var changes = <bool>[];
       fullScreen.onChanged.listen(changes.add);
 
-      await _sendWindowEvent('enter-full-screen');
+      window.simulateFullScreenChanged(true);
       expect(fullScreen.isFullScreen, isTrue);
-      await _sendWindowEvent('leave-full-screen');
+      window.simulateFullScreenChanged(false);
       expect(fullScreen.isFullScreen, isFalse);
-      // Unrelated event.
-      await _sendWindowEvent('focus');
       await pumpEventQueue();
       expect(changes, [true, false]);
-      expect(calls, isEmpty);
+      expect(window.requests, isEmpty);
 
       fullScreen.dispose();
       // No longer listening.
-      await _sendWindowEvent('enter-full-screen');
+      window.simulateFullScreenChanged(true);
       expect(fullScreen.isFullScreen, isFalse);
     });
 
-    test('plugin error', () async {
-      _messenger.setMockMethodCallHandler(_windowManagerChannel, (call) async {
-        calls.add(call);
-        throw PlatformException(code: 'test');
-      });
-      var fullScreen = createPlatformFullScreenIo(desktop: true);
+    test('window error', () async {
+      window.error = StateError('test');
+      var fullScreen = createPlatformFullScreenIo(
+        desktop: true,
+        desktopWindow: window,
+      );
+      expect(window.listenCount, 1);
       await fullScreen.setFullScreen(true);
       expect(fullScreen.isFullScreen, isFalse);
-      // The initialization is retried.
+      // Listening is retried on each request until it works.
+      expect(window.listenCount, 2);
+      window.error = null;
       await fullScreen.setFullScreen(true);
-      expect(
-        calls.where((call) => call.method == 'ensureInitialized').length,
-        2,
-      );
+      expect(fullScreen.isFullScreen, isTrue);
+      expect(window.listenCount, 3);
+      await fullScreen.setFullScreen(false);
+      expect(window.listenCount, 3);
+      window.simulateFullScreenChanged(true);
+      expect(fullScreen.isFullScreen, isTrue);
       fullScreen.dispose();
     });
   });
 
-  group('full_screen_io without the plugin', () {
-    test('missing plugin', () async {
-      // flutter test has no window_manager plugin: MissingPluginException,
-      // caught, nothing changes.
+  group('full_screen_io without a window', () {
+    test('flutter test', () async {
+      // flutter test has no app window: the error is caught, nothing changes.
       var fullScreen = createPlatformFullScreenIo(desktop: true);
       await fullScreen.setFullScreen(true);
       expect(fullScreen.isFullScreen, isFalse);

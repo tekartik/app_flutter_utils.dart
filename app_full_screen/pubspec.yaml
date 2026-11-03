@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_full_screen
 description: Platform full screen for Flutter apps - the browser full screen api on the web, the window manager on desktop, the immersive mode on mobile - behind one interface.
-version: 0.1.0
+version: 0.1.1
 publish_to: none
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   # The window manager full screen on Linux, macOS and Windows.
-  window_manager: ">=0.5.2"
+  window_manager: ">=0.6.0"
   # The browser full screen api (src/full_screen_web.dart).
   tekartik_browser_utils:
     git:
