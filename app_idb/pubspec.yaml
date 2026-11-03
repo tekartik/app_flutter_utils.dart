@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  idb_shim: ">=2.8.4+1"
-  idb_sqflite: '>=1.4.6-1'
+  idb_shim: ">=2.11.2-1"
+  idb_sqflite: '>=1.5.2-1'
   sqflite: ">=2.4.0"
   tekartik_app_flutter_sqflite:
     git:
