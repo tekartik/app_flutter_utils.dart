@@ -19,6 +19,9 @@ jobs:
     with:
       channel: stable
       runs-on: ubuntu-latest
+      # GTK 3, X11 and Xi for the native build hooks of window_manager >= 0.6.0
+      # (app_full_screen), installed before the tests.
+      tekartik-ci-setup: setup_gtk3lib
 
   ubuntu_beta:
     name: ubuntu beta
@@ -26,6 +29,9 @@ jobs:
     with:
       channel: beta
       runs-on: ubuntu-latest
+      # GTK 3, X11 and Xi for the native build hooks of window_manager >= 0.6.0
+      # (app_full_screen), installed before the tests.
+      tekartik-ci-setup: setup_gtk3lib
 
   windows_stable:
     name: windows stable
