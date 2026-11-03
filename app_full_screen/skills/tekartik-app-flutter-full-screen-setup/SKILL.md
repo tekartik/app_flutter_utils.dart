@@ -6,7 +6,7 @@ description: >-
   tekartik_app_flutter_full_screen: createPlatformFullScreen() from
   package:tekartik_app_flutter_full_screen/full_screen.dart and its
   PlatformFullScreen (supported, isFullScreen, onChanged, setFullScreen,
-  toggleFullScreen, dispose), the browser full screen api / window_manager /
+  toggleFullScreen, dispose), the browser full screen api / the app window /
   SystemChrome immersive mode behind it, PlatformFullScreenOptions for the
   mobile system ui modes, and PlatformFullScreenMemory from
   full_screen_memory.dart for widget tests.
@@ -15,7 +15,8 @@ description: >-
 # Platform full screen (tekartik_app_flutter_full_screen)
 
 One interface to ask the platform for full screen: the browser full screen api
-on the web (through `tekartik_browser_utils`), `window_manager` on Linux, macOS
+on the web (through `tekartik_browser_utils`), the app window
+(`tekartik_app_flutter_window`, `window_manager` underneath) on Linux, macOS
 and Windows, `SystemChrome.setEnabledSystemUIMode` on Android and iOS,
 unsupported elsewhere. Extracted from the playelio karaoke player.
 
@@ -69,9 +70,9 @@ unsupported elsewhere. Extracted from the playelio karaoke player.
   are the defaults; leaving full screen restores `mobileNormalMode`, not the
   mode the app had before (there is no way to read it). Pass the app's own
   mode when it is not edge to edge. `SystemUiMode.manual` is not supported.
-* Desktop goes through `window_manager` >= 0.6.0 (built on nativeapi, Flutter
-  3.47 / Dart 3.13, macOS 10.15): no runner setup, but its native core is
-  compiled by a build hook, so Linux build machines need `libgtk-3-dev
+* Desktop goes through `tekartik_app_flutter_window` (window_manager >= 0.6.0,
+  built on nativeapi, Flutter 3.47 / Dart 3.13, macOS 10.15): no runner
+  setup, but its native core is compiled by a build hook, so Linux build machines need `libgtk-3-dev
   libx11-dev libxi-dev`. No extra configuration on the web or mobile.
 * On the web the whole document goes full screen, unless the page has an
   element with id `tekartik_full_screen_section` (then that element does).

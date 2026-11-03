@@ -1,3 +1,10 @@
+## 0.1.2
+
+- The desktop full screen goes through tekartik_app_flutter_window (no direct
+  `window_manager` dependency any more);
+  `PlatformFullScreenDesktopWindow.app([AppWindow? window])` gives the
+  desktop window of an `AppWindow` (an `AppWindowMemory` in tests).
+
 ## 0.1.1
 
 - `window_manager` >= 0.6.0 (nativeapi): the app window through

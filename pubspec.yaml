@@ -50,3 +50,4 @@ workspace:
   - app_full_screen
   - example/full_screen_test_app_lib
   - app_agent
+  - app_window

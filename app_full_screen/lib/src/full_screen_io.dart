@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:tekartik_app_flutter_window/app_window.dart';
 
 import 'full_screen.dart';
 
@@ -15,7 +16,7 @@ PlatformFullScreen createPlatformFullScreen({
 /// [desktop] true forces the window manager path, false the mobile system ui
 /// mode path; null (the default) detects it from the platform.
 ///
-/// [desktopWindow] replaces the app window of `window_manager` (tests).
+/// [desktopWindow] replaces the app window (tests).
 PlatformFullScreen createPlatformFullScreenIo({
   PlatformFullScreenOptions? options,
   bool? desktop,
@@ -29,12 +30,14 @@ PlatformFullScreen createPlatformFullScreenIo({
 bool get _isDesktop =>
     Platform.isLinux || Platform.isMacOS || Platform.isWindows;
 
-/// True under `flutter test`, where there is no app window.
-bool get _isFlutterTest => Platform.environment.containsKey('FLUTTER_TEST');
-
-/// The desktop window made full screen: the app window of `window_manager`
-/// by default, a fake in tests.
+/// The desktop window made full screen: the app window
+/// (tekartik_app_flutter_window) by default, a fake in tests.
 abstract class PlatformFullScreenDesktopWindow {
+  /// The desktop window of [window], `appWindowCurrent()` (looked up on
+  /// first use) when null.
+  factory PlatformFullScreenDesktopWindow.app([AppWindow? window]) =>
+      _AppDesktopWindow(window);
+
   /// Make the window full screen ([fullScreen] true) or not.
   ///
   /// Throws when the window is not available.
@@ -51,19 +54,15 @@ abstract class PlatformFullScreenDesktopWindow {
   void dispose();
 }
 
-/// The app window of `window_manager` (nativeapi), looked up on first use.
-class _NativeDesktopWindow implements PlatformFullScreenDesktopWindow {
-  Window? _window;
+/// An [AppWindow], the app one (looked up on first use: there is none under
+/// `flutter test` or before the window exists) by default.
+class _AppDesktopWindow implements PlatformFullScreenDesktopWindow {
+  AppWindow? _window;
 
-  Window get _current {
-    if (_isFlutterTest) {
-      // No app window, and the native library may not even be built.
-      throw UnsupportedError('no app window under flutter test');
-    }
-    return _window ??=
-        WindowManager.instance.getCurrent() ??
-        (throw StateError('no current window'));
-  }
+  _AppDesktopWindow(this._window);
+
+  AppWindow get _current =>
+      _window ??= appWindowCurrent() ?? (throw StateError('no app window'));
 
   @override
   void setFullScreen(bool fullScreen) {
@@ -72,18 +71,8 @@ class _NativeDesktopWindow implements PlatformFullScreenDesktopWindow {
 
   @override
   VoidCallback listen(ValueChanged<bool> onFullScreenChanged) {
-    var window = _current;
-    var listenerId = window.addListener((event) {
-      switch (event) {
-        case WindowEnteredFullScreenEvent():
-          onFullScreenChanged(true);
-        case WindowExitedFullScreenEvent():
-          onFullScreenChanged(false);
-        default:
-          break;
-      }
-    });
-    return () => window.removeListener(listenerId);
+    var subscription = _current.onFullScreenChanged.listen(onFullScreenChanged);
+    return () => unawaited(subscription.cancel());
   }
 
   @override
@@ -93,7 +82,7 @@ class _NativeDesktopWindow implements PlatformFullScreenDesktopWindow {
   }
 }
 
-/// Io implementation: `window_manager` on desktop (which also reports the
+/// Io implementation: the app window on desktop (which also reports the
 /// changes made by the window manager itself), `SystemChrome` on mobile.
 ///
 /// Every platform failure (no window in tests, refused) is logged and leaves
@@ -113,7 +102,7 @@ class PlatformFullScreenIo extends PlatformFullScreenBase {
     required this.options,
     required this.desktop,
     PlatformFullScreenDesktopWindow? desktopWindow,
-  }) : _desktopWindow = desktopWindow ?? _NativeDesktopWindow() {
+  }) : _desktopWindow = desktopWindow ?? _AppDesktopWindow(null) {
     _listen();
   }
 

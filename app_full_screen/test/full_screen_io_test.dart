@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_full_screen/full_screen.dart';
 import 'package:tekartik_app_flutter_full_screen/src/full_screen_io.dart';
+import 'package:tekartik_app_flutter_window/app_window_memory.dart';
 
 TestDefaultBinaryMessenger get _messenger =>
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
@@ -129,6 +130,24 @@ void main() {
       window.simulateFullScreenChanged(true);
       expect(fullScreen.isFullScreen, isTrue);
       fullScreen.dispose();
+    });
+  });
+
+  group('full_screen_io app window', () {
+    test('full screen through the AppWindow, its changes heard', () async {
+      var window = AppWindowMemory();
+      var fullScreen = createPlatformFullScreenIo(
+        desktop: true,
+        desktopWindow: PlatformFullScreenDesktopWindow.app(window),
+      );
+      await fullScreen.setFullScreen(true);
+      expect(window.isFullScreen, isTrue);
+      expect(fullScreen.isFullScreen, isTrue);
+      // F11
+      window.simulateFullScreenChanged(false);
+      expect(fullScreen.isFullScreen, isFalse);
+      fullScreen.dispose();
+      expect(window.isDisposed, isTrue);
     });
   });
 
