@@ -50,6 +50,36 @@ void main() {
       expect(window.size, const Size(800, 600));
     });
 
+    test('the content size is kept, the title bar excluded', () async {
+      var values = <String, String>{};
+      var keeper = AppWindowSizeKeeper(
+        store: memoryKvStore(values),
+        minimumSize: const Size(240, 240),
+      );
+      var window = AppWindowMemory(titleBarHeight: 47);
+      window.simulateResized(const Size(1000, 747));
+      expect(window.contentSize, const Size(1000, 700));
+      await keeper.save(window);
+      expect(values, {'app_window_size': '{"width":1000.0,"height":700.0}'});
+      // The next launch: the same window size, not one title bar taller.
+      window = AppWindowMemory(titleBarHeight: 47);
+      await keeper.restore(window);
+      expect(window.contentSize, const Size(1000, 700));
+      expect(window.size, const Size(1000, 747));
+      await keeper.save(window);
+      await keeper.restore(window);
+      expect(window.size, const Size(1000, 747));
+      // At the minimum size: saved (the minimum is the window's), its
+      // content is smaller.
+      window.simulateResized(const Size(240, 240));
+      await keeper.save(window);
+      expect(await keeper.read(), const Size(240, 193));
+      // Restored at least at the minimum size.
+      window = AppWindowMemory(titleBarHeight: 47);
+      await keeper.restore(window);
+      expect(window.contentSize, const Size(240, 240));
+    });
+
     test('autoSave, the last size of a resize', () async {
       var keeper = AppWindowSizeKeeper(
         store: memoryKvStore(),

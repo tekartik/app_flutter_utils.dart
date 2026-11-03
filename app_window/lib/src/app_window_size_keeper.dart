@@ -20,8 +20,14 @@ const appWindowSizeKeyDefault = 'app_window_size';
 /// `KvStore(getString: ..., setString: ..., remove: ...)`. The size is a json
 /// string (`{"width":1000.0,"height":700.0}`) under [key].
 ///
-/// A size below [minimumSize] is never saved (it would make the app unusable
-/// on the next launch) and the restored size is at least [minimumSize].
+/// The size kept is the content size ([AppWindow.contentSize], the title bar
+/// excluded): restored before the window is shown, the size of the whole
+/// window would not be exact on Linux (the window would grow by its title
+/// bar at each launch).
+///
+/// Nothing is saved while the window is below [minimumSize] (it would make
+/// the app unusable on the next launch) and the restored size is at least
+/// [minimumSize].
 class AppWindowSizeKeeper {
   /// Where the size is kept.
   final KvStore store;
@@ -29,7 +35,8 @@ class AppWindowSizeKeeper {
   /// The key of the size in [store].
   final String key;
 
-  /// The minimum size of the window, also the floor of a restored size.
+  /// The minimum size of the window (its frame included), also the floor of
+  /// a restored content size.
   final Size minimumSize;
 
   /// How long after the last resize event [autoSave] saves.
@@ -67,9 +74,17 @@ class AppWindowSizeKeeper {
 
   /// Save [size], unless empty or below [minimumSize].
   Future<void> write(Size size) async {
-    if (size.isEmpty ||
-        size.width < minimumSize.width ||
-        size.height < minimumSize.height) {
+    if (_isBelowMinimum(size)) {
+      return;
+    }
+    await _write(size);
+  }
+
+  bool _isBelowMinimum(Size size) =>
+      size.width < minimumSize.width || size.height < minimumSize.height;
+
+  Future<void> _write(Size size) async {
+    if (size.isEmpty) {
       return;
     }
     await store.setString(
@@ -78,8 +93,8 @@ class AppWindowSizeKeeper {
     );
   }
 
-  /// Set [minimumSize] on [window] (when not zero), then the saved size (at
-  /// least [minimumSize]).
+  /// Set [minimumSize] on [window] (when not zero), then the saved content
+  /// size (at least [minimumSize]).
   ///
   /// Never throws: a window issue must never prevent the app from starting.
   Future<void> restore(AppWindow window) async {
@@ -89,11 +104,9 @@ class AppWindowSizeKeeper {
       }
       var size = await read();
       if (size != null) {
-        window.setSize(
-          Size(
-            max(size.width, minimumSize.width),
-            max(size.height, minimumSize.height),
-          ),
+        window.contentSize = Size(
+          max(size.width, minimumSize.width),
+          max(size.height, minimumSize.height),
         );
       }
     } catch (_) {
@@ -114,10 +127,15 @@ class AppWindowSizeKeeper {
     }
   }
 
-  /// Save the current size of [window]. Never throws.
+  /// Save the current content size of [window], unless the window is below
+  /// [minimumSize]. Never throws.
   Future<void> save(AppWindow window) async {
     try {
-      await write(window.size);
+      // The minimum is the one of the window, its frame included.
+      if (_isBelowMinimum(window.size)) {
+        return;
+      }
+      await _write(window.contentSize);
     } catch (_) {
       // No window, the store is gone: the next launch uses the default size.
     }

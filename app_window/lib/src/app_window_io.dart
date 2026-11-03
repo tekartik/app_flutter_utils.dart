@@ -89,6 +89,12 @@ class _AppWindowNative implements AppWindow {
       _window.setSize(size.toNative(), animate);
 
   @override
+  Size get contentSize => _window.contentSize.toSize();
+
+  @override
+  set contentSize(Size value) => _window.contentSize = value.toNative();
+
+  @override
   Size get minimumSize => _window.minimumSize.toSize();
 
   @override

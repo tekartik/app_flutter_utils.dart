@@ -37,7 +37,8 @@ here once).
   be loaded) and before the window exists. `appWindowSupported` is true on
   Linux, macOS and Windows.
 * `AppWindow` is synchronous like nativeapi: `size`, `setSize(size,
-  animate:)`, `minimumSize`, `isFullScreen`, `isAlwaysOnTop`,
+  animate:)` (the whole window), `contentSize` (get and set, the title bar
+  excluded, exact before the window is shown), `minimumSize`, `isFullScreen`, `isAlwaysOnTop`,
   `isVisibleInTaskbar`, `isTitleBarHidden`, `show()`, `focus()`, the
   broadcast streams `onResized` (a stream of sizes while the user resizes,
   debounce before saving) and `onFullScreenChanged` (requests and the window
@@ -59,8 +60,11 @@ here once).
   sdb store `text` field). `await keeper.restoreAppWindow()` before `runApp`
   (minimum size, then the saved size), `AppWindowSizeSaver(keeper:, child:)`
   at the root saves after each resize; `read`, `write`, `restore(window)`,
-  `save(window)`, `autoSave(window)` for custom flows. Sizes below
-  `minimumSize` are never saved, a restored one is at least `minimumSize`.
+  `save(window)`, `autoSave(window)` for custom flows. The content size is
+  kept (`setSize` before the window is shown counts its title bar as content
+  on Linux: the window would grow at each launch). Nothing is saved while
+  the window is below `minimumSize`, a restored size is at least
+  `minimumSize`.
 * Kiosk: `isFullScreen = true`, `isAlwaysOnTop = true`,
   `isVisibleInTaskbar = false`, `isTitleBarHidden = true`, then `show()`,
   `focus()`; the reverse to leave it.

@@ -17,6 +17,17 @@ abstract class AppWindow {
   /// platform can (macOS). It is never below [minimumSize].
   void setSize(Size size, {bool animate = false});
 
+  /// The size of the window content (where the app draws), its frame (the
+  /// title bar) excluded.
+  ///
+  /// Unlike [setSize], setting it is exact before the window is shown (on
+  /// Linux the frame is only known once the window is shown): the size to
+  /// save and restore.
+  Size get contentSize;
+
+  /// Resize the window so that its content is [value].
+  set contentSize(Size value);
+
   /// The size the window cannot be resized below.
   Size get minimumSize;
 

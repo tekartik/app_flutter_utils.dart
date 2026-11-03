@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_window
 description: The app window on Linux, macOS and Windows (size, minimum size, full screen, always on top, taskbar, title bar, events) behind one interface, window_manager underneath, so that apps never use window_manager directly.
-version: 0.1.0
+version: 0.1.1
 publish_to: none
 
 environment:

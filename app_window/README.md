@@ -64,7 +64,10 @@ re-exported): an sdb prefs (`getPrefsLightSdb(sdbFactory)` of
 tekartik_prefs_sdb), the app prefs (a `PrefsLight` is a `KvStore`), or a
 store of the app database wrapped by `KvStore(getString:, setString:,
 remove:)`. The size is a json string under `key` (`app_window_size` by
-default), never saved below `minimumSize`.
+default), never saved while the window is below `minimumSize`. It is the
+content size (`AppWindow.contentSize`, the title bar excluded): restored
+before the window is shown, the size of the whole window is not exact on
+Linux (the window would grow by its title bar at each launch).
 
 ```dart
 final keeper = AppWindowSizeKeeper(

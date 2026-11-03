@@ -19,7 +19,8 @@ class AppWindowMemory implements AppWindow {
   final _fullScreenChanged = StreamController<bool>.broadcast(sync: true);
 
   /// A window of [size] (800x600 by default), not full screen, not on top,
-  /// in the taskbar, with its title bar.
+  /// in the taskbar, with its title bar ([titleBarHeight] high, none by
+  /// default: the content is the whole window).
   AppWindowMemory({
     this._size = const Size(800, 600),
     this._minimumSize = Size.zero,
@@ -27,7 +28,11 @@ class AppWindowMemory implements AppWindow {
     this.isAlwaysOnTop = false,
     this.isVisibleInTaskbar = true,
     this.isTitleBarHidden = false,
+    this.titleBarHeight = 0,
   });
+
+  /// The height of the frame above the content ([size] minus [contentSize]).
+  final double titleBarHeight;
 
   @override
   bool isAlwaysOnTop;
@@ -52,6 +57,14 @@ class AppWindowMemory implements AppWindow {
 
   @override
   void setSize(Size size, {bool animate = false}) => _resize(size);
+
+  @override
+  Size get contentSize =>
+      Size(_size.width, max(0, _size.height - titleBarHeight));
+
+  @override
+  set contentSize(Size value) =>
+      _resize(Size(value.width, value.height + titleBarHeight));
 
   /// Resize to [size] (at least [minimumSize]), reported when it changes.
   void _resize(Size size) {

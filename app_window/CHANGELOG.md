@@ -1,3 +1,12 @@
+## 0.1.1
+
+- `AppWindow.contentSize` (get and set, the title bar excluded).
+  `AppWindowSizeKeeper` keeps the content size: `setSize` before the window
+  is shown counted the title bar as content on Linux, the window grew by
+  its title bar at each launch (a size saved before is read as a content
+  size, the window is one title bar taller once). `AppWindowMemory`
+  `titleBarHeight`.
+
 ## 0.1.0
 
 - Initial version: `AppWindow` (size, setSize, minimumSize, isFullScreen,
