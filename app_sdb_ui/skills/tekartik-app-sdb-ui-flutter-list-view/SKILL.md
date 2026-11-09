@@ -5,9 +5,10 @@ description: >-
   index or join query in a Flutter list with tekartik_app_sdb_ui_flutter:
   SdbStoreListView, SdbIndexListView and SdbJoinListView lazily load pages of
   SdbRecordSnapshot/SdbIndexRecordSnapshot/SdbJoinRow by offset/limit from a
-  SdbStoreRef, a SdbIndexRef or a join between two stores (targetStore,
-  joinKeyPath, joinOptions)
-  with SdbFindOptions (boundaries, filter, descending,
+  SdbStoreRef, a SdbIndexRef or a join (source: store.asJoinSourceAt,
+  store.asJoinSource, index.asJoinSource; target: store.asJoinTarget,
+  index.asJoinTarget; joinOptions) with SdbFindOptions (boundaries, filter,
+  descending,
   offset/limit window), one-shot or watched (watch: true, the list updates on
   store changes), with itemBuilder, itemLoadingBuilder, loadingBuilder,
   emptyBuilder, errorBuilder, pageSize, pageWindowMargin and itemExtent.
@@ -22,8 +23,8 @@ update themselves when the store changes. They are built on the generic
 package.
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final notes = SdbStoreRef<int, SdbModel>('notes');
@@ -79,11 +80,17 @@ class NotesList extends StatelessWidget {
   are `SdbIndexRecordSnapshot<K, V, I>` (`key` is the primary key,
   `indexKey`, `value`, `store`, `index`). There is no `ref`: to write the
   record use `snapshot.store.record(snapshot.key)`.
-* `SdbJoinListView<K, V, JK, JV>` lists a store query together with the
-  records it references at `joinKeyPath` in `targetStore` (an sql `LEFT JOIN`,
-  see `joinIterate` in `idb_shim`). Items are `SdbJoinRow<K, V, JK, JV>`
-  (`record`, `joinedRecord`, `joinKey`, either snapshot being null when
-  absent or hidden). Use it instead of reading the referenced record in
+* `SdbJoinListView<K, V, SK, JK, JV>` lists the records of a `source`
+  together with the record(s) their join key matches in a `target` (an sql
+  `LEFT JOIN`, see `joinIterate` in `idb_shim`). `source`:
+  `store.asJoinSourceAt('authorId')` (join key in a field),
+  `store.asJoinSource` (join key = primary key) or `index.asJoinSource` (join
+  key = index key, rows in index key order, the shape to prefer). `target`:
+  `store.asJoinTarget` (primary key, at most one match) or
+  `index.asJoinTarget` (index key, one row per match). `SK` is the key the
+  source is walked by (`findOptions` apply to it). Items are
+  `SdbJoinRow<K, V, JK, JV>` (`record`, never null, `joinedRecord`, null on a
+  left join without match, `joinKey`). Use it instead of reading the referenced record in
   `itemBuilder`: the referenced records of a page are read in one query, and
   a record referenced by several rows is read once.
 * The type parameters must match the store/index reference: `K` is `int` or
@@ -109,12 +116,13 @@ class NotesList extends StatelessWidget {
   window of the query result the list is restricted to (a "top 100" list for
   example). The count is clipped to the window and pages are computed
   relative to it. Pagination is `pageSize`.
-* Keep the store/index references and `findOptions` stable across builds:
-  declare the refs as top-level `final`s and build the options once (a
-  field, `initState`, or a memoized value). The widget compares them with
-  `==` in `didUpdateWidget` and recreates its controller (reload, loaded
-  pages lost) whenever a new `SdbFindOptions` instance is given. Rebuild the
-  options only when the query really changes (search text, sort order).
+* The widget compares its arguments by value in `didUpdateWidget` (store,
+  index, join source/target, boundaries, limit, offset, descending): inline
+  `SdbFindOptions(...)` or `store.asJoinTarget` keep the list on a parent
+  rebuild, a real change recreates the controller (the list reloads). A
+  filter is compared by its description only, which does not show
+  `anyInList`, the value type (`1` and `'1'`) nor the and/or grouping: when
+  only such a detail changes, give the widget a new `key`.
 
 ### One-shot or watched
 
@@ -122,10 +130,11 @@ class NotesList extends StatelessWidget {
   (`findRecords`/`count`); the list does not reflect later writes. To reload,
   give the widget a new `key`, change the query, or call `refresh()` on an
   external controller.
-* `watch: true`: pages are `onSnapshots` streams and the count is re-queried
-  on every store change, so the list follows adds, updates and deletes (from
-  any tab on the web). `client` must then be a `SdbDatabase`
-  (`ArgumentError` otherwise).
+* `watch: true`: pages are `onSnapshots` streams and the count an `onCount`
+  stream, so the list follows adds, updates and deletes, from any tab on the
+  web. A join list follows the changes of both stores made through this
+  database connection, not the ones of another tab. `client` must then be a
+  `SdbDatabase` (`ArgumentError` otherwise).
 * In watch mode every loaded page is a live query re-run on each write:
   keep `pageWindowMargin` (default 2 pages kept on each side of the built
   range, pages further away are dropped and their query cancelled). Never
@@ -154,8 +163,8 @@ class NotesList extends StatelessWidget {
 ### Store list on a key range, newest first, with delete
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final events = SdbStoreRef<int, SdbModel>('events');
@@ -169,7 +178,7 @@ class RecentEvents extends StatefulWidget {
 }
 
 class _RecentEventsState extends State<RecentEvents> {
-  // Built once: a new instance on every build would recreate the controller.
+  // A field or inline: equal options keep the list on a rebuild.
   final findOptions = SdbFindOptions<int>(
     boundaries: SdbBoundaries.lowerValue(1000),
     descending: true,
@@ -206,8 +215,8 @@ class _RecentEventsState extends State<RecentEvents> {
 ### Index list narrowed by a search prefix
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final contacts = SdbStoreRef<int, SdbModel>('contacts');
@@ -266,8 +275,8 @@ class _ContactSearchState extends State<ContactSearch> {
 ### Fixed window: only the first 100 records
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final scores = SdbStoreRef<int, SdbModel>('scores');
@@ -293,8 +302,8 @@ Widget buildTop100(SdbDatabase db) => SdbIndexListView<int, SdbModel, int>(
 ### Join list: books with their author
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final authorStore = SdbStoreRef<int, SdbModel>('author');
@@ -309,11 +318,10 @@ class BooksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Books')),
-      body: SdbJoinListView<int, SdbModel, int, SdbModel>(
+      body: SdbJoinListView<int, SdbModel, int, int, SdbModel>(
         client: db,
-        store: bookStore,
-        targetStore: authorStore,
-        joinKeyPath: 'authorId',
+        source: bookStore.asJoinSourceAt('authorId'),
+        target: authorStore.asJoinTarget,
         // Skip the books whose author is missing; left join by default.
         joinOptions: const SdbJoinFindOptions(inner: true),
         watch: true,
@@ -341,11 +349,10 @@ To list the referenced records themselves — every author that has at least one
 book, each one once — the rows still carry both sides, so read the joined one:
 
 ```dart
-SdbJoinListView<int, SdbModel, int, SdbModel>(
+SdbJoinListView<int, SdbModel, int, int, SdbModel>(
   client: db,
-  store: bookStore,
-  targetStore: authorStore,
-  joinKeyPath: 'authorId',
+  source: bookStore.asJoinSourceAt('authorId'),
+  target: authorStore.asJoinTarget,
   joinOptions: const SdbJoinFindOptions(distinct: true, inner: true),
   itemBuilder: (context, row, index) =>
       ListTile(title: Text('${row.joinedRecord!.value['name']}')),
@@ -357,8 +364,12 @@ directly, as plain records rather than rows.
 
 ## Common mistakes
 
-* Creating `SdbFindOptions` (or a store ref) inside `build`: the widget sees
-  a new query on every rebuild and reloads from scratch.
+* Mixing `package:flutter/material.dart` with these widgets: they are built
+  with `package:material_ui`, so the app uses its `MaterialApp`/`Scaffold`
+  (else "No MaterialLocalizations found" or "No Material widget found").
+* Changing only the `anyInList`, the value type or the and/or grouping of a
+  filter: the widget compares filters by description and keeps the old
+  list; give it a new `key`.
 * Using `findOptions.offset`/`limit` to paginate; they window the query,
   `pageSize` paginates.
 * `watch: true` with a `SdbTransaction` as `client` (`ArgumentError`), or a

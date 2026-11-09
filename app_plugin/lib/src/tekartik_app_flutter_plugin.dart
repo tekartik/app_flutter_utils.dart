@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:tekartik_common_utils/env_utils.dart';
 
@@ -14,9 +15,10 @@ class TekartikAppFlutterPlugin {
     return version;
   }
 
-  /// Android only, returns false otherwise
+  /// Android only, returns false otherwise (the web included: `dart:io`
+  /// `Platform` throws there)
   static Future<bool> get isMonkeyRunning async {
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       try {
         final running = await callIsMonkeyRunning ?? false;
         return running;

@@ -25,7 +25,8 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    // Always false when not on Android
+    // Always false when not on Android, the web included (run with
+    // `flutter test --platform chrome`: it threw there).
     expect(await isMonkeyRunning, isFalse);
   });
 }

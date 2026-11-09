@@ -1,33 +1,56 @@
 # tekartik_app_flutter_plugin
 
-Flutter plugin with platform features 
+A one-feature Flutter plugin: tells whether the Android
+[monkey](https://developer.android.com/studio/test/other-testing-tools/monkey)
+tester is driving the app (`ActivityManager.isUserAMonkey()`), so that a
+purchase, a share sheet or a "delete all" can be skipped during a monkey run.
 
-## Setup
+## Getting started
 
-`pubspec.yaml` dependencies:
+Not on pub.dev, add it as a git dependency:
 
 ```yaml
-tekartik_app_flutter_plugin:
-  git:
-    url: https://github.com/tekartik/app_flutter_utils.dart
-    path: app_plugin
-  version: '>=0.1.0'
+dependencies:
+  tekartik_app_flutter_plugin:
+    git:
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      path: app_plugin
 ```
 
-## Test if monkey is running
-
-Assuming you run the following shell script
-
-```bash
-adb shell monkey -p $packageName -v --pct-touch 98 --pct-majornav 1 --pct-motion 1 5000 
-```
-
-You can check whether monkey testing is running from dart code using
+Check it before a destructive or paid action:
 
 ```dart
-if (await isMonkeyRunning) {
-  // Do a specific action while monkey is running
-} else {
-  // Monkey testing is not running
+import 'package:tekartik_app_flutter_plugin/monkey.dart';
+
+Future<void> deleteAll() async {
+  // A getter returning a Future: await it, do not call it.
+  if (await isMonkeyRunning) {
+    return; // Never wipe the data during a monkey run.
+  }
+  // ...delete everything
 }
 ```
+
+Run the monkey on the app:
+
+```bash
+adb shell monkey -p <applicationId> -v --pct-touch 98 --pct-majornav 1 --pct-motion 1 5000
+```
+
+## Platforms
+
+| Platform | `isMonkeyRunning` |
+|---|---|
+| Android | `ActivityManager.isUserAMonkey()` through the plugin channel |
+| iOS, macOS, Linux, Windows, web | always `false`, the channel is not called |
+
+A channel error (plugin not registered...) also gives `false`, so `true` can
+be trusted, `false` only means "not a known monkey run".
+
+## Notes
+
+- `monkey.dart` is the whole public API; do not import `lib/src/`.
+- Each call is a platform channel round trip on Android: read it once at
+  startup when it is checked often.
+- In `flutter test` (not Android) it is always `false`: test your own
+  wrapper, see the package skill for a mocked channel.

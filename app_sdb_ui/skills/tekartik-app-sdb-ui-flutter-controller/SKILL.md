@@ -21,8 +21,8 @@ create one internally; create it yourself for slivers, `ListView.custom`,
 pull-to-refresh, or to read the state (count, error) elsewhere.
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final items = SdbStoreRef<int, SdbModel>('items');
@@ -75,19 +75,24 @@ class _ItemsScreenState extends State<ItemsScreen> {
   until `refresh()`.
 * Watched (`Stream` based): `SdbStoreListController<K, V>.watch(database:,
   store:, ...)` and `SdbIndexListController<K, V, I>.watch(database:, index:,
-  ...)`. Pages are `onSnapshots` streams and the count is re-queried on every
-  store change (through `addOnChangesListener`). Needs a `SdbDatabase`, not
-  a transaction.
-* Join (`SdbJoinListController<K, V, JK, JV>(client:, store:, targetStore:,
-  joinKeyPath:, joinOptions:, findOptions:, ...)`, or
-  `.watch(database:, ...)`): items are `SdbJoinRow<K, V, JK, JV>` (`record`,
+  ...)`. Pages are `onSnapshots` streams and the count an `onCount` stream
+  (idb_shim): both re-query on every store change, including the changes
+  made in another browser tab. Needs a `SdbDatabase`, not a transaction.
+* Join (`SdbJoinListController<K, V, SK, JK, JV>(client:, source:, target:,
+  joinOptions:, findOptions:, ...)`, or `.watch(database:, ...)`; `source`
+  is `store.asJoinSourceAt(field)`, `store.asJoinSource` or
+  `index.asJoinSource`, `target` `store.asJoinTarget` or
+  `index.asJoinTarget`, `findOptions` apply to the key `SK` the source is
+  walked by): items are `SdbJoinRow<K, V, JK, JV>` (`record`,
   never null, `joinedRecord`, null on a left join, `joinKey`). `joinOptions`
   is a `SdbJoinFindOptions` (`distinct`, `inner`, `chunkSize`), separate from
   the `findOptions` on the iterated store. Each page is one `findJoinRows`
   and the count one `joinCount`. The watched variant re-queries on a change
-  of **either** store, since both feed the rows. Without `distinct` nor
-  `inner` the count is the record count of the iterated store, so it is as
-  cheap as `count`; with either of them the join is scanned to count.
+  of **either** store, since both feed the rows (changes made through this
+  database connection only: another browser tab is not seen). Without
+  `distinct` nor `inner` the count is the record count of the iterated
+  store, so it is as cheap as `count`; with either of them the join is
+  scanned to count.
 * Create it once (`initState`, a `late final` field, a riverpod/provider
   holder), pass it to the widgets and call `dispose()` when done. The
   widgets (`SdbStoreListView`, `LazyListView`, `SliverLazyList`) only listen
@@ -162,8 +167,8 @@ models at load time, several stores, a custom `SdbClient`), write a
 ### CustomScrollView with empty and error states
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final books = SdbStoreRef<int, SdbModel>('books');
@@ -232,8 +237,8 @@ class _BooksScreenState extends State<BooksScreen> {
 ### Pull to refresh on a one-shot list
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final logs = SdbStoreRef<int, SdbModel>('logs');

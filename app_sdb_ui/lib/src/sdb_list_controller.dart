@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:idb_shim/sdb.dart';
 import 'package:tekartik_app_list_view_flutter/list_view_flutter.dart';
 
@@ -54,49 +52,6 @@ int sdbWindowCount(SdbFindOptions? base, int rawCount) {
   return count;
 }
 
-/// Count stream: emits the count and re-counts on every store change.
-Stream<int> _onCount<K extends SdbKey, V extends SdbValue>(
-  SdbDatabase database,
-  SdbStoreRef<K, V> store,
-
-  Future<int> Function() getCount,
-) {
-  late StreamController<int> controller;
-
-  void addCount() {
-    getCount().then(
-      (count) {
-        if (!controller.isClosed) {
-          controller.add(count);
-        }
-      },
-      onError: (Object e, StackTrace st) {
-        if (!controller.isClosed) {
-          controller.addError(e, st);
-        }
-      },
-    );
-  }
-
-  FutureOr<void> onChange(
-    SdbTransaction transaction,
-    List<SdbRecordChange<K, V>> changes,
-  ) {
-    addCount();
-  }
-
-  controller = StreamController<int>(
-    onListen: () {
-      addCount();
-      store.addOnChangesListener(database, onChange);
-      controller.onCancel = () {
-        store.removeOnChangesListener(database, onChange);
-      };
-    },
-  );
-  return controller.stream;
-}
-
 /// Lazy list controller on an sdb store query.
 ///
 /// Items are [SdbRecordSnapshot]s loaded page by page. The query is defined
@@ -127,7 +82,7 @@ class SdbStoreListController<K extends SdbKey, V extends SdbValue>
        );
 
   /// Watching query (Stream based), pages and count are re-queried whenever
-  /// the store changes.
+  /// the store changes, including changes made in another browser tab.
   SdbStoreListController.watch({
     required SdbDatabase database,
     required SdbStoreRef<K, V> store,
@@ -142,17 +97,10 @@ class SdbStoreListController<K extends SdbKey, V extends SdbValue>
            }
            return store.onSnapshots(database, options: options);
          },
-         watchCount: () => _onCount(
-           database,
-           store,
-           () async => sdbWindowCount(
-             findOptions,
-             await store.count(
-               database,
-               options: sdbCountFindOptions(findOptions),
-             ),
-           ),
-         ),
+         // idb_shim onCount also recounts on the changes of another tab.
+         watchCount: () => store
+             .onCount(database, options: sdbCountFindOptions(findOptions))
+             .map((count) => sdbWindowCount(findOptions, count)),
        );
 }
 
@@ -191,7 +139,7 @@ class SdbIndexListController<
        );
 
   /// Watching query (Stream based), pages and count are re-queried whenever
-  /// the index store changes.
+  /// the index store changes, including changes made in another browser tab.
   SdbIndexListController.watch({
     required SdbDatabase database,
     required SdbIndexRef<K, V, I> index,
@@ -206,16 +154,9 @@ class SdbIndexListController<
            }
            return index.onSnapshots(database, options: options);
          },
-         watchCount: () => _onCount(
-           database,
-           index.store,
-           () async => sdbWindowCount(
-             findOptions,
-             await index.count(
-               database,
-               options: sdbCountFindOptions(findOptions),
-             ),
-           ),
-         ),
+         // idb_shim onCount also recounts on the changes of another tab.
+         watchCount: () => index
+             .onCount(database, options: sdbCountFindOptions(findOptions))
+             .map((count) => sdbWindowCount(findOptions, count)),
        );
 }

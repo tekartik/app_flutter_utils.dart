@@ -60,7 +60,8 @@ class SdbJoinListView<
   final SdbFindOptions<SK>? findOptions;
 
   /// When true, the query is watched and the list updates on changes of
-  /// either store, [client] must be a [SdbDatabase].
+  /// either store made through this database connection (not the ones of
+  /// another browser tab), [client] must be a [SdbDatabase].
   final bool watch;
 
   /// Page size for lazy loading.

@@ -23,7 +23,10 @@ bool sdbIndexRefEquals(SdbIndexRef? a, SdbIndexRef? b) {
 
 /// True if [a] and [b] describe the same filter.
 ///
-/// Filters have no value equality, their description is compared instead.
+/// Filters have no value equality, their description is compared instead:
+/// it does not show `anyInList`, the value type (`1` and `'1'`) nor the
+/// grouping of `and`/`or` filters, such filters compare equal (a view then
+/// keeps its list, give it a new key).
 /// A custom filter (a closure) is only equal to itself.
 bool sdbFilterEquals(SdbFilter? a, SdbFilter? b) {
   if (identical(a, b)) {

@@ -130,9 +130,9 @@ Future<void> waitUntil(bool Function() condition) async {
 ### Widget test helpers and a watched list
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:idb_shim/sdb.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_sdb_ui_flutter/sdb_ui_flutter.dart';
 
 final simple = SdbStoreRef<int, String>('simple');

@@ -264,8 +264,9 @@ void main() {
 * `The getter 'rect' isn't defined for the type 'Size'` (or `Image`): the
   extension library is not imported; import `utils/ui_size_utils.dart` (or
   `utils/ui_image_utils.dart`), the `src/` files are not exported.
-* A generator hangs or throws in a `dart test` (no Flutter binding): the
-  generators render with the engine, run them under `flutter test`.
+* `Dart library 'dart:ui' is not available on this platform` in a plain
+  `dart test`: the generators render with the engine, run them under
+  `flutter test`.
 
 ## More
 

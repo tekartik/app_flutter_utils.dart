@@ -41,16 +41,17 @@ destructive or paid actions can be skipped during a monkey run.
   never `isMonkeyRunning()`. Each read is a platform channel round trip;
   cache the value once at startup if it is checked often.
 * It is Android only. On iOS, desktop and web it resolves to `false` without
-  touching the channel (`Platform.isAndroid` guard), and any channel error is
+  touching the channel (`!kIsWeb && Platform.isAndroid` guard), and any
+  channel error is
   swallowed and reported as `false` (logged in debug). So a `true` result is
   trustworthy, a `false` result just means "not a known monkey run".
 * Android side: the plugin answers the `isMonkeyRunning` method of the
   `tekartik_app_flutter_plugin` `MethodChannel` with
   `ActivityManager.isUserAMonkey()`, true while a
   `adb shell monkey -p <package> ...` run is driving the app.
-* Because the check uses `dart:io` `Platform`, importing `monkey.dart` in
-  code compiled for the web fails to build; keep it behind a platform
-  specific file or an `if (!kIsWeb)` split in a web-targeting app.
+* `monkey.dart` builds on every platform, the web included (the `dart:io`
+  `Platform` check is skipped there through `kIsWeb`): no conditional import
+  needed.
 * Typical use: wrap a purchase, a share sheet, a logout, a "delete all" or an
   analytics call in `if (!await isMonkeyRunning) { ... }`, and optionally
   show a monkey banner in debug.

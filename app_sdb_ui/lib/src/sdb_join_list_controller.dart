@@ -156,7 +156,8 @@ class SdbJoinListController<
        );
 
   /// Watching query (Stream based), pages and count are re-queried whenever
-  /// either store changes.
+  /// either store changes through this database connection (a change made in
+  /// another browser tab is not seen, unlike the store and index lists).
   SdbJoinListController.watch({
     required SdbDatabase database,
     required SdbJoinSource<K, V, SK> source,
