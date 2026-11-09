@@ -62,12 +62,17 @@ streams or listenables, widgets rebuild with `StreamBuilder` or
 
 ## Examples
 
+The examples use `package:material_ui` (the material library published
+outside the Flutter SDK, `material_ui: '>=1.5.0'`) as the Tekartik apps do;
+`BlocProvider` itself only needs `flutter/widgets.dart`. A complete app is in
+the package `example/main.dart`.
+
 ### A bloc with a stream, its provider and consumers
 
 ```dart
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_bloc/bloc_provider.dart';
 
 class CounterBloc extends BaseBloc {
@@ -133,8 +138,8 @@ void main() {
 ### Widget test
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_bloc/bloc_provider.dart';
 
 class TestBloc extends BaseBloc {

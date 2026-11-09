@@ -34,6 +34,11 @@ workaround for iOS 26.
   `package:tekartik_app_flutter_common_utils/color.dart`, `hex_color.dart`,
   `asset/asset_bundle.dart`, `asset/asset_utils.dart`, `workaround.dart`,
   `common_utils_import.dart`.
+* The color helpers are built on `package:material_ui` (the material library
+  published outside the Flutter SDK, add `material_ui: '>=1.5.0'`): import
+  it in the app, not `package:flutter/material.dart`. `generateMaterialColor`
+  returns material_ui's `MaterialColor`, which Flutter's own `ThemeData` /
+  `ColorScheme.fromSwatch` do not accept (compile error).
 
 ### Colors (`color.dart`, `hex_color.dart`)
 
@@ -57,11 +62,15 @@ workaround for iOS 26.
 * `HexColor` is an extension on `Color` whose parsers are static: call
   `HexColor.fromHex('#0d6efd')`, not `Color.fromHex`. Accepted forms:
   `rrggbb`, `#rrggbb` (alpha `ff` is added), `aarrggbb`, `#aarrggbb`.
-  `HexColor.fromHexOrNull(text)` returns `null` for `null`, empty or
-  unparsable input; `fromHex` throws on those. `color.toHex()` returns
-  `'#aarrggbb'` in lowercase; `toHex(leadingHashSign: false)` drops the `#`,
+  `HexColor.fromHexOrNull(text)` returns `null` for `null`, empty or non hex
+  input; `fromHex` throws on those. The length is not checked: `'#abc'`
+  (CSS shorthand) gives a transparent color, not `#aabbcc`, expand it first.
+  `color.toHex()` returns `'#aarrggbb'` (8 lowercase digits, alpha
+  included); `toHex(leadingHashSign: false)` drops the `#`,
   `toHex(noAlpha: true)` gives `'#rrggbb'`. `toHex()` output round-trips
   through `fromHex`.
+* A `MaterialColor` (`Colors.orange`) is never `==` to a plain `Color` of the
+  same value (`Color ==` compares the runtime types): compare `compatValue`.
 
 ### Assets (`asset/asset_bundle.dart`, `asset/asset_utils.dart`)
 
@@ -105,7 +114,7 @@ workaround for iOS 26.
 ### Theme from a hex brand color
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_common_utils/color.dart';
 import 'package:tekartik_app_flutter_common_utils/hex_color.dart';
 
@@ -148,7 +157,7 @@ void main() {
 ### Persist a color as int components or hex
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_common_utils/color.dart';
 import 'package:tekartik_app_flutter_common_utils/hex_color.dart';
 
@@ -170,7 +179,8 @@ Color? colorFromJson(Map<String, Object?> map) {
 void main() {
   var json = colorToJson(Colors.orange);
   print(json); // {argb: 4294940672, hex: #ffff9800, rgb: [255, 152, 0], ...}
-  print(colorFromJson(json) == Colors.orange); // true
+  // A MaterialColor is never == to a Color: compare the values.
+  print(colorFromJson(json)?.compatValue == Colors.orange.compatValue); // true
 }
 ```
 
@@ -201,7 +211,7 @@ Future<void> main() async {
   );
   var repository = SongRepository(tkRootBundle);
   for (var key in songKeys) {
-    devPrint(jsonPretty(await repository.loadSong(key)));
+    print(jsonPretty(await repository.loadSong(key)));
   }
 }
 ```
@@ -227,7 +237,7 @@ void main() {
 ### iOS 26 pointer workaround at startup
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_common_utils/workaround.dart';
 
 Future<void> main() async {

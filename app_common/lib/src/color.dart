@@ -8,11 +8,13 @@ MaterialColor generateMaterialColor(Color color) =>
 
 /// dark/light helper
 extension TekartikColorFlutterExt on Color {
-  /// True if the color is dark
+  /// True if the color is dark: luminance (`0.299 r + 0.587 g + 0.114 b`, the
+  /// components from 0 to 1) below 0.5, alpha ignored. Use it to pick a light
+  /// or dark foreground.
   bool get isDark {
     // Standard luminance formula
     final brightness = (0.299 * r + 0.587 * g + 0.114 * b);
 
-    return brightness < .5; // threshold (0–255 scale)
+    return brightness < .5; // threshold (0..1 scale)
   }
 }

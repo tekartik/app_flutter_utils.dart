@@ -72,10 +72,14 @@ what it does, when it is still acceptable and what to write instead.
 
 ## Examples
 
+The examples use `package:material_ui` (the material library published
+outside the Flutter SDK, `material_ui: '>=1.5.0'`) as the Tekartik apps do;
+the widget itself only needs `flutter/widgets.dart`.
+
 ### Using the deprecated builder with a dedicated controller
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_emit/emit.dart';
 import 'package:tekartik_app_emit_builder/emit_builder.dart';
 
@@ -131,7 +135,7 @@ void main() {
 ### Replacement: FutureBuilder with a synchronous initial value
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_emit/emit.dart';
 
 class EmitValueText extends StatefulWidget {
@@ -196,8 +200,8 @@ void main() {
 ### Widget test of the builder
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_emit/emit.dart';
 import 'package:tekartik_app_emit_builder/emit_builder.dart';
 

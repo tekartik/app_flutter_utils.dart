@@ -50,9 +50,12 @@ imports `dart:io`.
 * Get a writable location with the `AppFileSystem` extension, never a
   hardcoded path:
   * `await fs.getApplicationDocumentsDirectory(packageName: 'x.example.com')`
-    - user data. On ios/android it delegates to `path_provider`; on linux and
-    windows it is `<userAppDataPath>/<packageName>/data`, so `packageName` is
-    required there; on the web it is the `/data` root of the idb file system.
+    - user data. On android, ios and macos it delegates to `path_provider`;
+    on linux and windows it is `<userAppDataPath>/<packageName>/data`
+    (process_run `userAppDataPath`: `~/.config`, `%APPDATA%`), so
+    `packageName` is required there (without it every app shares
+    `<userAppDataPath>/data`); on the web it is the `/data` root of the idb
+    file system. The directory may not exist yet.
   * `await fs.getApplicationSupportDirectory()` - non user visible app files
     (`path_provider` on native, `/support` on the web).
   * Called on any *other* `FileSystem` (for example `fsMemory`), both return

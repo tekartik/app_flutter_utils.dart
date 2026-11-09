@@ -7,13 +7,13 @@ export 'package:fs_shim/fs_shim.dart';
 
 /// The FileSystem to use for your flutter application.
 ///
-/// For mobile, it uses the native IO implementation, on the web,
-/// it uses fs_shim on top of indexed db.
+/// On mobile and desktop, it uses the native IO implementation (`dart:io`),
+/// on the web, it uses fs_shim on top of indexed db.
 ///
-/// For testing you can use an in memory implementation for idb_shim.
+/// For testing, pass [fsMemory] (in memory) to your code instead.
 FileSystem get fs => src.fs;
 
-/// The memory file system to use for your flutter application.
+/// An in memory file system (fs_shim), for tests and scratch data.
 FileSystem fsMemory = newFileSystemMemory();
 
 /// path provider file system extension
@@ -28,9 +28,15 @@ extension AppFileSystem on FileSystem {
   /// using [getExternalStorageDirectory] instead if data is intended to be visible
   /// to the user.
   ///
-  /// On the web, it is the data root directory
+  /// On Linux and Windows, it is `<userAppDataPath>/<packageName>/data`
+  /// (process_run `userAppDataPath`: `~/.config`, `%APPDATA%`), shared by
+  /// every app without [packageName].
   ///
-  /// [packageName] only used on linux and windows for now
+  /// On the web, it is the data root directory (`/data`), as on any other
+  /// file system than [fs] (`fsMemory`).
+  ///
+  /// [packageName] only used on linux and windows for now. The directory may
+  /// not exist yet: create it before writing.
   Future<Directory> getApplicationDocumentsDirectory({
     String? packageName,
   }) async {

@@ -38,18 +38,28 @@ and computes a sane database directory on desktop, then hands back a plain
 * Everything goes through a factory - there is no top level
   `openDatabase(...)` here:
   * `databaseFactory` - the default factory. Resolved by conditional import:
-    `sqflite_common_ffi`'s `databaseFactoryFfi` on io targets (the package
-    depends on the `sqflite_ffi` Flutter plugin, which registers ffi at
-    startup, so no extra platform setup), `databaseFactoryFfiWeb` on the web,
-    a stub that throws `UnimplementedError` elsewhere.
+    `sqflite_common_ffi`'s `databaseFactoryFfi` on io targets (SQLite is
+    bundled by the `sqlite3` build hook, no platform setup), on android, ios
+    and macos wrapped so that its databases path is the sqflite plugin
+    folder (`<data dir>/databases` on android, Documents on ios/macos, set
+    once before the first call: an app moving from `sqflite` finds its
+    databases); `databaseFactoryFfiWeb` on the web; a stub that throws
+    `UnimplementedError` elsewhere. It is not the `sqfliteDatabaseFactoryFfi`
+    that the `sqflite_ffi` plugin (a dependency) registers for sqflite's
+    global `openDatabase`: do not open the same file through both.
   * `getDatabaseFactory({String? packageName, String? rootPath})` - same
     factory, but on **linux and windows** it also sets the databases path to
     `rootPath`, or to `<userAppDataPath>/<packageName>/databases` (created if
-    missing). Without either, desktop databases land in a `.` folder, so
-    always pass a reverse domain `packageName` (or an explicit `rootPath` in
-    tests). Both are ignored on android/ios/macos/web, except `rootPath`
-    under `flutter test`, used on any platform (so macOS tests are isolated
-    too).
+    missing). Without either, desktop databases land in
+    `<userAppDataPath>/./databases`, shared by every such app, so always pass
+    a reverse domain `packageName` (or an explicit `rootPath` in tests).
+    Without `getDatabaseFactory`, `databaseFactory` on linux/windows keeps
+    the ffi default, `.dart_tool/sqflite_common_ffi/databases` of the current
+    directory. The path is set on one shared object (`databaseFactory` is
+    the same): call it once, each call moves the path of every factory
+    returned before. Both are ignored on android/ios/macos/web, except
+    `rootPath` under `flutter test`, used on any platform (so macOS tests are
+    isolated too).
 * Open with options instead of raw arguments:
   `factory.openDatabase(path, options: OpenDatabaseOptions(version: 1,
   onCreate: ..., onUpgrade: ..., onConfigure: ...))`. Databases are
@@ -59,9 +69,11 @@ and computes a sane database directory on desktop, then hands back a plain
 * Build the path with `factory.getDatabasesPath()` + `package:path`'s `join`,
   never with a hardcoded separator, and never with `dart:io` (it breaks the
   web build). `inMemoryDatabasePath` gives a throwaway database.
-* `sqfliteWindowsFfiInit()` initializes sqflite ffi (finding the sqlite3 dll
-  on windows); call it at the start of a dart VM/desktop test or tool before
-  any factory use. It throws `UnimplementedError` on the web.
+* `sqfliteWindowsFfiInit()` initializes sqflite ffi (loading the sqlite3 dll
+  on windows, a no-op on the other io platforms); call it at the start of a
+  dart VM/desktop test or tool before any factory use. It throws
+  `UnimplementedError` on the web: guard it with `!kIsWeb` in a shared
+  `main()`.
 * Web target: the ffi web implementation needs the sqlite3 wasm assets in
   `web/`; install them once with
   ```bash
@@ -72,8 +84,9 @@ and computes a sane database directory on desktop, then hands back a plain
 * `initDatabaseFactory(packageName)` is deprecated (it returns a `Future`);
   use `getDatabaseFactory(packageName: ...)`.
 * Tests: `flutter test` runs on the dart VM, so call
-  `sqflite_ffi.sqfliteFfiInit()` (from `package:sqflite_common_ffi/sqflite_ffi.dart`)
-  in `main()` and point the factory at a project local `rootPath`; delete the
+  `sqflite_ffi.sqfliteFfiInit()` (from `package:sqflite_common_ffi/sqflite_ffi.dart`,
+  needed on windows only) in `main()` and point the factory at a project
+  local `rootPath`; delete the
   database first (`factory.deleteDatabase(path)`) to make tests repeatable.
 * Anti-patterns: importing `sqflite` / `sqflite_common_ffi` directly in app
   code, calling `getDatabaseFactory()` on every query, reopening the database

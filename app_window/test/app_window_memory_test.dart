@@ -77,6 +77,14 @@ void main() {
       expect(window.isClosed, isTrue);
     });
 
+    test('close request: a failing handler lets the window close', () async {
+      // As the native window: a failing handler must not keep it open.
+      var window = AppWindowMemory()
+        ..closeRequestHandler = () async => throw StateError('handler');
+      expect(await window.simulateCloseRequest(), isTrue);
+      expect(window.isClosed, isTrue);
+    });
+
     test('kiosk properties, show, focus, dispose', () async {
       var window = AppWindowMemory()
         ..isAlwaysOnTop = true

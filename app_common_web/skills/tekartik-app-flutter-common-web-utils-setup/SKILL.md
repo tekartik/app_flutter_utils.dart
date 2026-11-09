@@ -46,7 +46,12 @@ themselves.
   bar (the hash strategy only rewrites the fragment), so reloads keep it:
   handy on a static server without rewrites (`dhttpd`, a sub folder). Unknown
   values are ignored. `webUrlStrategyFromUri(uri)` and
-  `webResolveUrlStrategy(strategy, uri: uri)` expose the parsing.
+  `webResolveUrlStrategy(strategy, uri: uri)` expose the parsing. With
+  `path` the parameter is lost at the first navigation (the path strategy
+  pushes the route path without the page query), a reload then uses the
+  app's strategy. A `<meta name="url-strategy" content="hash">` in the page
+  (`webUrlStrategyMetaName`, what a server rewriting the entry can inject)
+  enforces it too; the url parameter wins over the meta.
 * `webIsPathUrlStrategy` / `webIsHashUrlStrategy` tell which strategy is in
   use (e.g. to build a shareable link), both `false` off the web.
 * Cursor, `package:tekartik_app_flutter_common_web_utils/cursor_utils.dart`:
@@ -55,6 +60,8 @@ themselves.
   the `<flutter-view>` element and start (once) a background loop that
   re-applies the requested state every second, because the Flutter engine
   rewrites that style on pointer changes. The state is global for the page.
+  Interactive widgets (buttons, text fields) set their own cursor on that
+  element: it shows over them until the pointer leaves them.
 * Typical use: `hideCursor()` in `initState` of a full-screen TV/kiosk page,
   `showCursor()` in its `dispose` or when leaving the mode. Do not call them
   from `build`. `unawaited(...)` them (they resolve immediately).
@@ -65,10 +72,14 @@ themselves.
 
 ## Examples
 
+The examples use `package:material_ui` (the material library published
+outside the Flutter SDK, `material_ui: '>=1.5.0'`) as the Tekartik apps do;
+the package itself needs no material library.
+
 ### Path URLs on the web, no-op elsewhere
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_common_web_utils/url_strategy.dart';
 
 void main() {
@@ -107,7 +118,7 @@ String appLink(String origin, String location) {
 ```dart
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_common_web_utils/cursor_utils.dart';
 
 class TvScreen extends StatefulWidget {
@@ -149,7 +160,7 @@ void main() {
 ### Toggle from a button (menu or settings page)
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_common_web_utils/cursor_utils.dart';
 
 class CursorButtons extends StatelessWidget {

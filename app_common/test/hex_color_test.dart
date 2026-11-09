@@ -24,5 +24,22 @@ void main() {
       expect(Colors.white.toHex(), '#ffffffff');
       expect(Colors.black.toHex(), '#ff000000');
     });
+    test('toHex alpha below 0x10', () {
+      // The alpha takes 2 digits too: '5aabbcc' (no '#') was read back as
+      // 0xf5aabbcc.
+      expect(const Color(0x05aabbcc).toHex(), '#05aabbcc');
+      expect(const Color(0x00ff0000).toHex(), '#00ff0000');
+      expect(const Color(0x05aabbcc).toHex(leadingHashSign: false), '05aabbcc');
+      for (var color in const [
+        Color(0x05aabbcc),
+        Color(0x00ff0000),
+        Color(0x0f000000),
+      ]) {
+        expect(HexColor.fromHex(color.toHex()), color);
+        expect(HexColor.fromHex(color.toHex(leadingHashSign: false)), color);
+      }
+      // A value written before (7 digits after the '#') still reads.
+      expect(HexColor.fromHex('#5aabbcc'), const Color(0x05aabbcc));
+    });
   });
 }

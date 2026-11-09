@@ -14,6 +14,10 @@ extension HexColor on Color {
   }
 
   /// String is in the format 'aabbcc' or 'ffaabbcc' with an optional leading '#'.
+  ///
+  /// Null when [hexString] is null or not hex. The length is not checked:
+  /// another one is read as a raw ARGB value ('#abc' is a transparent color,
+  /// not '#aabbcc').
   static Color? fromHexOrNull(String? hexString) {
     final buffer = StringBuffer();
     if (hexString == null) {
@@ -29,12 +33,14 @@ extension HexColor on Color {
     return Color(value);
   }
 
+  /// The color as `#aarrggbb` (8 lowercase digits, read back by [fromHex]).
+  ///
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   ///
-  /// Make it 6 digits if noAlpha is true
+  /// Make it 6 digits (`#rrggbb`) if noAlpha is true
   String toHex({bool leadingHashSign = true, bool? noAlpha}) =>
       '${leadingHashSign ? '#' : ''}'
-      '${((noAlpha ?? false) ? '' : compatAlpha.toRadixString(16))}'
+      '${((noAlpha ?? false) ? '' : _toHex(compatAlpha))}'
       '${_toHex(compatRed)}'
       '${_toHex(compatGreen)}'
       '${_toHex(compatBlue)}';

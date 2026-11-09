@@ -1,14 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:tekartik_app_common_utils/asset/asset_bundle.dart';
 
-/// Flutter implementation of [TkRootBundle]
+/// A [TkAssetBundle] reading a Flutter [AssetBundle] (`rootBundle`,
+/// `DefaultAssetBundle.of(context)`): pure Dart code depends on
+/// [TkAssetBundle], the app passes this one.
 abstract class TkAssetBundleFlutter implements TkAssetBundle {
   /// Create a [TkAssetBundleFlutter] from an [assetBundle]
   factory TkAssetBundleFlutter(AssetBundle assetBundle) =>
       _TkAssetBundleFlutter(assetBundle);
 }
 
-/// Flutter implementation of [TkRootBundle]
+/// Flutter implementation of [TkAssetBundleFlutter].
 class _TkAssetBundleFlutter implements TkAssetBundleFlutter {
   final AssetBundle assetBundle;
 
@@ -29,5 +31,7 @@ class _TkAssetBundleFlutter implements TkAssetBundleFlutter {
   }
 }
 
-/// Flutter root bundle
+/// Flutter's `rootBundle` (the app assets) as a [TkAssetBundle]. Keys are the
+/// pubspec asset paths (`packages/<package>/<path>` for the assets of another
+/// package).
 TkAssetBundle tkRootBundle = _TkAssetBundleFlutter(rootBundle);

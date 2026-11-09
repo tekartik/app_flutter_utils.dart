@@ -3,13 +3,14 @@ name: tekartik-app-flutter-window-setup
 description: >-
   Use when a Flutter desktop app (Linux, macOS, Windows) manages its window:
   restoring or saving its size, a minimum size, full screen, a kiosk (always
-  on top, hidden from the taskbar, no title bar), showing and focusing it,
-  listening to resize or full screen changes. tekartik_app_flutter_window:
-  appWindowCurrent() and AppWindow, AppWindowSizeKeeper (window size saved
-  in a KvStore: sdb prefs, app database) and AppWindowSizeSaver from
-  package:tekartik_app_flutter_window/app_window.dart, AppWindowMemory from
-  app_window_memory.dart for tests; window_manager (0.6, nativeapi) is never
-  used directly by apps.
+  on top, hidden from the taskbar, no title bar), its title, a confirmation
+  before the window closes, showing and focusing it, listening to resize or
+  full screen changes. tekartik_app_flutter_window: appWindowCurrent() and
+  AppWindow (title, closeRequestHandler, close), AppWindowSizeKeeper (window
+  size saved in a KvStore: sdb prefs, app database) and AppWindowSizeSaver
+  from package:tekartik_app_flutter_window/app_window.dart, AppWindowMemory
+  from app_window_memory.dart for tests; window_manager (0.6, nativeapi) is
+  never used directly by apps.
 ---
 
 # App window (tekartik_app_flutter_window)
@@ -45,8 +46,16 @@ here once).
   manager's F11 / title bar button). A native failure throws: wrap startup
   calls in try/catch, a window issue must never prevent the app from
   starting.
-* `dispose()` releases the object (the streams close), the window stays.
-  Keep one per widget or service and dispose it with them.
+* `title` (get and set): what the title bar and the window switchers show.
+* `closeRequestHandler` (`Future<bool> Function()?`): asked when the user
+  closes the window (close button, Alt+F4, the window menu); the window
+  closes when it completes with true (or throws), stays open on false (ask
+  "Quit?" first). `close()` closes the window without asking it (returns
+  false where the platform cannot close it). Not available on mobile.
+* `dispose()` releases the object (the streams close, its
+  `closeRequestHandler` goes), the window stays. `appWindowCurrent()` answers
+  a new object at each call: keep the one holding the handler and the
+  subscriptions for as long as they are needed, dispose it with them.
 * No `ensureInitialized` or `waitUntilReadyToShow` any more: set the
   properties, then `show()` and `focus()`. No runner setup either; the
   native core is compiled by a build hook, Linux build machines need
@@ -64,7 +73,8 @@ here once).
   kept (`setSize` before the window is shown counts its title bar as content
   on Linux: the window would grow at each launch). Nothing is saved while
   the window is below `minimumSize`, a restored size is at least
-  `minimumSize`.
+  `minimumSize`. Entering full screen is a resize too: an app closed while
+  full screen reopens at the size of the screen (not full screen).
 * Kiosk: `isFullScreen = true`, `isAlwaysOnTop = true`,
   `isVisibleInTaskbar = false`, `isTitleBarHidden = true`, then `show()`,
   `focus()`; the reverse to leave it.
@@ -73,5 +83,72 @@ here once).
   for desktop.
 * Tests: `AppWindowMemory` holds the values, reports size changes (never
   below `minimumSize`) and full screen changes like the native window,
-  `simulateResized` and `simulateFullScreenChanged` play the user and the
-  window manager, `isShown`, `focusCount`, `isDisposed` record the calls.
+  `simulateResized`, `simulateFullScreenChanged` and `simulateCloseRequest`
+  play the user and the window manager, `isShown`, `focusCount`, `isClosed`,
+  `isDisposed` record the calls. `AppWindowMemory(titleBarHeight: 47)` makes
+  `size` and `contentSize` differ as on Linux.
+* Complete app: `example/main.dart` of the package.
+
+## Examples
+
+### Main of a desktop app
+
+```dart
+import 'package:flutter/widgets.dart';
+import 'package:tekartik_app_flutter_window/app_window.dart';
+
+/// [store]: an sdb prefs, the app prefs, a store of the app database.
+Future<void> runDesktopApp(
+  KvStore store,
+  Widget app, {
+  required Future<bool> Function() confirmQuit,
+}) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var keeper = AppWindowSizeKeeper(
+    store: store,
+    minimumSize: const Size(400, 300),
+  );
+  // Before runApp: the window opens at its last size (never throws).
+  await keeper.restoreAppWindow();
+  // Null on the web, on mobile and under flutter test. Kept for the life of
+  // the app: the handler lives on this object.
+  var window = appWindowCurrent();
+  if (window != null) {
+    try {
+      window.title = 'My app';
+    } catch (_) {
+      // A window issue must never prevent the app from starting.
+    }
+    window.closeRequestHandler = confirmQuit;
+  }
+  runApp(AppWindowSizeSaver(keeper: keeper, window: window, child: app));
+}
+```
+
+### Testing with the memory window
+
+```dart
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tekartik_app_flutter_window/app_window.dart';
+import 'package:tekartik_app_flutter_window/app_window_memory.dart';
+import 'package:tekartik_prefs/prefs_light.dart';
+
+void main() {
+  test('size kept', () async {
+    var keeper = AppWindowSizeKeeper(store: PrefsMemory());
+    var window = AppWindowMemory();
+    window.simulateResized(const Size(1000, 700));
+    await keeper.save(window);
+    var next = AppWindowMemory();
+    await keeper.restore(next);
+    expect(next.size, const Size(1000, 700));
+  });
+
+  test('close confirmation', () async {
+    var window = AppWindowMemory()..closeRequestHandler = () async => false;
+    expect(await window.simulateCloseRequest(), isFalse);
+    expect(window.isClosed, isFalse);
+  });
+}
+```

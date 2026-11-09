@@ -75,9 +75,9 @@ abstract class AppWindow {
   /// Asked when the user closes the window (its close button, Alt+F4, the
   /// window menu): the window closes when it completes with true, stays
   /// open when false (a question to the user first, "End the running
-  /// sessions?"). Null (the default) lets the window close as usual. It is
-  /// not asked for a [close]; it is ignored where the platform cannot hold
-  /// a close request.
+  /// sessions?"). Null (the default) lets the window close as usual. A
+  /// handler that throws lets the window close. It is not asked for a
+  /// [close]; it is ignored where the platform cannot hold a close request.
   Future<bool> Function()? get closeRequestHandler;
 
   /// Set the [closeRequestHandler], null to remove it.

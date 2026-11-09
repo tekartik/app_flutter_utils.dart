@@ -116,13 +116,23 @@ class AppWindowMemory implements AppWindow {
   }
 
   /// The user closes the window (its close button): [closeRequestHandler]
-  /// is asked first. Returns true when the window closed.
+  /// is asked first (a handler that throws lets the window close, as the
+  /// native one). Returns true when the window closed.
   Future<bool> simulateCloseRequest() async {
     var handler = closeRequestHandler;
-    if (handler == null || await handler()) {
-      return close();
+    if (handler != null) {
+      bool ok;
+      try {
+        ok = await handler();
+      } catch (_) {
+        // A failing handler must not keep the window open for ever.
+        ok = true;
+      }
+      if (!ok) {
+        return false;
+      }
     }
-    return false;
+    return close();
   }
 
   @override
