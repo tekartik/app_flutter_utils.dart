@@ -70,12 +70,24 @@ class LazyListViewDelegate<T> extends SliverChildBuilderDelegate {
     }
     return true;
   }
+
+  /// Tells the controller the rows laid out, so that the pages on screen are
+  /// kept (a scroll only builds the rows it exposes).
+  @override
+  void didFinishLayout(int firstIndex, int lastIndex) {
+    super.didFinishLayout(firstIndex, lastIndex);
+    lazyListControllerDidFinishLayout(controller, firstIndex, lastIndex);
+  }
 }
 
 /// A lazy list sliver to use inside a [CustomScrollView].
 ///
 /// Prefer giving the items a known extent ([itemExtent], [prototypeItem] or
 /// [itemExtentBuilder]) on long lists, see [LazyListView.itemExtent].
+///
+/// It shows no error state: a page that failed keeps its loading
+/// placeholders, see [LazyListController.error], until
+/// [LazyListController.retry] (or [LazyListController.refresh]).
 class SliverLazyList<T> extends StatefulWidget {
   /// The controller managing the state, not disposed by this widget.
   final LazyListController<T> controller;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
@@ -80,6 +81,15 @@ class LazyListController<T> extends ChangeNotifier {
   /// Page that set [_error], null when it comes from the count.
   int? _errorPageIndex;
 
+  /// Pages whose fetch (or watch) failed: [getItem] does not fetch them
+  /// again until [retry] or [refresh]. A list that keeps building the rows
+  /// of a failing page (`SliverLazyList` shows no error state) would
+  /// otherwise fetch it on every frame.
+  final _failedPages = <int>{};
+
+  /// True when the count fetch (or watch) failed, see [retry].
+  bool _countFailed = false;
+
   /// Incremented by [refresh], a fetch started before it is ignored.
   int _generation = 0;
   bool _isInitialized = false;
@@ -90,6 +100,13 @@ class LazyListController<T> extends ChangeNotifier {
   /// Range of item indexes requested since the last eviction pass.
   int? _requestedMinIndex;
   int? _requestedMaxIndex;
+
+  /// Range of item indexes the list laid out last (on screen and in its
+  /// cache extent), told by `LazyListViewDelegate`: on a scroll only the
+  /// newly exposed rows are requested, the rows still on screen must not be
+  /// evicted.
+  int? _laidOutMinIndex;
+  int? _laidOutMaxIndex;
   bool _pruneScheduled = false;
   bool _notifyScheduled = false;
 
@@ -185,6 +202,7 @@ class LazyListController<T> extends ChangeNotifier {
         var total = await getCount!();
         if (isStale()) return;
         _totalCount = total;
+        _countFailed = false;
         _isInitialized = true;
 
         notifyListeners();
@@ -194,12 +212,14 @@ class LazyListController<T> extends ChangeNotifier {
             _totalCount = total;
             _inferredTotalPageIndex = null;
             _isInitialized = true;
+            _countFailed = false;
             _clearErrorFrom(null);
 
             notifyListeners();
           },
           onError: (Object e, StackTrace st) {
             _setError(e, st, null);
+            _countFailed = true;
             _isInitialized = true;
 
             notifyListeners();
@@ -213,6 +233,7 @@ class LazyListController<T> extends ChangeNotifier {
     } catch (e, st) {
       if (isStale()) return;
       _setError(e, st, null);
+      _countFailed = true;
       _isInitialized = true;
 
       notifyListeners();
@@ -290,6 +311,14 @@ class LazyListController<T> extends ChangeNotifier {
     if (_disposed || margin == null || minIndex == null || maxIndex == null) {
       return;
     }
+    // The rows laid out (on screen) are kept too: a scroll only builds, and
+    // so requests, the rows it exposes.
+    var laidOutMin = _laidOutMinIndex;
+    var laidOutMax = _laidOutMaxIndex;
+    if (laidOutMin != null && laidOutMax != null) {
+      minIndex = math.min(minIndex, laidOutMin);
+      maxIndex = math.max(maxIndex, laidOutMax);
+    }
     var firstPage = (minIndex ~/ pageSize) - margin;
     var lastPage = (maxIndex ~/ pageSize) + margin;
     bool outside(int pageIndex) =>
@@ -303,9 +332,25 @@ class LazyListController<T> extends ChangeNotifier {
     // A page being fetched (Future mode) cannot be cancelled, its result is
     // simply evicted by a later pass if it is still out of the window.
     _items.removeWhere((index, _) => outside(index ~/ pageSize));
+    // A failed page scrolled away is fetched again when scrolled back to.
+    _failedPages.removeWhere(outside);
+  }
+
+  /// The list laid out the rows [firstIndex] to [lastIndex], see
+  /// [lazyListControllerDidFinishLayout].
+  void _noteLaidOutRange(int firstIndex, int lastIndex) {
+    if (pageWindowMargin == null) {
+      return;
+    }
+    _laidOutMinIndex = firstIndex;
+    _laidOutMaxIndex = lastIndex;
   }
 
   void _loadPage(int pageIndex) {
+    if (_failedPages.contains(pageIndex)) {
+      // Waits for retry() or refresh().
+      return;
+    }
     var offset = pageIndex * pageSize;
     if (watchItems != null) {
       if (_pageSubscriptions.containsKey(pageIndex)) return;
@@ -315,6 +360,7 @@ class LazyListController<T> extends ChangeNotifier {
         },
         onError: (Object e, StackTrace st) {
           _setError(e, st, pageIndex);
+          _failedPages.add(pageIndex);
 
           notifyListeners();
         },
@@ -335,6 +381,7 @@ class LazyListController<T> extends ChangeNotifier {
           if (isStale()) return;
           _fetchingPages.remove(pageIndex);
           _setError(e, st, pageIndex);
+          _failedPages.add(pageIndex);
 
           notifyListeners();
         }
@@ -344,6 +391,7 @@ class LazyListController<T> extends ChangeNotifier {
 
   void _applyPageResult(int pageIndex, List<T> items) {
     _clearErrorFrom(pageIndex);
+    _failedPages.remove(pageIndex);
     var offset = pageIndex * pageSize;
     // Remove stale entries when the page shrank.
     for (var i = items.length; i < pageSize; i++) {
@@ -393,13 +441,52 @@ class LazyListController<T> extends ChangeNotifier {
     _error = null;
     _stackTrace = null;
     _errorPageIndex = null;
+    _failedPages.clear();
+    _countFailed = false;
     _isInitialized = false;
     _hasEverLoadedItems = false;
     _requestedMinIndex = null;
     _requestedMaxIndex = null;
+    _laidOutMinIndex = null;
+    _laidOutMaxIndex = null;
 
     notifyListeners();
     _init();
+  }
+
+  /// Fetches again what failed, keeping the loaded items (unlike
+  /// [refresh]): the pages whose fetch failed (in stream mode, their watch
+  /// is restarted) and the count when it failed.
+  ///
+  /// A failed page is not fetched again by [getItem] until then (or
+  /// [refresh], or once it was scrolled out of the window of kept pages):
+  /// the rows of a failing page would otherwise fetch it on every frame.
+  void retry() {
+    if (_disposed) {
+      return;
+    }
+    for (var pageIndex in _failedPages) {
+      var subscription = _pageSubscriptions.remove(pageIndex);
+      if (subscription != null) {
+        unawaited(subscription.cancel());
+      }
+    }
+    _failedPages.clear();
+    _error = null;
+    _stackTrace = null;
+    _errorPageIndex = null;
+    var countFailed = _countFailed;
+    _countFailed = false;
+    if (countFailed) {
+      var countSubscription = _countSubscription;
+      _countSubscription = null;
+      if (countSubscription != null) {
+        unawaited(countSubscription.cancel());
+      }
+      _init();
+    }
+
+    notifyListeners();
   }
 
   void _cancelSubscriptions() {
@@ -441,3 +528,14 @@ class LazyListController<T> extends ChangeNotifier {
     super.dispose();
   }
 }
+
+/// Tells [controller] the rows [firstIndex] to [lastIndex] are laid out (on
+/// screen and in the cache extent), so that their pages are kept: called by
+/// `LazyListViewDelegate` at the end of each layout.
+///
+/// Internal to this package (not exported).
+void lazyListControllerDidFinishLayout(
+  LazyListController<Object?> controller,
+  int firstIndex,
+  int lastIndex,
+) => controller._noteLaidOutRange(firstIndex, lastIndex);
