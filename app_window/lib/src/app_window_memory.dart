@@ -43,6 +43,9 @@ class AppWindowMemory implements AppWindow {
   @override
   bool isTitleBarHidden;
 
+  @override
+  String title = '';
+
   /// True once [show] was called.
   var isShown = false;
 
@@ -51,6 +54,12 @@ class AppWindowMemory implements AppWindow {
 
   /// True once [dispose] was called.
   var isDisposed = false;
+
+  @override
+  Future<bool> Function()? closeRequestHandler;
+
+  /// True once closed ([close], or a [simulateCloseRequest] let through).
+  var isClosed = false;
 
   @override
   Size get size => _size;
@@ -99,6 +108,22 @@ class AppWindowMemory implements AppWindow {
 
   @override
   void focus() => focusCount++;
+
+  @override
+  bool close() {
+    isClosed = true;
+    return true;
+  }
+
+  /// The user closes the window (its close button): [closeRequestHandler]
+  /// is asked first. Returns true when the window closed.
+  Future<bool> simulateCloseRequest() async {
+    var handler = closeRequestHandler;
+    if (handler == null || await handler()) {
+      return close();
+    }
+    return false;
+  }
 
   @override
   Stream<Size> get onResized => _resized.stream;

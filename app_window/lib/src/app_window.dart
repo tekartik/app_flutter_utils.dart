@@ -53,6 +53,13 @@ abstract class AppWindow {
   /// Show the window in the taskbar (true) or not, a kiosk hides it.
   set isVisibleInTaskbar(bool value);
 
+  /// The title of the window, what the window switchers (Alt+Tab, the
+  /// overview) and the title bar show; empty when none.
+  String get title;
+
+  /// Set the title of the window to [value].
+  set title(String value);
+
   /// True when the title bar is hidden.
   bool get isTitleBarHidden;
 
@@ -64,6 +71,22 @@ abstract class AppWindow {
 
   /// Give the window the focus (it comes to the front).
   void focus();
+
+  /// Asked when the user closes the window (its close button, Alt+F4, the
+  /// window menu): the window closes when it completes with true, stays
+  /// open when false (a question to the user first, "End the running
+  /// sessions?"). Null (the default) lets the window close as usual. It is
+  /// not asked for a [close]; it is ignored where the platform cannot hold
+  /// a close request.
+  Future<bool> Function()? get closeRequestHandler;
+
+  /// Set the [closeRequestHandler], null to remove it.
+  set closeRequestHandler(Future<bool> Function()? value);
+
+  /// Close the window, [closeRequestHandler] not asked (the app ends with
+  /// its last window). Returns false when the platform cannot close it (the
+  /// caller may end the app itself).
+  bool close();
 
   /// The new size of the window each time it is resized, a stream of events
   /// while the user resizes it (broadcast).

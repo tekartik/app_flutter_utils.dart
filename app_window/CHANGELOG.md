@@ -1,3 +1,12 @@
+## 0.1.2
+
+- `AppWindow.title` (get and set): what the window switchers and the title
+  bar show.
+- `AppWindow.closeRequestHandler`: asked when the user closes the window
+  (its close button, Alt+F4), the window stays open when it answers false
+  (a confirmation first); `AppWindow.close()` closes it without asking.
+  `AppWindowMemory.simulateCloseRequest()`.
+
 ## 0.1.1
 
 - `AppWindow.contentSize` (get and set, the title bar excluded).

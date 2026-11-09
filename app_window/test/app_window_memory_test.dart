@@ -14,6 +14,12 @@ void main() {
       expect(window.isAlwaysOnTop, isFalse);
       expect(window.isVisibleInTaskbar, isTrue);
       expect(window.isTitleBarHidden, isFalse);
+      expect(window.title, isEmpty);
+    });
+
+    test('title', () {
+      AppWindow window = AppWindowMemory()..title = 'Claude · sqflite';
+      expect(window.title, 'Claude · sqflite');
     });
 
     test('size, never below the minimum size, changes reported', () {
@@ -45,6 +51,30 @@ void main() {
       window.simulateFullScreenChanged(false);
       expect(changes, [true, false]);
       expect(window.isFullScreen, isFalse);
+    });
+
+    test('close request: asked, the window stays or closes', () async {
+      var window = AppWindowMemory();
+      // No handler: closes.
+      expect(await window.simulateCloseRequest(), isTrue);
+      expect(window.isClosed, isTrue);
+      window = AppWindowMemory();
+      var answer = false;
+      var asked = 0;
+      window.closeRequestHandler = () async {
+        asked++;
+        return answer;
+      };
+      expect(await window.simulateCloseRequest(), isFalse);
+      expect(window.isClosed, isFalse);
+      answer = true;
+      expect(await window.simulateCloseRequest(), isTrue);
+      expect(window.isClosed, isTrue);
+      expect(asked, 2);
+      // close: not asked.
+      window = AppWindowMemory()..closeRequestHandler = () async => false;
+      expect(window.close(), isTrue);
+      expect(window.isClosed, isTrue);
     });
 
     test('kiosk properties, show, focus, dispose', () async {

@@ -9,6 +9,7 @@ import 'package:window_manager/window_manager.dart'
         SizeToNative,
         TitleBarStyle,
         Window,
+        WindowCloseRequestedEvent,
         WindowEnteredFullScreenEvent,
         WindowExitedFullScreenEvent,
         WindowManager,
@@ -52,12 +53,27 @@ class _AppWindowNative implements AppWindow {
     onCancel: _cancel,
   );
 
+  Future<bool> Function()? _closeRequestHandler;
+
+  /// True while [close] closes the window: its close request is let through.
+  var _closing = false;
+
   _AppWindowNative(this._window);
 
-  /// The window events are listened to while a stream is.
+  /// The window events are listened to while a stream is, or while a
+  /// [closeRequestHandler] is set.
   void _listen() {
     _listenerId ??= _window.addListener((event) {
       switch (event) {
+        case WindowCloseRequestedEvent(:final request):
+          var handler = _closeRequestHandler;
+          if (_closing || handler == null) {
+            _closing = false;
+            break;
+          }
+          // Held, then closed if the handler says so.
+          request.cancel();
+          unawaited(_askClose(handler));
         case WindowResizedEvent():
           _resized.add(event.newSize.toSize());
         case WindowEnteredFullScreenEvent():
@@ -70,8 +86,23 @@ class _AppWindowNative implements AppWindow {
     });
   }
 
+  Future<void> _askClose(Future<bool> Function() handler) async {
+    bool ok;
+    try {
+      ok = await handler();
+    } catch (_) {
+      // A failing handler must not keep the window open for ever.
+      ok = true;
+    }
+    if (ok) {
+      close();
+    }
+  }
+
   void _cancel() {
-    if (_resized.hasListener || _fullScreenChanged.hasListener) {
+    if (_resized.hasListener ||
+        _fullScreenChanged.hasListener ||
+        _closeRequestHandler != null) {
       return;
     }
     var listenerId = _listenerId;
@@ -119,6 +150,12 @@ class _AppWindowNative implements AppWindow {
   set isVisibleInTaskbar(bool value) => _window.isVisibleInTaskbar = value;
 
   @override
+  String get title => _window.title ?? '';
+
+  @override
+  set title(String value) => _window.title = value;
+
+  @override
   bool get isTitleBarHidden => _window.titleBarStyle == TitleBarStyle.hidden;
 
   @override
@@ -131,6 +168,32 @@ class _AppWindowNative implements AppWindow {
 
   @override
   void focus() => _window.focus();
+
+  @override
+  Future<bool> Function()? get closeRequestHandler => _closeRequestHandler;
+
+  @override
+  set closeRequestHandler(Future<bool> Function()? value) {
+    _closeRequestHandler = value;
+    if (value != null) {
+      _listen();
+    } else {
+      _cancel();
+    }
+  }
+
+  @override
+  bool close() {
+    if (!Window.isCloseSupported()) {
+      return false;
+    }
+    _closing = true;
+    var closing = _window.close();
+    if (!closing) {
+      _closing = false;
+    }
+    return closing;
+  }
 
   @override
   Stream<Size> get onResized => _resized.stream;
