@@ -1,5 +1,5 @@
 name: tekartik_app_dev_menu_flutter
-description: "Quick dev menu flutter"
+description: "Flutter dev/test menu (tappable items, console pane, prompts), its declaration shared with the console and browser menus of tekartik_app_dev_menu."
 version: 0.0.1
 publish_to: none
 

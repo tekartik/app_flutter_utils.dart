@@ -74,20 +74,31 @@ browser menu.
 * `initMainMenuFlutter(builder: (child) => Wrapper(child: child), showConsole:)`
   is the lower level: it `runApp`s the menu app (wrapped by `builder`) and
   installs the presenter; `mainMenuFlutter` is implemented on it and declares
-  the menu from inside `builder`. Reach for it only to add providers or a
-  theme around the menu app.
-* Key/values (`keyValuesMenu`) persist through the `tekartik_test_menu_io`
-  var storage (environment-like, file backed): a desktop/CLI feature; on a
-  phone treat `KeyValue` as in-memory settings.
-* This package has no tests; the test apps of `app_flutter_utils.dart`
-  (`example/*_test_app_lib`) are the reference usage.
+  the menu from inside `builder`. Reach for it only to add providers (an
+  `InheritedWidget`, a riverpod `ProviderScope`...) around the menu app,
+  read from an item with `buildContext!`. Not for a theme: the menu app
+  builds its own `MaterialApp` with its own light/dark themes (switched in
+  its settings), a `Theme` around it has no effect.
+* Pages pushed from an item use the material widgets: import
+  `package:material_ui/material_ui.dart` (dependency `material_ui`), not
+  `package:flutter/material.dart` (deprecated on the Flutter beta).
+* Key/values (`keyValuesMenu`, `kvFromVar`): on io (Flutter desktop, CLI)
+  process_run shell variables saved in `.local/ds_env.yaml` under the
+  working directory, on the web (Flutter web too) `localStorage`. A
+  desktop/CLI/web feature: do not rely on them in a phone app (its working
+  directory is not the place to write).
+* This package has no tests; `example/main.dart` and the test apps of
+  `app_flutter_utils.dart` (`example/*_test_app_lib`) are the reference
+  usage.
 
 ## Examples
 
 ### Flutter dev menu with console, prompt and navigation
 
+The app depends on `material_ui` too (the page widgets).
+
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_dev_menu_flutter/dev_menu_flutter.dart';
 
 Future<void> _push(Widget page) async {
@@ -167,24 +178,39 @@ void main(List<String> args) {
 }
 ```
 
-### Menu app wrapped in a provider/theme
+### Menu app wrapped in a provider
+
+The items read the provider through `buildContext` (the root menu page,
+below the wrapper).
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_dev_menu_flutter/dev_menu_flutter.dart';
+
+class ApiScope extends InheritedWidget {
+  const ApiScope({super.key, required this.url, required super.child});
+
+  final String url;
+
+  static ApiScope of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ApiScope>()!;
+
+  @override
+  bool updateShouldNotify(ApiScope oldWidget) => url != oldWidget.url;
+}
 
 void main() {
   var declared = false;
   initMainMenuFlutter(
     showConsole: true,
-    builder: (child) => Theme(
-      data: ThemeData.dark(),
+    builder: (child) => ApiScope(
+      url: 'http://localhost:8080',
       child: Builder(
         builder: (_) {
           if (!declared) {
             declared = true;
-            menu('dark', () {
-              item('hello', () => write('hello'));
+            menu('api', () {
+              item('url', () => write(ApiScope.of(buildContext!).url));
             });
           }
           return child;
