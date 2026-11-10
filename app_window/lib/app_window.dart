@@ -12,7 +12,7 @@
 /// [AppWindowSizeSaver] saves it while the app runs.
 library;
 
-export 'package:tekartik_prefs/kv_store.dart' show KvStore;
+export 'package:tekartik_prefs/kv_store.dart' show KvStore, KvStoreExt;
 
 export 'src/app_window.dart' show AppWindow;
 export 'src/app_window_factory.dart' show appWindowCurrent, appWindowSupported;

@@ -1,3 +1,10 @@
+## 0.1.3
+
+- Requires `tekartik_prefs` 2.0.0, where `KvStore` is 2 methods (`getString`,
+  `setString` with a null value removing the key) and a `PrefsLight` is no
+  longer a `KvStore`: pass `prefs.kvStore` to `AppWindowSizeKeeper`, and build
+  a store with `KvStore(getString: ..., setString: ...)`. No API change here.
+
 ## 0.1.2
 
 - `AppWindow.title` (get and set): what the window switchers and the title

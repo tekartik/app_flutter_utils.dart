@@ -5,7 +5,12 @@ KvStore memoryKvStore([Map<String, String>? map]) {
   var values = map ?? <String, String>{};
   return KvStore(
     getString: (key) async => values[key],
-    setString: (key, value) async => values[key] = value,
-    remove: (key) async => values.remove(key),
+    setString: (key, value) async {
+      if (value == null) {
+        values.remove(key);
+      } else {
+        values[key] = value;
+      }
+    },
   );
 }

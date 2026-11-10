@@ -63,10 +63,10 @@ here once).
 * Window size saved and restored: `AppWindowSizeKeeper(store: kvStore,
   key: 'app_window_size', minimumSize: ..., saveDelay: 500 ms)` keeps a json
   `{"width":..,"height":..}` in any `KvStore` (re-exported from
-  tekartik_prefs): `getPrefsLightSdb(sdbFactory)` (tekartik_prefs_sdb, a
-  dedicated sdb prefs), the app prefs, or the app database wrapped by
-  `KvStore(getString:, setString:, remove:)` (tktoolsapp maps its `appMeta`
-  sdb store `text` field). `await keeper.restoreAppWindow()` before `runApp`
+  tekartik_prefs): `getPrefsLightSdb(sdbFactory).kvStore` (tekartik_prefs_sdb,
+  a dedicated sdb prefs), the app prefs (`prefs.kvStore`), or the app database
+  wrapped by `KvStore(getString:, setString:)`, a null value removing the key
+  (tktoolsapp maps its `appMeta` sdb store `text` field). `await keeper.restoreAppWindow()` before `runApp`
   (minimum size, then the saved size), `AppWindowSizeSaver(keeper:, child:)`
   at the root saves after each resize; `read`, `write`, `restore(window)`,
   `save(window)`, `autoSave(window)` for custom flows. The content size is

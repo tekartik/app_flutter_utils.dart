@@ -99,10 +99,11 @@ void enterKiosk(AppWindow window) {
 
 `AppWindowSizeKeeper` keeps the size as json (`{"width":..,"height":..}`)
 under `key` (`app_window_size` by default) in a `KvStore` (from
-tekartik_prefs, re-exported): an sdb prefs (`getPrefsLightSdb(sdbFactory)` of
-tekartik_prefs_sdb), the app prefs (a `PrefsLight` is a `KvStore`), or a
-store of the app database wrapped by `KvStore(getString:, setString:,
-remove:)`.
+tekartik_prefs, re-exported): an sdb prefs
+(`getPrefsLightSdb(sdbFactory).kvStore` of tekartik_prefs_sdb), the app prefs
+(`prefs.kvStore`), or a store of the app database wrapped by
+`KvStore(getString:, setString:)`, where setting a null value removes the
+key.
 
 - `restoreAppWindow()` (before `runApp`): the minimum size, then the saved
   size, never below the minimum size. It never throws.

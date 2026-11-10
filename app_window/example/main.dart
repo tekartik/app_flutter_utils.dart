@@ -8,8 +8,8 @@ import 'package:tekartik_prefs/prefs_light.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // In memory here: an app uses a persistent store, such as
-  // getPrefsLightSdb(sdbFactory) of tekartik_prefs_sdb.
-  KvStore store = PrefsMemory();
+  // getPrefsLightSdb(sdbFactory).kvStore of tekartik_prefs_sdb.
+  var store = PrefsMemory().kvStore;
   var keeper = AppWindowSizeKeeper(
     store: store,
     minimumSize: const Size(400, 300),

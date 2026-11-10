@@ -14,10 +14,11 @@ const appWindowSizeKeyDefault = 'app_window_size';
 /// Saves the size of the app window in a [KvStore] and restores it on the
 /// next launch.
 ///
-/// The store is any [KvStore]: an sdb prefs (`getPrefsLightSdb(sdbFactory)`
-/// of tekartik_prefs_sdb), the app prefs (a `PrefsLight` is a [KvStore]), a
-/// store of the app database wrapped by
-/// `KvStore(getString: ..., setString: ..., remove: ...)`. The size is a json
+/// The store is any [KvStore]: an sdb prefs
+/// (`getPrefsLightSdb(sdbFactory).kvStore` of tekartik_prefs_sdb), the app
+/// prefs (`prefs.kvStore`, a `PrefsLight` gives a [KvStore]), a store of the
+/// app database wrapped by `KvStore(getString: ..., setString: ...)`, where
+/// setting a null value removes the key. The size is a json
 /// string (`{"width":1000.0,"height":700.0}`) under [key].
 ///
 /// The size kept is the content size ([AppWindow.contentSize], the title bar

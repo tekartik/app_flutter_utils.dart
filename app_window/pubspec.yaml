@@ -1,6 +1,6 @@
 name: tekartik_app_flutter_window
 description: The app window on Linux, macOS and Windows (size, minimum size, full screen, always on top, taskbar, title bar, events) behind one interface, window_manager underneath, so that apps never use window_manager directly.
-version: 0.1.2
+version: 0.1.3
 publish_to: none
 
 environment:
@@ -16,7 +16,7 @@ dependencies:
     git:
       url: https://github.com/tekartik/prefs.dart
       path: prefs
-    version: '>=1.1.0'
+    version: '>=2.0.0'
 
 dev_dependencies:
   flutter_test:
