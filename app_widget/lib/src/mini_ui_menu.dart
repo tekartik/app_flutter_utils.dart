@@ -50,7 +50,10 @@ MuiScreenWidget muiScreenWidget(String name, void Function() body) {
 
 MuiBodyWidget muiBodyWidget(void Function() body, {bool? shrinkWrap}) {
   var muiMenuContext = muiMenu('body', body) as _MuiMenuContext;
-  return MuiBodyWidget(items: muiMenuContext.items, shinkWrap: true);
+  return MuiBodyWidget(
+    items: muiMenuContext.items,
+    shinkWrap: shrinkWrap ?? true,
+  );
 }
 
 MuiMenuContext muiMenu(String name, void Function() body) {

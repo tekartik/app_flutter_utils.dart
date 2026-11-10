@@ -21,7 +21,7 @@ class CvUiListItemLabel extends StatelessWidget {
     return Text(
       'item $index',
       style: TextTheme.of(context).labelSmall
-        ?..copyWith(fontStyle: FontStyle.italic),
+          ?.copyWith(fontStyle: FontStyle.italic),
     );
   }
 }

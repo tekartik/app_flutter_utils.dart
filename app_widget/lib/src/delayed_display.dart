@@ -108,6 +108,8 @@ class _DelayedDisplayState extends State<DelayedDisplay>
   }
 
   void _runFadeAnimation() {
+    // Only the last change counts: a pending timer would run after dispose.
+    _timer?.cancel();
     _timer = Timer(delay, () {
       fadeIn ? _opacityController.forward() : _opacityController.reverse();
     });

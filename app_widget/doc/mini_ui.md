@@ -1,30 +1,38 @@
-## Example
+## Mini UI example
+
+A menu screen built from `MuiItem`s, a sub menu returning a value. Keep the
+context of the tile (`muiBuildContext`) before an `await`: the global
+changes with the next tap (here, a tap in the sub menu).
 
 ```dart
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 
-Future<void> main() async {
-  runApp(MaterialApp(
-    home: MuiScreenWidget(items: [
-      MuiItem('item', () {
-        muiSnack(muiBuildContext, 'tap');
-      }),
-      MuiItem('sub', () async {
-        var result = await showMuiMenu<Object?>(muiBuildContext, 'simple', () {
-          muiItem('Pop', () => Navigator.of(muiBuildContext).pop(null));
-          muiItem('Pop Some text',
-              () => Navigator.of(muiBuildContext).pop('Some text'));
-          muiItem('Snack Some text', () {
-            muiSnack(muiBuildContext, 'Some text');
-          });
-        });
-        // ignore: unawaited_futures
-        muiSnack(muiBuildContext, 'result $result');
-      })
-    ], name: 'main'),
-  ));
+void main() {
+  runApp(
+    MaterialApp(
+      home: MuiScreenWidget(
+        name: 'main',
+        items: [
+          MuiItem('item', () {
+            muiSnackSync(muiBuildContext, 'tap');
+          }),
+          MuiItem('sub', () async {
+            var context = muiBuildContext;
+            var result = await showMuiMenu<String>(context, 'simple', () {
+              muiItem('Pop', () => Navigator.of(muiBuildContext).pop());
+              muiItem(
+                'Pop Some text',
+                () => Navigator.of(muiBuildContext).pop('Some text'),
+              );
+            });
+            if (context.mounted) {
+              muiSnackSync(context, 'result $result');
+            }
+          }),
+        ],
+      ),
+    ),
+  );
 }
 ```

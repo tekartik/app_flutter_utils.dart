@@ -17,7 +17,8 @@ class WillPopScopeCompat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      // Like WillPopScope: no callback, no veto.
+      canPop: onWillPop == null,
       onPopInvokedWithResult: (invoked, result) async {
         if (invoked) {
           return;

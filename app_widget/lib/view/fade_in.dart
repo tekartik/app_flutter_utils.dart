@@ -55,6 +55,9 @@ class FadeInController {
 
 class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
   late AnimationController _controller;
+
+  /// The opacity, [_controller] through the curve of the widget.
+  late CurvedAnimation _animation;
   StreamSubscription<FadeInAction>? _listener;
 
   @override
@@ -73,9 +76,7 @@ class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
   }
 
   void _setupCurve() {
-    final curve = CurvedAnimation(parent: _controller, curve: widget.curve);
-
-    Tween(begin: 0.0, end: 1.0).animate(curve);
+    _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
   }
 
   void _listen() {
@@ -111,6 +112,7 @@ class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
     }
 
     if (oldWidget.curve != widget.curve) {
+      _animation.dispose();
       _setupCurve();
     }
 
@@ -119,13 +121,16 @@ class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _listener?.cancel();
+    _listener = null;
+    _animation.dispose();
     _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(opacity: _controller, child: widget.child);
+    return FadeTransition(opacity: _animation, child: widget.child);
   }
 
   /// Fades-in child

@@ -28,6 +28,9 @@ that serializes an async action behind a progress bar.
         path: app_widget
       version: '>=0.2.1'
   ```
+* The package is built on `package:material_ui`: the app imports
+  `package:material_ui/material_ui.dart`, not `package:flutter/material.dart`
+  (the two Material libraries do not mix: `No MaterialLocalizations found`).
 * Each widget lives in its own small library; import only what you need and
   never anything under `lib/src/`:
   * `package:tekartik_app_flutter_widget/app_widget.dart` - `CenteredProgress`,
@@ -68,9 +71,12 @@ that serializes an async action behind a progress bar.
     and `Future<BusyActionResult<R>> busyAction<R>(Future<R> Function())`.
   * `busyAction` refuses to start while busy (it returns
     `BusyActionResult(busy: true)` with a null `result`), catches exceptions
-    into `result.error` / `result.errorStackTrace` and always clears the busy
-    flag. Check `result.busy` first, then `result.error`, then `result.result`
-    - it never throws.
+    into `result.error` / `result.errorStackTrace` and clears the busy flag
+    (while the state is mounted). Check `result.busy` first, then
+    `result.error`, then `result.result` - it never throws.
+  * `busy` is a plain getter: reading it in `build()` does not rebuild the
+    screen when it changes; listen to `busyStream` (`BusyIndicator`, a
+    `StreamBuilder` with `initialData: busy`).
   * `BusyIndicator(busy: busyStream)` renders a `LinearProgressIndicator`
     while true and an empty `Container` otherwise; put it at the top of the
     body or in `PreferredSize`.
@@ -79,13 +85,15 @@ that serializes an async action behind a progress bar.
   padding of a `ListTile` to a non tile widget.
 * Animation: `DelayedDisplay(child:, delay:, fadingDuration:, slidingCurve:,
   slidingBeginOffset:, fadeIn:)` fades and slides a widget in (toggle `fadeIn`
-  to reverse), `FadeIn(child:, controller:, duration:, curve:)` with a
-  `FadeInController(autoStart: ...)` and its `fadeIn()` / `fadeOut()` methods
-  (dispose the controller yourself).
+  to reverse), `FadeIn(child:, controller:, duration:, curve:)` fades in at
+  once without a controller; with a `FadeInController(autoStart: ...)` it
+  waits for `autoStart` or `fadeIn()` / `fadeOut()` (dispose the controller
+  yourself, one `FadeIn` per controller).
 * App level: `MaterialApp(scrollBehavior: AppScrollBehavior())` enables mouse
   and trackpad drag scrolling on desktop/web;
   `WillPopScopeCompat(onWillPop: () async => bool, child: ...)` is the
-  `PopScope` based replacement of the removed `WillPopScope`;
+  `PopScope` based replacement of the removed `WillPopScope` (back is vetoed
+  until `onWillPop` returns true; without `onWillPop` the route pops);
   `AllWidgetForTheming()` renders a sample of every common widget, useful in a
   dev screen to eyeball a `ThemeData`.
 * Anti-patterns: rebuilding a `FutureOrBuilder` with a freshly created
@@ -100,7 +108,7 @@ that serializes an async action behind a progress bar.
 ```dart
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/app_widget.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -146,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
 ### List with header and footer, inside a max width body
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/view/body_container.dart';
 import 'package:tekartik_app_flutter_widget/view/tile_padding.dart';
 import 'package:tekartik_app_flutter_widget/view/with_header_footer_list_view.dart';
@@ -174,8 +182,7 @@ class ItemListView extends StatelessWidget {
 ### Busy screen: one action at a time, progress bar and error
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:tekartik_app_flutter_widget/app_widget.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/view/busy_indicator.dart';
 import 'package:tekartik_app_flutter_widget/view/busy_screen_state_mixin.dart';
 
@@ -227,8 +234,15 @@ class _SyncPageState extends State<SyncPage> with BusyScreenStateMixin<SyncPage>
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(_status),
-            ElevatedButton(onPressed: _sync, child: const Text('Sync')),
-            if (busy) const SmallProgress(),
+            // busyStream rebuilds the button (busy alone would not).
+            StreamBuilder<bool>(
+              stream: busyStream,
+              initialData: busy,
+              builder: (context, snapshot) => ElevatedButton(
+                onPressed: (snapshot.data ?? false) ? null : _sync,
+                child: const Text('Sync'),
+              ),
+            ),
           ],
         ),
       ),
@@ -240,7 +254,7 @@ class _SyncPageState extends State<SyncPage> with BusyScreenStateMixin<SyncPage>
 ### App wiring: desktop scrolling, back confirmation, fade in
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/delayed_display.dart';
 import 'package:tekartik_app_flutter_widget/scroll_behavior.dart';
 import 'package:tekartik_app_flutter_widget/will_pop_scope_compat.dart';

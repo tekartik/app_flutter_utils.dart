@@ -32,13 +32,18 @@ build developer/test screens in a few lines.
   import 'package:tekartik_app_flutter_widget/mini_ui.dart';
   ```
   Never import anything under `lib/src/`.
+* The package is built on `package:material_ui`: the app imports
+  `package:material_ui/material_ui.dart` (`MaterialApp`, `Scaffold`...), not
+  `package:flutter/material.dart`. Mixing the two Material libraries fails
+  at run time (`No MaterialLocalizations found`).
 * Dialogs (all need a `Navigator`, i.e. a `MaterialApp`/`Scaffold` above the
   context, and all are `await`ed):
   * `Future<bool> muiConfirm(context, {String message = 'Confirm operation'})`
     - Yes/No, returns `false` when dismissed (never null).
   * `Future<String?> muiGetString(context, {String? value, String? title,
     FormFieldValidator<String>? validator, String? hint})` - a one field form,
-    `null` on cancel or when the validator rejects.
+    `null` on cancel; while the validator rejects the text, the dialog stays
+    open with the error.
   * `Future<int?> muiSelectString(context, {required List<String> list,
     String? title, double? width})` - returns the **index** picked in the
     list, `null` on cancel.
@@ -54,9 +59,10 @@ build developer/test screens in a few lines.
     callback is a `MuiFutureOrVoidCallback` (sync or async).
   * The declarative form avoids building the list by hand:
     `muiScreenWidget('name', () { muiItem('label', () {...}); })` returns the
-    same widget, `muiBodyWidget(() { ... })` returns just the `ListView`
-    (`MuiBodyWidget`) to embed in your own `Scaffold`, and `muiMenu('name',
-    () { ... })` declares a sub menu.
+    same widget, `muiBodyWidget(() { ... }, shrinkWrap: true)` returns just
+    the `ListView` (`MuiBodyWidget`, shrink wrapped unless
+    `shrinkWrap: false`) to embed in your own `Scaffold`, and
+    `muiMenu('name', () { ... })` declares a sub menu.
   * `muiItem(...)` and `muiMenu(...)` only work **inside** a
     `muiScreenWidget` / `muiBodyWidget` / `muiMenu` body (they assert
     otherwise). A nested `muiMenu` becomes an item that pushes a new screen.
@@ -66,7 +72,9 @@ build developer/test screens in a few lines.
   * Inside an item callback, `muiBuildContext` is the `BuildContext` of the
     tapped tile: use it for `Navigator.of(...)`, `muiSnack(...)` or a nested
     `showMuiMenu(...)`. It is a global set on tap, so it is only valid during
-    the callback, never in `build()` nor after the screen is gone.
+    the callback, never in `build()` nor after the screen is gone: keep it
+    in a local (`var context = muiBuildContext;`) before an `await`, the
+    next tap (in a sub menu) replaces it.
   * `muiItem(name, body, solo: true)` auto runs that item when the screen
     opens - it is annotated `@doNotSubmit`, so it is a local debugging
     shortcut, never committed.
@@ -78,7 +86,7 @@ build developer/test screens in a few lines.
 ### The four dialogs
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 
 class ItemActions extends StatelessWidget {
@@ -140,7 +148,7 @@ class ItemActions extends StatelessWidget {
 ### A dev menu screen with sub menus
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 
 void main() {
@@ -185,7 +193,7 @@ void main() {
 ### Embedding the menu list in your own screen
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/mini_ui.dart';
 
 class DebugTab extends StatelessWidget {

@@ -31,13 +31,15 @@ debug, admin and dev screens, not a designed form.
   ```
 * Import `package:tekartik_app_flutter_widget/view/cv_ui.dart` (plus
   `package:cv/cv.dart` for the model itself). Never import anything under
-  `lib/src/`.
+  `lib/src/`. The app uses `package:material_ui/material_ui.dart`, not
+  `package:flutter/material.dart` (the two Material libraries do not mix).
 * Read only: `CvUiModelView(model: myModel)` walks `model.fields` and builds
   a label + value per field, recursing into `CvModelField`,
-  `CvModelListField`, `CvListField` and `CvModelMapField`. Pass a
-  `CvUiModelViewController()` if you want the expand/collapse state of the
-  sub trees to survive a rebuild (the controller keeps it; nodes default to
-  expanded).
+  `CvModelListField`, `CvListField` and `CvModelMapField`. Sub trees can be
+  collapsed (tap their label); nodes default to expanded. The collapse state
+  is kept per widget instance: it is lost when the tree is rebuilt (each edit
+  of a `CvUiModelEdit` rebuilds it), a `CvUiModelViewController` does not
+  keep it across rebuilds.
 * Editable: `CvUiModelEdit(controller: CvUiModelEditController(model:
   myModel))`. `controller` is required and holds the model. Each value then
   gets a small pencil button opening a dialog with OK / DELETE / NULLIFY (and
@@ -74,7 +76,7 @@ debug, admin and dev screens, not a designed form.
 
 ```dart
 import 'package:cv/cv.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/view/cv_ui.dart';
 
 class Address extends CvModelBase {
@@ -117,7 +119,7 @@ class UserViewPage extends StatelessWidget {
 
 ```dart
 import 'package:cv/cv.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/view/cv_ui.dart';
 
 class Item extends CvModelBase {
@@ -184,7 +186,7 @@ Future<Basket?> editBasket(BuildContext context, Basket original) async {
 
 ```dart
 import 'package:cv/cv.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_widget/view/cv_ui.dart';
 
 class ValueSamples extends StatelessWidget {
