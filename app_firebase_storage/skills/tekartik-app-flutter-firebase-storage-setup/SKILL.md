@@ -51,9 +51,14 @@ console-url helper.
   Never import anything under `lib/src/`.
 * `storageService` is resolved by conditional import: `dart:io` and
   `dart:js_interop` builds both return `storageServiceFlutter` from
-  `tekartik_firebase_storage_flutter`; any other target gets a stub whose
-  getter throws `UnimplementedError`. Importing is safe everywhere, reading
-  the getter is what can throw.
+  `tekartik_firebase_storage_flutter` (every Flutter target, `flutter test`
+  included); any other target gets a stub whose getter throws
+  `UnimplementedError`. What needs a device (or a browser) is
+  `storageService.storage(app)`, with an app of
+  `firebase.initializeAppAsync()`.
+* Platforms: Android, iOS, macOS, web and Windows. Linux has no
+  `firebase_core` implementation: `initializeAppAsync()` fails there. On the
+  web, reading file content needs a CORS configuration on the bucket.
 * Startup order: `WidgetsFlutterBinding.ensureInitialized()`, then
   `var app = await firebase.initializeAppAsync();` (from
   `package:tekartik_app_flutter_firebase/firebase.dart`), then
@@ -71,24 +76,29 @@ console-url helper.
     `getDownloadUrl()`. `path` may be a plain path or a `gs://` url; empty or
     omitted means the root.
 * `File` operations: `upload(bytes, options: StorageUploadFileOptions(
-  contentType: 'image/png'))`, `writeAsBytes(bytes)`, `writeAsString(text)`,
-  `save(content)`, `readAsBytes()` / `download()`, `readAsString()`,
-  `exists()`, `delete()`, `getMetadata()` and the cached `metadata`. `name`
-  is the path inside the bucket, `bucket` the owning bucket. Bytes are
-  `Uint8List` (`dart:typed_data`).
-* `FileMetadata` exposes `size`, `dateUpdated`, `md5Hash` and `contentType`.
-  It is only populated after `getMetadata()`.
+  contentType: 'image/png', cacheControl: ...))` (the content type defaults
+  to the one of the file extension), `writeAsBytes(bytes)`,
+  `writeAsString(text)`, `readAsBytes()`, `readAsString()`, `exists()`,
+  `delete()` and `getMetadata()` (`save` and `download` are deprecated).
+  `name` is the path inside the bucket, `bucket` the owning bucket. Bytes
+  are `Uint8List` (`dart:typed_data`).
+* `getMetadata()` returns a `FileMetadata`: `size`, `dateUpdated`,
+  `md5Hash`, `contentType`, `cacheControl`. The `File.metadata` getter is
+  always null on Flutter (nothing is cached): use `getMetadata()`.
+* `File.exists()` is false on any error (permission denied, network), not
+  only for a missing file: never overwrite a file on a false `exists()`
+  alone.
 * Not supported by the flutter backend: `Bucket.create()` throws
   `UnimplementedError` (create buckets from the console or a backend), and
   `Bucket.exists()` is a name comparison, not a real server check.
 * To hand a url to a widget (`Image.network`), use
   `storage.ref(path).getDownloadUrl()`, not the `gs://` path.
-* Testing: this package throws off-device. Write your code against the
-  abstract `Storage`/`Bucket`/`File` types and inject the instance, so tests
-  can use an in-memory implementation
-  (`tekartik_firebase_storage_local`/`_fs`) instead of `storageService`.
-  `firebaseStorageGetAdminWebUploadFolder` is pure and can be unit tested
-  directly.
+* Testing: `storageService.storage(app)` needs a native Firebase app. Write
+  your code against the abstract `Storage`/`Bucket`/`File` types and inject
+  the instance, so tests can use the in-memory implementation
+  (`newStorageMemory()` of `tekartik_firebase_storage_fs`) instead of
+  `storageService`. `firebaseStorageGetAdminWebUploadFolder` is pure and can
+  be unit tested directly.
 
 ## Examples
 
@@ -150,16 +160,24 @@ Future<void> removeNote(Bucket bucket, String path) =>
 import 'package:flutter/material.dart';
 import 'package:tekartik_app_flutter_firebase_storage/storage.dart';
 
-class StorageImage extends StatelessWidget {
+class StorageImage extends StatefulWidget {
   final Storage storage;
   final String path;
 
   const StorageImage({super.key, required this.storage, required this.path});
 
   @override
+  State<StorageImage> createState() => _StorageImageState();
+}
+
+class _StorageImageState extends State<StorageImage> {
+  /// Resolved once, not on every build.
+  late final _url = widget.storage.ref(widget.path).getDownloadUrl();
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: storage.ref(path).getDownloadUrl(),
+      future: _url,
       builder: (context, snapshot) {
         var url = snapshot.data;
         if (url == null) {
@@ -218,6 +236,8 @@ String consoleUrlRaw(String projectId, String bucketName, String path) =>
 * Trusting `bucket.exists()` as a server check - it only compares names.
 * Feeding a `gs://` path to `Image.network`: resolve it with
   `storage.ref(path).getDownloadUrl()` first.
-* Reading `file.metadata` before `getMetadata()` has run.
+* Reading `file.metadata`: always null on Flutter, use `getMetadata()`.
+* Uploading defaults when `exists()` is false: it is false after any error
+  too, an existing file would be overwritten.
 * Importing `package:tekartik_app_flutter_firebase_storage/src/storage.dart`
   instead of the public `storage.dart`.

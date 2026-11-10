@@ -42,9 +42,12 @@ app code never imports a platform specific auth package. It adds nothing else.
   `AuthService get authService`. Do not import anything under `lib/src/`.
 * `authService` is resolved by conditional import: `dart:io` and
   `dart:js_interop` builds both return `authServiceFlutter` from
-  `tekartik_firebase_auth_flutter`; any other target gets a stub whose getter
-  throws `UnimplementedError`. Importing the library is always safe, reading
-  `authService` is what can throw.
+  `tekartik_firebase_auth_flutter` (every Flutter target, `flutter test`
+  included); any other target gets a stub whose getter throws
+  `UnimplementedError`. What needs a device (or a browser) is
+  `authService.auth(app)`, with an app of `firebase.initializeAppAsync()`.
+* Platforms: Android, iOS, macOS, web and Windows. Linux has no
+  `firebase_core` implementation: `initializeAppAsync()` fails there.
 * `AuthService` is a deprecated alias for `FirebaseAuthService`, `Auth` for
   `FirebaseAuth`, `User` for `FirebaseUser`. Prefer the `Firebase*` names in
   new code; both resolve to the same types.
@@ -65,8 +68,10 @@ app code never imports a platform specific auth package. It adds nothing else.
   `signInWithEmailAndPassword(email:, password:)`,
   `createUserWithEmailAndPassword(email:, password:)`,
   `signInAnonymously()`, `signOut()`, `sendEmailVerification()`,
-  `currentUser`, `reloadCurrentUser()`, `onCurrentUser` and
-  `signIn(AuthProvider, options:)`. The extension
+  `sendPasswordResetEmail(email:)`, `currentUser`, `reloadCurrentUser()` and
+  `onCurrentUser`. `signIn(AuthProvider, options:)` (Google, Apple...)
+  throws `UnsupportedError` for every provider: use the FlutterFire provider
+  API on `nativeInstance` (below). The extension
   `signInOrUpWithEmailAndPassword(email:, password:)` signs in and falls back
   to creating the account; `getOrCreateUserWithEmailAndPassword(...)` does the
   same but signs out again and returns the `FirebaseUser`.
@@ -80,17 +85,17 @@ app code never imports a platform specific auth package. It adds nothing else.
   (null when signed out); it is the right source for a `StreamBuilder` gate
   between a sign-in page and the app. `currentUser` is the synchronous
   snapshot and is null until the native SDK has restored the session.
-* Emulator and native escape hatches (`useAuthEmulator(host, port)`,
-  `nativeInstance`, `webSetIndexedDbPersistence()`) live in
+* Emulator and native escape hatches (`auth.flutter.useAuthEmulator(host,
+  port)` before any sign in, `auth.nativeInstance`,
+  `auth.webSetIndexedDbPersistence()`) live in
   `package:tekartik_firebase_auth_flutter/auth_flutter.dart`, not in this
   package: import it explicitly (and declare it in `pubspec.yaml`) when you
   need them.
-* Testing: this package cannot be unit tested off-device; the package's own
-  test only checks that the symbols exist and swallows the
-  `UnimplementedError`. For logic tests, depend on the abstract
-  `tekartik_firebase_auth` API in your code and inject a local service
-  (`tekartik_firebase_auth_local` / `_sembast`) in tests instead of
-  `authService`.
+* Testing: `authService.auth(app)` needs a native Firebase app, so unit and
+  widget tests never use it. Write the logic against the abstract
+  `FirebaseAuth` and inject a local one:
+  `authServiceLocal.auth(newFirebaseAppLocal())` from
+  `tekartik_firebase_auth_local` (or `tekartik_firebase_auth_sembast`).
 
 ## Examples
 

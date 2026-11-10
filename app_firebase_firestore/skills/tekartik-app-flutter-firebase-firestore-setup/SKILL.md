@@ -44,9 +44,13 @@ package, and can be swapped for an in-memory/sembast firestore in tests.
   `lib/src/`.
 * `firestoreService` is resolved by conditional import: `dart:io` and
   `dart:js_interop` builds both return `firestoreServiceFlutter` from
-  `tekartik_firebase_firestore_flutter`; any other target gets a stub whose
-  getter throws `UnimplementedError`. Importing is always safe, reading the
-  getter is what can throw.
+  `tekartik_firebase_firestore_flutter` (one instance, every Flutter target,
+  `flutter test` included); any other target gets a stub whose getter throws
+  `UnimplementedError`. What needs a device (or a browser) is
+  `firestoreService.firestore(app)`, with an app of
+  `firebase.initializeAppAsync()`.
+* Platforms: Android, iOS, macOS, web and Windows. Linux has no
+  `firebase_core` implementation: `initializeAppAsync()` fails there.
 * Startup order: `WidgetsFlutterBinding.ensureInitialized()`, then
   `var app = await firebase.initializeAppAsync();` (from
   `package:tekartik_app_flutter_firebase/firebase.dart`), then
@@ -64,7 +68,8 @@ package, and can be swapped for an in-memory/sembast firestore in tests.
 * `Query`: `where(fieldPath, isEqualTo:, isLessThan:, isLessThanOrEqualTo:,
   isGreaterThan:, isGreaterThanOrEqualTo:, arrayContains:, arrayContainsAny:,
   whereIn:, isNull:)`, `orderBy(key, descending:)`, `orderById()`,
-  `limit(n)`, `startAt/startAfter/endAt/endBefore(values:)`, `get()`,
+  `limit(n)`, `startAt/startAfter/endAt/endBefore(snapshot:, values:)`,
+  `get()`,
   `count()`, `onCount()`, `onSnapshot()`, `aggregate(fields)`.
 * Data is plain `Map<String, Object?>`. `DocumentSnapshot` exposes `exists`,
   `data`, `ref`, `metadata` (and `dataOrNull` from `DocumentSnapshotExt`);
@@ -76,21 +81,20 @@ package, and can be swapped for an in-memory/sembast firestore in tests.
   getters/setters over a map).
 * Know the flutter backend limits before using a feature: this service has
   `supportsQuerySelect == false` (`Query.select` is a no-op),
-  `supportsQuerySnapshotCursor == false` (paginate with
-  `startAfter(values: [...])`, not with a snapshot),
   `supportsDocumentSnapshotTime == false` (`updateTime`/`createTime` are
   null), `supportsListCollections == false` (`listCollections()` throws).
-  `supportsTimestamps`, `supportsFieldValueArray`, `supportsAggregateQueries`,
-  `supportsBlobs`, `supportsVectorValue` and `supportsTrackChanges` are all
-  true.
+  `supportsQuerySnapshotCursor` (`startAfter(snapshot: doc)`, the native
+  document cursor), `supportsTimestamps`, `supportsFieldValueArray`,
+  `supportsFieldValueIncrement`, `supportsAggregateQueries`, `supportsBlobs`,
+  `supportsVectorValue` and `supportsTrackChanges` are all true.
 * The emulator hook (`useFirestoreEmulator(host, port)` on `FirestoreFlutter`)
   lives in `package:tekartik_firebase_firestore_flutter/firestore_flutter.dart`,
   not here: import and declare that package explicitly when you need it.
 * Testing: write your data layer against the abstract `Firestore` type and
   inject it. In unit tests use an in-memory service
   (`newFirestoreServiceMemory()` from `tekartik_firebase_firestore_sembast`
-  with `newFirebaseAppLocal()`) instead of `firestoreService`, which throws
-  off-device.
+  with `newFirebaseAppLocal()`) instead of `firestoreService`, whose
+  `firestore(app)` needs a native Firebase app.
 
 ## Examples
 
@@ -215,32 +219,31 @@ Future<void> importAll(Firestore firestore, Map<String, Object?> byId) async {
 }
 ```
 
-### Paginating without snapshot cursors
+### Paginating with a snapshot cursor
 
 ```dart
 import 'package:tekartik_app_flutter_firebase_firestore/firestore.dart';
 
-/// The flutter backend has supportsQuerySnapshotCursor == false, so page on
-/// the ordered field values, not on a DocumentSnapshot.
+/// Pages of 50 notes ordered by title: each page starts after the last
+/// document of the previous one (supportsQuerySnapshotCursor is true; with
+/// `values: [lastTitle]` instead, two notes with the same title at a page
+/// boundary would be skipped).
 Future<void> pageByTitle(Firestore firestore) async {
   var pageSize = 50;
-  Object? lastTitle;
+  DocumentSnapshot? last;
   while (true) {
     var query = firestore.collection('notes').orderBy('title').limit(pageSize);
-    if (lastTitle != null) {
-      query = query.startAfter(values: [lastTitle]);
+    if (last != null) {
+      query = query.startAfter(snapshot: last);
     }
     var snapshot = await query.get();
-    if (snapshot.docs.isEmpty) {
-      break;
-    }
     for (var doc in snapshot.docs) {
       print(doc.ref.path);
     }
-    lastTitle = snapshot.docs.last.data['title'];
     if (snapshot.docs.length < pageSize) {
       break;
     }
+    last = snapshot.docs.last;
   }
 }
 ```
@@ -252,8 +255,8 @@ Future<void> pageByTitle(Firestore firestore) async {
   app is a `FirebaseAppFlutter`.
 * Mixing up `collection()` (odd segment count) and `doc()` (even segment
   count) paths.
-* Using `startAfter(snapshot: ...)` or `Query.select` on the flutter backend:
-  both are unsupported there.
+* Using `Query.select` on the flutter backend: it has no effect there (the
+  whole documents are read).
 * Reading `DocumentSnapshot.data` without checking `exists` first (use
   `dataOrNull`).
 * Writing `FieldValue.serverTimestamp()` - it is a static *value*,
