@@ -1,6 +1,6 @@
 // A counter bloc provided to its page, and a name field whose controller and
 // notifier are released by AutoDisposeBaseState.
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_rx_bloc_flutter/app_rx_flutter.dart';
 
 /// The counter state, pure Dart (testable with package:test).

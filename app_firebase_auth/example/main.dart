@@ -1,7 +1,7 @@
 // Anonymous sign in and sign out (FlutterFire setup done: `flutterfire
 // configure`, or google-services.json / GoogleService-Info.plist, and the
 // anonymous provider enabled in the Firebase console).
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_flutter_firebase/firebase.dart';
 import 'package:tekartik_app_flutter_firebase_auth/auth.dart';
 
