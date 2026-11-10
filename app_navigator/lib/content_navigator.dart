@@ -1,3 +1,10 @@
+/// A Navigator 2.0 router on typed content paths (`/note/1`): declare
+/// [ContentPath]s (a [ContentPathBase] with its [ContentPathField]s), bind
+/// them to screens with [ContentPageDef]s in a [ContentNavigatorDef], wrap
+/// the app in a [ContentNavigator] and give `ContentNavigator.of(context)`'s
+/// `routerConfig` to `MaterialApp.router`.
+library;
+
 export 'src/content_navigator.dart'
     show
         ContentNavigator,

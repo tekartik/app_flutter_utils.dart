@@ -44,17 +44,26 @@ local/in-memory implementations.
 * Reading `firebase` has no side effect and needs no binding; initialization
   does. On io and web it is `firebaseFlutter`; only an exotic platform hits
   the stub that throws `UnimplementedError('firebase')`.
+* Platforms: Android, iOS, macOS, Windows and the web (the `firebase_core`
+  ones). Linux has no `firebase_core` implementation: initialization fails
+  there.
 * Initialize once, in `main()`:
   `WidgetsFlutterBinding.ensureInitialized(); var app = await
   firebase.initializeAppAsync();` uses the platform default options. Keep the
-  returned `FirebaseApp` in a global or a provider; initializing the default
-  app twice may throw a duplicate-app error from `firebase_core`.
+  returned `FirebaseApp` in a global or a provider. There is one
+  `FirebaseApp` per native app (since 2026-11-10): asking again
+  (`initializeAppAsync()` without options, `firebase.app()`) gives the same
+  object with the products already registered on it. A second
+  initialization with different options may throw a duplicate-app error
+  from `firebase_core`.
 * Explicit options must be wrapped: `firebase.initializeAppAsync(options:
   firebase.wrapOptions(DefaultFirebaseOptions.currentPlatform))` with the
   `FirebaseFlutterExtension` from
   `package:tekartik_firebase_flutter/firebase_flutter.dart`. A plain
-  `FirebaseAppOptions` carrying a `projectId` is rejected (`'not supported
-  yet'`); one without `projectId` behaves like no options.
+  `FirebaseAppOptions` carrying a `projectId` throws `UnsupportedError`
+  ("Options other than the flutter ones ... are not supported yet") before
+  any native app is created; one without `projectId` behaves like no
+  options.
 * Synchronous `firebase.initializeApp()` only works with no `options` and no
   `name`, and only after the native default app exists (it wraps
   `Firebase.app()`); otherwise it throws. `firebase.app()` returns the
@@ -65,7 +74,8 @@ local/in-memory implementations.
   `firebase` back reference, `isLocal`. `app.nativeInstance`
   (`FirebaseAppFlutterExtension`, same import as `wrapOptions`) is the
   `firebase_core` `FirebaseApp` for FlutterFire plugins not covered by the
-  Tekartik layer. `app.delete()` throws for the default app.
+  Tekartik layer. `app.delete()` throws for the default app on mobile
+  (`firebase_core` refuses it), after its Tekartik products were deleted.
 * Products: pass the app to the sibling packages' service getters,
   `firestoreService.firestore(app)`
   (`tekartik_app_flutter_firebase_firestore/firestore.dart`),
@@ -85,7 +95,7 @@ local/in-memory implementations.
 ### Initialize with the platform default options
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_flutter_firebase/firebase.dart';
 
 late FirebaseApp firebaseApp;

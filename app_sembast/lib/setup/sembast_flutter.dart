@@ -2,13 +2,11 @@ import 'package:tekartik_app_flutter_sembast/sembast.dart';
 
 export 'package:sembast/sembast.dart';
 
-/// Opinionated factory for flutter
+/// Same as [getDatabaseFactory] (deprecated).
 ///
-/// (app_dir)/db on iOS/Android or when getApplicationDocumentsDirectory is supported
-///
-/// (app_data)/`<package_name>`/db on Desktop
-///
-/// IndexedDB db for the web
+/// SQLite in the sqflite plugin databases folder on Android, iOS and macOS,
+/// `<userAppDataPath>/<packageName>/databases` on Linux and Windows,
+/// IndexedDB on the web.
 ///
 /// [packageName] only needed for desktop.
 @Deprecated('User getDatabaseFactory instead')

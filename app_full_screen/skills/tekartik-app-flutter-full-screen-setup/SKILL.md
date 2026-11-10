@@ -53,9 +53,14 @@ unsupported elsewhere. Extracted from the playelio karaoke player.
   `onPressed`, before any `await`. A request made later from an async
   continuation is refused by the browser.
 * **Listen to `onChanged`** to follow changes not asked for: escape or F11 in
-  the browser, the window manager on desktop. `isFullScreen` is the truth
-  (`document.fullscreenElement` on the web), the stream fires only when it
-  changes. Rebuild the widget from it, do not assume the last request stuck.
+  the browser, the window manager on desktop. `isFullScreen` is
+  `document.fullscreenElement` on the web, the window state on desktop (read
+  when the instance is created, then followed through its events), the last
+  request on mobile (the system ui mode cannot be read back); the stream
+  fires only when it changes. Rebuild the widget from it, do not assume the
+  last request stuck. An instance created while the platform is already full
+  screen (another screen left it so) starts full screen and reports the exit
+  (fixed 2026-11-10, it used to start at false and miss it).
 * **One instance per screen**, created after the widgets binding is
   initialized (in `initState`, or in `main` after
   `WidgetsFlutterBinding.ensureInitialized()`), and `dispose()`d in
@@ -88,7 +93,7 @@ unsupported elsewhere. Extracted from the playelio karaoke player.
 ```dart
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_flutter_full_screen/full_screen.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -164,7 +169,7 @@ PlatformFullScreen createLeanBackFullScreen() => createPlatformFullScreen(
 ### Widget test with the memory implementation
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tekartik_app_flutter_full_screen/full_screen_memory.dart';
 

@@ -27,6 +27,9 @@ class _FakeDesktopWindow implements PlatformFullScreenDesktopWindow {
       _onFullScreenChanged?.call(fullScreen);
 
   @override
+  bool isFullScreen = false;
+
+  @override
   void setFullScreen(bool fullScreen) {
     if (error != null) {
       throw error!;
@@ -148,6 +151,24 @@ void main() {
       expect(fullScreen.isFullScreen, isFalse);
       fullScreen.dispose();
       expect(window.isDisposed, isTrue);
+    });
+
+    test('created while the window is full screen', () async {
+      // Another screen (or F11) left the window full screen.
+      var window = AppWindowMemory(isFullScreen: true);
+      var fullScreen = createPlatformFullScreenIo(
+        desktop: true,
+        desktopWindow: PlatformFullScreenDesktopWindow.app(window),
+      );
+      var changes = <bool>[];
+      fullScreen.onChanged.listen(changes.add);
+      expect(fullScreen.isFullScreen, isTrue);
+      // F11 to leave: reported.
+      window.simulateFullScreenChanged(false);
+      await pumpEventQueue();
+      expect(fullScreen.isFullScreen, isFalse);
+      expect(changes, [false]);
+      fullScreen.dispose();
     });
   });
 

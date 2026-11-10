@@ -22,8 +22,8 @@ on typed, firestore-like content paths (`/school/1/student/2`): a
 screen builder, and `ContentNavigator` provides the `RouterDelegate` and
 `RouteInformationParser` for `MaterialApp.router`.
 
-Its README says **work in progress, do not use**: expect breaking changes and
-prefer `go_router` for new apps. Use this skill when reading or maintaining an
+Its README says it is **experimental**: expect breaking changes and prefer
+`go_router` for new apps. Use this skill when reading or maintaining an
 app that already depends on it.
 
 ## Guidelines
@@ -93,9 +93,14 @@ app that already depends on it.
   `setNewRoutePath`. `TekartikNavigatorStateExt.popUntilPath(path)` extends
   `NavigatorState` for the imperative case.
 * Pushing a path that has no matching def throws `StateError`; pushing an
-  invalid (wildcard) path throws `ArgumentError` in debug. Parsing an unknown
-  url in `ContentRouteInformationParser` throws `StateError` too, so declare
-  every deep link as a def.
+  invalid (wildcard) path throws `ArgumentError` in debug. An url matching no
+  def (a typed or stale link) is parsed as the home path: the root def, else
+  the first def.
+* Urls (web): `ContentRouteInformationParser` writes each name and value
+  percent-encoded (`/note/caf%C3%A9`) and decodes them back, so a value may
+  hold a space, an accent, `%`, `?` or `#` (fixed 2026-11-10: they changed
+  the id on reload). A value must not hold `/`: the page name keeps the raw
+  value and a `/` there reads back as more fields.
 * Transitions: pass `transitionDelegate: const NoAnimationTransitionDelegate()`
   per push, or set `ContentNavigatorBloc.transitionDelegate` for the whole
   app. `NoAnimationMaterialPageRoute` does the same for imperative pushes.
@@ -119,7 +124,7 @@ app that already depends on it.
 ### Typed paths, defs and the router app
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 
 /// `/` the home page.
@@ -227,7 +232,7 @@ class StudentScreen extends StatelessWidget {
 ### Pushing, awaiting a result, replacing and popping
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 
 class EditPath extends ContentPathBase {
@@ -274,7 +279,7 @@ void backToList(BuildContext context) {
 ### Resume/pause aware screen
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_navigator_flutter/content_navigator.dart';
 import 'package:tekartik_app_navigator_flutter/route_aware.dart';
 

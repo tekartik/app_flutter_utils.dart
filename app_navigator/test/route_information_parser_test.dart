@@ -10,6 +10,13 @@ class StartContentPath extends ContentPathBase {
   List<ContentPathField> get fields => [start];
 }
 
+class NoteContentPath extends ContentPathBase {
+  final note = ContentPathField('note');
+
+  @override
+  List<ContentPathField> get fields => [note];
+}
+
 ContentPageDef _def(ContentPath path) =>
     ContentPageDef(path: path, screenBuilder: (_) => Container());
 
@@ -70,6 +77,49 @@ void main() {
           RouteInformation(uri: Uri.parse('/start/other')),
         ),
         rootContentPath,
+      );
+    });
+    test('url round trip of path values', () async {
+      var bloc = ContentNavigatorBloc(
+        contentNavigator: ContentNavigator(
+          def: ContentNavigatorDef(
+            defs: [_def(rootContentPath), _def(NoteContentPath())],
+          ),
+        ),
+      );
+      var crip = ContentRouteInformationParser(bloc);
+      Future<ContentPath> reload(Uri uri) => crip.parseRouteInformation(
+        // As the browser gives it back (reload, back, shared link).
+        RouteInformation(uri: Uri.parse(uri.toString())),
+      );
+      for (var id in [
+        'x1',
+        'Café Tacvba',
+        'a b',
+        'a?b',
+        'a#b',
+        '50%',
+        'a%20b',
+        'a/b',
+      ]) {
+        var path = NoteContentPath()..note.value = id;
+        var uri = crip.restoreRouteInformation(path).uri;
+        var parsed = await reload(uri);
+        expect(parsed.field('note')?.value, id, reason: '$id: $uri');
+        expect(NoteContentPath()..fromPath(parsed), path);
+      }
+      // Plain values stay readable.
+      expect(
+        crip
+            .restoreRouteInformation(NoteContentPath()..note.value = 'x1')
+            .uri
+            .toString(),
+        '/note/x1',
+      );
+      // A percent-encoded deep link.
+      expect(
+        (await reload(Uri.parse('/note/Caf%C3%A9'))).field('note')?.value,
+        'Café',
       );
     });
     test('home is the first def when there is no root', () async {

@@ -16,8 +16,10 @@ description: >-
 
 `sdb` is the strongly typed, less verbose API that `idb_shim` layers on top of
 an `IdbFactory`. This package wires it to the right platform implementation
-(sqflite on mobile/desktop, native IndexedDB on the web) so a Flutter app gets
-`SdbFactory` with no platform code.
+(SQLite through sqflite_common_ffi, bundled, on Android, iOS, macOS, Linux and
+Windows; the native IndexedDB on the web) so a Flutter app gets `SdbFactory`
+with no platform code. sdb is the API for new local database code (not the
+sembast layers).
 
 ## Guidelines
 
@@ -37,6 +39,13 @@ an `IdbFactory`. This package wires it to the right platform implementation
   * `SdbFactory getSdbFactory({String? packageName})` - **prefer this one**.
     On linux and windows the `packageName` selects the databases directory
     (`<userAppDataPath>/<packageName>/databases`); elsewhere it is ignored.
+    Call it once per app with one package name: on linux and windows the
+    folder belongs to a single shared sqflite factory, so another
+    `getSdbFactory`/`getIdbFactory` package name, or a `getDatabaseFactory`
+    of tekartik_app_flutter_sembast / tekartik_app_flutter_sqflite, moves
+    the databases of every factory returned before (the last call wins).
+    Without `packageName` they go to `<userAppDataPath>/databases`, shared
+    by every app.
   * `SdbFactory get sdbFactoryMemory` - in-memory, for tests.
   `newSdbFactoryMemory()` (a fresh, independent memory factory) comes from
   the re-export. Off a supported platform, reading `sdbFactory` throws

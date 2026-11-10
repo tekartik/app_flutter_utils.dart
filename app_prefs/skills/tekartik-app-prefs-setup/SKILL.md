@@ -15,10 +15,12 @@ description: >-
 # App preferences (tekartik_app_prefs)
 
 `tekartik_app_prefs` picks the right `tekartik_prefs` implementation for the
-platform the Flutter app runs on: shared_preferences on mobile, indexed db in
-the browser, and a sembast file under the user data directory on Linux and
-Windows. Application code only sees the `tekartik_prefs` API, which the
-package re-exports.
+platform the Flutter app runs on: shared_preferences on Android, iOS and
+macOS, the browser local storage on the web (one entry per key, named
+`<prefs name>/<key>`), and for `getPrefsFactory` and its async twins a
+sembast file under the user data directory on Linux and Windows.
+Application code only sees the `tekartik_prefs` API, which the package
+re-exports.
 
 ## Guidelines
 
@@ -50,10 +52,17 @@ package re-exports.
     `shared_preferences`, with no named prefs and no version. For a handful
     of settings.
 * Always prefer `getPrefsFactory(packageName: 'com.example.my_app')` over the
-  bare `prefsFactory` getter: on Linux and Windows the package name is the
-  folder under the user data path where the sembast database is written
-  (without it everything lands in a shared `com.tekartik.app_prefs` folder).
-  It is ignored on mobile and web. Call it once and keep the factory.
+  bare `prefsFactory` getter, and never mix them: on Linux and Windows the
+  getters are shared_preferences while `getPrefsFactory` is a sembast file
+  in `<userAppDataPath>/<packageName>/prefs` (two storages: code mixing
+  them reads empty prefs). Without `packageName` everything lands in a
+  shared `<userAppDataPath>/com.tekartik.app_prefs` folder. It is ignored on
+  Android, iOS, macOS and the web. Call it once and keep the factory (cached
+  per package name anyway).
+* Names: on the web and with shared_preferences a prefs `a` owns every key
+  starting with `a/`, so it sees and clears the keys of a prefs `a/b`, which
+  is what `factory.sandbox(path: 'a').openPreferences('b')` opens. Do not
+  name a prefs like the sandbox of another one.
 * `factory.openPreferences(name, {version, onVersionChanged})` returns a
   `Future<Prefs>`; `name` is a store name, not a file path. Keep the `Prefs`
   open for the app lifetime, `close()` it only when done.
@@ -74,7 +83,9 @@ package re-exports.
   off the implicit type conversions (and the map/list extensions).
 * Migrations: pass `version:` and `onVersionChanged: (prefs, oldVersion,
   newVersion) { ... }` to `openPreferences`; the callback gets the prefs
-  object to fix up.
+  object to fix up. It may await (`await prefs.save()`): the Linux/Windows
+  sembast prefs call it after their open transaction since 2026-11-10 (it
+  used to deadlock there).
 * Tests and previews: use `prefsFactoryMemory` / `newPrefsFactoryMemory()`
   (or `prefsAsyncFactoryMemory`, `newPrefsAsyncFactoryMemory()`,
   `prefsAsyncWithCacheFactoryMemory`), all exported by the same imports. A
@@ -88,15 +99,15 @@ package re-exports.
   (add `tekartik_prefs_flutter` as a dev dependency); the memory factory is
   simpler.
 * Prefs are not a database: no queries, no transactions, everything is loaded
-  in memory in the sync flavor. Use `tekartik_app_sembast` /
-  `tekartik_app_idb` for real data.
+  in memory in the sync flavor. For real data use the sdb API of
+  `tekartik_app_flutter_idb` (`sdb.dart`).
 
 ## Examples
 
 ### Open the app prefs once and use them
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_platform/app_platform.dart';
 import 'package:tekartik_app_prefs/app_prefs.dart';
 

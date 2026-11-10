@@ -26,7 +26,9 @@ class ContentRouteInformationParser
     // devPrint('restore: ${path}');
     // Convert the current path to a displayable string
     if (configuration is ContentPath) {
-      var location = configuration.toPathString();
+      // Each value percent-encoded: read back as is by
+      // parseRouteInformation (a raw `?` or `#` would end the path).
+      var location = contentPathToUriLocation(configuration);
 
       return RouteInformation(uri: Uri.parse(location));
     }
@@ -41,7 +43,8 @@ extension ContentRouteInformationParserPrvExt on ContentRouteInformationParser {
   ContentPath parseAnyRouteInformationSync(RouteInformation routeInformation) {
     final uri = routeInformation.uri;
 
-    var path = ContentPath.fromString(uri.path);
+    // The decoded segments (`uri.path` is still percent-encoded).
+    var path = contentPathFromUriPathSegments(uri.pathSegments);
     if (contentNavigatorDebug) {
       _log('parsing $uri: $path');
     }

@@ -73,10 +73,15 @@ the English source text to its translation, loaded at runtime from
 * Wiring: implement a `LocalizationsDelegate<AppLocalizations>` whose `load`
   calls `loadLocalizationMap`, register it in
   `MaterialApp(localizationsDelegates: [...], supportedLocales: [...])` next
-  to `GlobalMaterialLocalizations.delegate` (from `flutter_localizations`),
+  to `GlobalMaterialLocalizations.delegate` (exported by `material_ui`, by
+  `flutter_localizations` for `flutter/material.dart` apps),
   and read it with `Localizations.of<AppLocalizations>(context,
-  AppLocalizations)`. Return a `SynchronousFuture` from `load` to avoid a
-  frame without text.
+  AppLocalizations)`. Reading the assets is asynchronous: until `load`
+  completes, `Localizations` builds nothing. To avoid that empty frame,
+  load the maps before `runApp` and return them from a **non async** `load`
+  wrapped in a `SynchronousFuture` (example below); a `SynchronousFuture`
+  returned from an `async` function is wrapped in a plain `Future` and
+  changes nothing.
 * Testing: `intlDecodeLocalizationMap`, `intlText`, `intlSafeKey` and
   `intlRender` are pure and unit testable without a device.
   `loadLocalizationMap` needs `TestWidgetsFlutterBinding.ensureInitialized()`
@@ -116,8 +121,17 @@ Future<void> main() async {
 
 ```dart
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_flutter_intl/intl.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Before runApp: the first frame has its texts.
+  await AppLocalizationsDelegate.preload(
+    AppLocalizationsDelegate.supportedLocales,
+  );
+  runApp(const MyApp());
+}
 
 class AppLocalizations {
   final Locale locale;
@@ -144,8 +158,10 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
       .map((locale) => locale.languageCode)
       .contains(locale.languageCode);
 
-  @override
-  Future<AppLocalizations> load(Locale locale) async {
+  /// Loaded localizations, by locale name.
+  static final _loaded = <String, AppLocalizations>{};
+
+  static Future<AppLocalizations> _load(Locale locale) async {
     var defaultMap = await loadLocalizationMap(enUsTextLocale);
     var map = defaultMap;
     var textLocale = TextLocale(locale.toString());
@@ -156,9 +172,28 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
         // No file for that locale, english only.
       }
     }
-    return SynchronousFuture<AppLocalizations>(
-      AppLocalizations(locale, map, defaultMap),
+    return _loaded[locale.toString()] = AppLocalizations(
+      locale,
+      map,
+      defaultMap,
     );
+  }
+
+  /// Loads [locales] ahead (in main, before runApp).
+  static Future<void> preload(List<Locale> locales) async {
+    for (var locale in locales) {
+      await _load(locale);
+    }
+  }
+
+  /// Not async: a preloaded locale is returned synchronously.
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    var loaded = _loaded[locale.toString()];
+    if (loaded != null) {
+      return SynchronousFuture<AppLocalizations>(loaded);
+    }
+    return _load(locale);
   }
 
   @override
@@ -171,7 +206,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: const [AppLocalizationsDelegate()],
+      localizationsDelegates: const [
+        AppLocalizationsDelegate(),
+        // The Material texts (tooltips...) in French too: exported by
+        // material_ui (by flutter_localizations for flutter/material.dart).
+        GlobalMaterialLocalizations.delegate,
+      ],
       supportedLocales: AppLocalizationsDelegate.supportedLocales,
       home: const HomePage(),
     );

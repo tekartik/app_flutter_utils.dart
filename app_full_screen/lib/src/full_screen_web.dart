@@ -16,7 +16,11 @@ class PlatformFullScreenWeb extends PlatformFullScreenBase {
   StreamSubscription<bool>? _subscription;
 
   /// Starts listening to the document full screen changes.
+  ///
+  /// The document may already be full screen (left so by another screen):
+  /// that state is the starting point, so that escape is reported.
   PlatformFullScreenWeb() {
+    setFullScreenState(browser.isFullScreen());
     _subscription = browser.onFullScreenChange.listen(setFullScreenState);
   }
 

@@ -19,6 +19,11 @@ This package hides the platform choice behind a single
 and windows, `sembast_web` (IndexedDB) on the web. App code only uses the
 plain `sembast` API.
 
+For new local database code use the sdb API of `tekartik_app_flutter_idb`
+(`package:tekartik_app_flutter_idb/sdb.dart`, the
+`tekartik-app-flutter-idb-sdb` skill) instead: this package is for apps
+already on sembast.
+
 ## Guidelines
 
 * Dependency (git, not on pub.dev):
@@ -41,21 +46,27 @@ plain `sembast` API.
   * web (`dart.library.js_interop`): `databaseFactoryWeb` from `sembast_web`,
     an IndexedDB database; `packageName` and `rootPath` are ignored.
   * io (`dart.library.io`): `sembast_sqflite` on top of
-    `tekartik_app_flutter_sqflite`'s factory (sqlite through ffi, registered
-    by its `sqflite_ffi` plugin dependency).
+    `tekartik_app_flutter_sqflite`'s factory (SQLite through
+    sqflite_common_ffi, bundled by the sqlite3 build hooks; in the sqflite
+    plugin databases folder on android/ios/macos).
   * any other target: a stub that throws `UnimplementedError`.
 * `packageName` / `rootPath` matter on linux and windows only: without them
-  the database lands in a `.`-named folder. Pass a reverse domain
+  the database lands in `<userAppDataPath>/databases`, shared by every app.
+  That folder is the one of a single shared sqflite factory: a later
+  `getDatabaseFactory` with another `packageName`/`rootPath` (or an app_idb
+  `getIdbFactory`, an app_sqflite `getDatabaseFactory`) moves the databases
+  of every factory returned before, the last call wins. Pass a reverse domain
   `packageName` (`'com.example.myapp'`) so files go to
   `<userAppDataPath>/<packageName>/databases`, or an explicit `rootPath` for a
   fully controlled location (handy in tests:
   `'.dart_tool/my_app/db'`). On android/ios/macos both are ignored, except
   `rootPath` under `flutter test`, used on any platform.
 * Call `WidgetsFlutterBinding.ensureInitialized()` before opening a database
-  in `main()`, open the database **once** for the whole app and keep it open
-  (the factory returns the same single instance for a given path); do not
-  open/close per screen. `await db.close()` only when the app tears down or
-  in tests.
+  in `main()`, open the database **once** for the whole app and keep it open;
+  do not open/close per screen. `await db.close()` only when the app tears down or
+  in tests. One factory returns the same database for a given path, but each
+  `getDatabaseFactory` call builds a new factory: two of them opening the
+  same file are two sembast databases with their own cache.
 * Unit tests: use the exported `databaseFactoryMemory` (sembast's
   `databaseFactoryMemoryFs`, a file-system-like in-memory factory, so
   `openDatabase('test.db')` works and data survives a close/reopen within the
@@ -69,10 +80,12 @@ plain `sembast` API.
     the Dart VM); call `sqfliteFfiInit()` first outside Flutter.
   * `setup/sembast_flutter.dart`'s `initDatabaseFactory({packageName})` is
     deprecated - use `getDatabaseFactory()`.
-* On windows during development (`flutter test`, dart VM) call
+* SQLite is bundled (sqlite3 build hooks), nothing to install.
   `sqfliteWindowsFfiInit()` from
-  `package:tekartik_app_flutter_sqflite/sqflite.dart` before using the
-  factory, so the sqlite3 dll is found.
+  `package:tekartik_app_flutter_sqflite/sqflite.dart` only loads SQLite in
+  the main isolate on Windows (a no-op on the other io platforms, it throws
+  on the web): call it in `main` of a VM test, guarded by `!kIsWeb` in code
+  that also builds for the web.
 * Web caveats: IndexedDB is asynchronous and per origin, there is no file on
   disk, the database name is a key, and clearing site data wipes it. Keep the
   data model identical across platforms; anything sqlite specific (raw SQL) is
@@ -184,11 +197,12 @@ import 'package:tekartik_app_flutter_sqflite/sqflite.dart'
     show sqfliteWindowsFfiInit;
 
 void main() {
-  /// Initializes sqflite ffi (finds the sqlite3 dll on windows). Safe on any
-  /// dart VM/desktop target, throws UnimplementedError on the web.
+  /// Loads SQLite in the main isolate on windows, a no-op on the other io
+  /// targets, throws UnimplementedError on the web.
   sqfliteWindowsFfiInit();
 
-  /// rootPath keeps the files inside the project on linux/windows.
+  /// rootPath keeps the files inside the project (honored under flutter
+  /// test on every platform).
   var factory = getDatabaseFactory(
     rootPath: '.dart_tool/my_app/db',
     packageName: 'com.example.myapp',

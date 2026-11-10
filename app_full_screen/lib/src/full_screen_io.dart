@@ -38,6 +38,11 @@ abstract class PlatformFullScreenDesktopWindow {
   factory PlatformFullScreenDesktopWindow.app([AppWindow? window]) =>
       _AppDesktopWindow(window);
 
+  /// True when the window is full screen.
+  ///
+  /// Throws when the window is not available.
+  bool get isFullScreen;
+
   /// Make the window full screen ([fullScreen] true) or not.
   ///
   /// Throws when the window is not available.
@@ -63,6 +68,9 @@ class _AppDesktopWindow implements PlatformFullScreenDesktopWindow {
 
   AppWindow get _current =>
       _window ??= appWindowCurrent() ?? (throw StateError('no app window'));
+
+  @override
+  bool get isFullScreen => _current.isFullScreen;
 
   @override
   void setFullScreen(bool fullScreen) {
@@ -106,13 +114,16 @@ class PlatformFullScreenIo extends PlatformFullScreenBase {
     _listen();
   }
 
-  /// Hear the window manager changes (F11, the title bar button).
+  /// Hear the window manager changes (F11, the title bar button), starting
+  /// from the window state (it may already be full screen, left so by
+  /// another screen).
   ///
   /// Retried on the next request when the window is not available yet.
   void _listen() {
     if (desktop && _cancelListen == null) {
       try {
         _cancelListen = _desktopWindow.listen(setFullScreenState);
+        setFullScreenState(_desktopWindow.isFullScreen);
       } catch (e) {
         debugPrint('full screen: $e');
       }

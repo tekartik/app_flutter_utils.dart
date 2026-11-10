@@ -35,12 +35,17 @@ with no boilerplate at the call site.
   `lib/src/`.
 * It calls `url_launcher`'s `launchUrl(uri, webOnlyWindowName: '_blank')`:
   * web: a new browser tab/window, the Flutter app stays loaded;
-  * android/ios/macos/linux/windows: `webOnlyWindowName` is ignored and the
-    OS picks the handler (browser for `https:`, mail client for `mailto:`,
+  * android/ios: `https:` opens in an in-app browser view (Custom Tabs,
+    SFSafariViewController: url_launcher's `platformDefault` mode), other
+    schemes in the app that handles them (mail client for `mailto:`,
     dialer for `tel:`);
+  * macos/linux/windows: the default browser or app;
   * in debug mode it also `print`s the uri.
 * The function is **synchronous and returns void**: the underlying `Future`
-  is not awaited and a failure is not reported back. Do not write
+  is not awaited and a failure is not reported back, only logged in debug
+  mode (no app for the uri: url_launcher_android throws
+  `PlatformException(ACTIVITY_NOT_FOUND)`, a `tel:` uri on a tablet). Before
+  2026-11-10 that error was uncaught. Do not write
   `await webLaunchUri(...)` or test its result. When you need the boolean
   result, a `LaunchMode`, `canLaunchUrl`, or in-app webview / custom tabs,
   add `url_launcher` to your own `dependencies` and call `launchUrl`
@@ -66,7 +71,7 @@ with no boilerplate at the call site.
 ### Link button
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_url_launcher_flutter/web_launch_uri.dart';
 
 class HelpLink extends StatelessWidget {
@@ -111,7 +116,7 @@ void call(String phoneNumber) {
 ### Injectable launcher, testable
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_url_launcher_flutter/web_launch_uri.dart';
 
 typedef UriLauncher = void Function(Uri uri);

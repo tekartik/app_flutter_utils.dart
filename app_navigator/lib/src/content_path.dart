@@ -192,22 +192,59 @@ class _PathFromPath with PathMixin implements ContentPath {
       if (parts[end - 1] == ContentPath.separator) {
         end--;
       }
-      for (var i = start; i < end; i++) {
-        var name = parts[i++];
-        String? value;
-        ContentPathField field;
-        if (i < end) {
-          value = parts[i];
-          // Won't set if null however cannot happen
-          field = ContentPathField(name, value);
-        } else {
-          field = ContentPathPart(name);
-        }
-        fields.add(field);
+      if (start < end) {
+        _addFields(parts.sublist(start, end));
       }
+    }
+  }
+
+  /// From decoded segments (name, value, name, value...), the empty ones
+  /// ignored (as `p.url.split` does).
+  _PathFromPath.segments(Iterable<String> segments) {
+    _addFields(segments.where((segment) => segment.isNotEmpty).toList());
+  }
+
+  /// name, value, name, value..., a last name without value is a part.
+  void _addFields(List<String> parts) {
+    for (var i = 0; i < parts.length; i++) {
+      var name = parts[i++];
+      ContentPathField field;
+      if (i < parts.length) {
+        field = ContentPathField(name, parts[i]);
+      } else {
+        field = ContentPathPart(name);
+      }
+      fields.add(field);
     }
   }
 
   @override
   String toString() => toPathString();
+}
+
+/// A content path from the decoded segments of an url path
+/// (`Uri.pathSegments`), so that a value may hold any character (space,
+/// accent, `%`, `?`, `#`, `/`).
+///
+/// The reverse of [contentPathToUriLocation].
+ContentPath contentPathFromUriPathSegments(Iterable<String> segments) =>
+    _PathFromPath.segments(segments);
+
+/// The url location of [path], each name and value percent-encoded
+/// (`/note/a%20b` for the value `a b`), a wildcard value as `*`.
+///
+/// Unlike [ContentPath.toPathString] (raw values), it reads back the same
+/// values through [contentPathFromUriPathSegments].
+String contentPathToUriLocation(ContentPath path) {
+  var segments = <String>[];
+  for (var field in path.fields) {
+    segments.add(field.name);
+    var value = field.value;
+    if (value == null) {
+      segments.add('*');
+    } else if (value.isNotEmpty) {
+      segments.add(value);
+    }
+  }
+  return '/${segments.map(Uri.encodeComponent).join('/')}';
 }

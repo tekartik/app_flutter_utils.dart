@@ -8,12 +8,13 @@ import 'package:tekartik_prefs_flutter/prefs_async.dart';
 import 'package:tekartik_prefs_sembast/prefs.dart';
 import 'package:tekartik_prefs_sembast/prefs_async.dart';
 
+/// shared_preferences on every io platform (Linux and Windows included).
 PrefsFactory get prefsFactory => prefsFactoryFlutter;
 
-/// Default for io use a local folder
+/// shared_preferences on every io platform (Linux and Windows included).
 PrefsAsyncFactory get prefsAsyncFactory => prefsAsyncFactoryFlutter;
 
-/// Default for io use a local folder
+/// shared_preferences on every io platform (Linux and Windows included).
 PrefsAsyncWithCacheFactory get prefsAsyncWithCacheFactory =>
     prefsAsyncWithCacheFactoryFlutter;
 

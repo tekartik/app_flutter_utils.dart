@@ -2,8 +2,8 @@
 name: tekartik-app-platform-setup
 description: >-
   Use when a Flutter app must know or initialize its platform with
-  tekartik_app_platform: platformInit() at the start of main (Linux/Windows
-  support), the platformContext getter and its PlatformContext (io, node,
+  tekartik_app_platform: platformInit() at the start of main (a no-op kept
+  for compatibility), the platformContext getter and its PlatformContext (io, node,
   browser, platform, toMap) from package:tekartik_app_platform/app_platform.dart,
   and the isIOS / isAndroid / isLinux / isWindows / isMacOS / isWeb booleans of
   package:tekartik_app_platform/platform.dart (import with a prefix in
@@ -13,8 +13,9 @@ description: >-
 # Platform helper (tekartik_app_platform)
 
 `tekartik_app_platform` gives a Flutter app one conditional-import free way to
-know where it runs: `platformInit()` to call at the start of `main()`, and a
-`platformContext` describing the host (io, node or browser). It wraps
+know where it runs: a `platformContext` describing the host (io, node or
+browser), and `platformInit()` (called at the start of `main()` by the
+tekartik apps, a no-op today). It wraps
 `tekartik_platform_io` and `tekartik_platform_browser` behind a stub/web/io
 conditional export, so the same code compiles for mobile, desktop and web.
 
@@ -37,9 +38,9 @@ conditional export, so the same code compiles for mobile, desktop and web.
     one to import in `main.dart` and in shared code.
   * `package:tekartik_app_platform/platform.dart`: the lazy booleans
     `isIOS`, `isAndroid`, `isLinux`, `isWindows`, `isMacOS`, `isWeb`.
-* Call `platformInit()` once, first thing in `main()`, before `runApp()` (it
-  is what the tekartik example apps do). It is a no-op on web and mobile and
-  handles the Linux/Windows desktop setup; calling it is harmless everywhere.
+* `platformInit()`, first thing in `main()` in the tekartik example apps, is
+  a no-op on every platform today (the Linux/Windows desktop setup it did is
+  no longer needed); calling it is harmless, new code may skip it.
 * `platformContext` is a `PlatformContext` (from
   `package:tekartik_platform/context.dart`, re-exported here):
   * `io` is non null on the Dart VM (Flutter mobile/desktop):
@@ -77,11 +78,11 @@ conditional export, so the same code compiles for mobile, desktop and web.
 ### App entry point
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart'; // or flutter/material.dart
 import 'package:tekartik_app_platform/app_platform.dart';
 
 void main() {
-  // Linux/Windows support, no-op on web and mobile.
+  // A no-op today (kept by the tekartik apps), harmless.
   platformInit();
   runApp(const MyApp());
 }

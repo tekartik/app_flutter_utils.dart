@@ -14,9 +14,12 @@ description: >-
 # Cross platform idb factory for a Flutter app (tekartik_app_flutter_idb)
 
 This package gives a Flutter app one `IdbFactory` that works everywhere:
-sqflite on android/ios/macos, sqflite-ffi (through `tekartik_app_flutter_sqflite`)
-on linux/windows, the browser's native IndexedDB on the web. App code writes
-plain `idb_shim` code and never picks an implementation.
+SQLite through sqflite_common_ffi (bundled, via `tekartik_app_flutter_sqflite`)
+on android/ios/macos (in the sqflite plugin databases folder) and
+linux/windows, the browser's native IndexedDB on the web. App code writes
+plain `idb_shim` code and never picks an implementation. For new code prefer
+the typed sdb API on the same factory (`sdb.dart`, the
+`tekartik-app-flutter-idb-sdb` skill).
 
 ## Guidelines
 
@@ -36,7 +39,7 @@ plain `idb_shim` code and never picks an implementation.
   `idbModeReadWrite`, `idbDirectionNext`, `idbDirectionPrev`,
   `newIdbFactoryMemory()`, `idbFactoryNative`) and adds three members:
   * `IdbFactory get idbFactory` - the platform factory. Resolved by
-    conditional import: `dart:io` builds use sqflite, `dart:js_interop`
+    conditional import: `dart:io` builds use SQLite (ffi), `dart:js_interop`
     builds use `idbFactoryNative`, other targets get a stub that throws
     `UnimplementedError`.
   * `IdbFactory getIdbFactory({String? packageName})` - **prefer this one**.
@@ -76,9 +79,10 @@ plain `idb_shim` code and never picks an implementation.
 * `KeyRange.only/lowerBound/upperBound/bound(...)` builds ranges for
   `count`, `delete`, `openCursor` and `Index` lookups.
 * Testing: unit tests (`flutter test`, no device) must use
-  `idbFactoryMemory` or a fresh `newIdbFactoryMemory()`; the platform
-  `idbFactory` needs a real device/browser. Take the `IdbFactory` as a
-  constructor parameter so the same code runs against both.
+  `idbFactoryMemory` or a fresh `newIdbFactoryMemory()` (the platform
+  factory does run under `flutter test` on a desktop VM, on real files).
+  Take the `IdbFactory` as a constructor parameter so the same code runs
+  against both.
 * If you want a typed, less verbose API on top of the same factory, use
   `package:tekartik_app_flutter_idb/sdb.dart` instead (see the
   `tekartik-app-flutter-idb-sdb` skill).
@@ -159,7 +163,7 @@ Future<List<Object?>> notesByTitle(Database db, String prefix) async {
   var index = txn.objectStore(notesStore).index(titleIndex);
   var rows = await index
       .openCursor(
-        range: KeyRange.bound(prefix, '$prefix￿'),
+        range: KeyRange.bound(prefix, '$prefix\uffff'),
         autoAdvance: true,
       )
       .map((cursor) => cursor.value)
@@ -235,8 +239,16 @@ Future<void> reset(IdbFactory factory) async {
 ## Common mistakes
 
 * Using `idbFactory` on linux/windows instead of
-  `getIdbFactory(packageName: ...)`: the databases then land in a shared
-  default directory.
+  `getIdbFactory(packageName: ...)`: the databases then land in the ffi
+  default folder (`.dart_tool/sqflite_common_ffi/databases` of the current
+  directory) or wherever the last `getIdbFactory`/`getDatabaseFactory` call
+  moved it.
+* Calling `getIdbFactory` with two package names (or along with a
+  `getDatabaseFactory` of tekartik_app_flutter_sembast or
+  tekartik_app_flutter_sqflite) on linux/windows: the folder belongs to one
+  shared sqflite factory, the last call wins for every factory returned
+  before. Without `packageName`: `<userAppDataPath>/databases`, shared by
+  every app.
 * Forgetting `await txn.completed` and closing the database (or asserting a
   read) before the write landed.
 * Doing an `await` on something unrelated inside a transaction: the
